@@ -6,12 +6,11 @@ require "red/chainer/version"
 Gem::Specification.new do |spec|
   spec.name          = "red-chainer"
   spec.version       = Red::Chainer::VERSION
-  spec.authors       = ["yusaku.hatanaka"]
-  spec.email         = ["hata.yusaku.1225@gmail.com"]
+  spec.authors       = ["Yusaku Hatanaka"]
+  spec.email         = ["hatappi@hatappi.me"]
 
-  spec.summary       = %q{TODO: Write a short summary, because Rubygems requires one.}
-  spec.description   = %q{TODO: Write a longer description or delete this line.}
-  spec.homepage      = "TODO: Put your gem's website or public repo URL here."
+  spec.summary, spec.description = "A flexible framework for neural network for Ruby"
+  spec.homepage      = "https://github.com/red-data-tools/red-chainer"
   spec.license       = "MIT"
 
   # Prevent pushing this gem to RubyGems.org. To allow pushes either set the 'allowed_push_host'
