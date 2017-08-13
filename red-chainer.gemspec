@@ -1,11 +1,11 @@
 # coding: utf-8
 lib = File.expand_path("../lib", __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require "red/chainer/version"
+require "chainer/version"
 
 Gem::Specification.new do |spec|
   spec.name          = "red-chainer"
-  spec.version       = Red::Chainer::VERSION
+  spec.version       = Chainer::VERSION
   spec.authors       = ["Yusaku Hatanaka"]
   spec.email         = ["hatappi@hatappi.me"]
 
