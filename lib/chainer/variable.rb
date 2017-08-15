@@ -12,6 +12,10 @@ module Chainer
       self.requires_grad = requires_grad
     end
 
+    def data
+      return @data[0]
+    end
+
     private
 
     def validate(data:)
