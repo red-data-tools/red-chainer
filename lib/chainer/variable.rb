@@ -45,6 +45,21 @@ module Chainer
     def grad=(g)
       @node.set_grad_with_check(g, nil, self)
     end
+
+    def rank
+      @node.rank
+    end
+
+    def set_creator(gen_func)
+      @node.set_creator(gen_func)
+    end
+
+    def +(other)
+      if other.instance_of?(Chainer::Variable)
+        Functions::Math::Add.new.([self, other])
+      end
+      Functions::Math::AddConstant.new(other).(self)
+    end
   end
 end
 
