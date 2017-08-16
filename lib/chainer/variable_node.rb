@@ -1,9 +1,7 @@
-require "weakref"
-
 module Chainer
   class VariableNode
     attr_reader :dtype, :shape
-    attr_accessor :data, :name, :grad, :rank, :creatore, :requires_grad, :variable
+    attr_accessor :data, :name, :grad, :rank, :creator, :requires_grad, :variable
 
     def initialize(variable: , name:, grad: nil)
       @variable = WeakRef.new(variable)
@@ -44,7 +42,7 @@ module Chainer
     end
 
     def set_creator(creator)
-      @creator = creator
+      self.creator = creator
     end
 
     def unchain
