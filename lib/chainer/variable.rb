@@ -56,9 +56,10 @@ module Chainer
 
     def +(other)
       if other.instance_of?(Chainer::Variable)
-        Functions::Math::Add.new.([self, other])
+        Functions::Math::Add.new.(*[self, other])
+      else
+        Functions::Math::AddConstant.new(other).(self)
       end
-      Functions::Math::AddConstant.new(other).(self)
     end
   end
 end

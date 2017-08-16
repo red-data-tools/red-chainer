@@ -9,7 +9,7 @@ module Chainer
 
     def call(*inputs)
       inputs = inputs.map do |x|
-        if x.instance_of?(Variable)
+        if x.instance_of?(Chainer::Variable)
           x
         else
           Variable.new(x, requires_grad: false)
