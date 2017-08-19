@@ -176,6 +176,7 @@ module Chainer
       @node.data = @data[0]
     end
 
+    # when left side is Numeric value and right side is Chainer::Value, call this method.
     def coerce(other)
       other = self.data.class[*other] if other.kind_of?(Numeric)
       [Chainer::Variable.new(other, requires_grad: false), self]
