@@ -49,12 +49,8 @@ module Chainer
           remove_instance_variable(:@output_indexes_to_retain)
         end
       end
-      
-      if ret.size == 1
-        ret[0]
-      else
-        ret
-      end
+
+      ret.size == 1 ? ret[0] : ret
     end
 
     def forward(inputs)
