@@ -1,7 +1,8 @@
 module Chainer
   class Function
 
-    attr_reader :rank
+    attr_reader :rank, :inputs, :outputs, :retain_after_backward
+    attr_accessor :output_data
 
     def initialize
       @rank = 0
