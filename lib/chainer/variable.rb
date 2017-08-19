@@ -128,6 +128,10 @@ module Chainer
       end 
     end
 
+    def -@
+      Functions::Math::Neg.new.(self) 
+    end
+
     def +(other)
       if other.instance_of?(Chainer::Variable)
         Functions::Math::Add.new.(*[self, other])

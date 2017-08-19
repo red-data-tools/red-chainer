@@ -1,6 +1,18 @@
 module Chainer
   module Functions
     module Math
+ 
+      class Neg < ::Chainer::Function
+        def forward(x)
+          retain_inputs([])
+          [Utils::Array.force_array(-x[0])]
+        end
+
+        def backward(x, gy)
+          [Utils::Array.force_array(-gy[0])]
+        end
+      end
+
       class Add < ::Chainer::Function
         def forward(x)
           retain_inputs([])
