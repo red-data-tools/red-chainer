@@ -6,12 +6,8 @@ module Chainer
           return
         end
 
-        unless gx.instance_of?(x.class)
+        unless gx.instance_of?(x.data.class)
           raise TypeError, "Type of data and grad mismatch\n#{x.class} != #{gx.class}"
-        end
-
-        unless gx.dtype == x.data.dtype
-          raise TypeError, "Dtype of data and grad mismatch\n#{x.class} != #{gx.class}"
         end
 
         unless gx.shape == x.data.shape
