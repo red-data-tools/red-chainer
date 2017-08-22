@@ -50,6 +50,10 @@ module Chainer
       self.data.shape
     end
 
+    def size
+      self.data.size
+    end
+
     def dtype
       self.data.class
     end
