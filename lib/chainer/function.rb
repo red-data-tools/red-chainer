@@ -65,5 +65,12 @@ module Chainer
     def retain_inputs(indexes)
       @input_indexes_to_retain = indexes
     end
+
+    def retain_outputs(indexes, retain_after_backward: false)
+      @output_indexes_to_retain = indexes
+      if retain_after_backward
+        @retain_after_backward = retain_after_backward
+      end
+    end
   end
 end
