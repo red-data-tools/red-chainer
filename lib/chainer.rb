@@ -4,6 +4,9 @@ require "chainer/version"
 
 require 'chainer/configuration'
 require 'chainer/function'
+require 'chainer/optimizer'
+require 'chainer/gradient_method'
+require 'chainer/hyperparameter'
 require 'chainer/initializer'
 require 'chainer/initializers/init'
 require 'chainer/initializers/constant'
@@ -23,6 +26,7 @@ require 'chainer/functions/math/basic_math'
 require 'chainer/functions/loss/softmax_cross_entropy'
 require 'chainer/functions/connection/linear'
 require 'chainer/parameter'
+require 'chainer/optimizers/adam'
 
 require 'numo/narray'
 

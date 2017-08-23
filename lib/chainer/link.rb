@@ -21,12 +21,33 @@ module Chainer
         @within_init_scope = old_flag
       end
     end
+
+    def params(include_uninit: true)
+      @params.each do |name|
+        data = self.send(name).data
+        if include_uninit || data
+          yield self.send(name)
+        end
+      end
+    end
   end
 
   class Chain < Link
     def initialize
       super
       @children = []
+    end
+
+    def params(include_uninit: true)
+      super(include_uninit: include_uninit) do |param|
+        yield param
+      end
+      
+      @children.each do |name|
+        self.send(name).params(include_uninit: include_uninit) do |param|
+          yield param
+        end
+      end
     end
   end
 end
