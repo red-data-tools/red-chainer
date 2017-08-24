@@ -15,4 +15,10 @@ module Chainer
       end
     end
   end
+
+  class DictSummary
+    def initialize
+      @summaries = Hash.new { |h,k| h[k] = [] }
+    end
+  end
 end
