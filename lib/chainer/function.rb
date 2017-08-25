@@ -62,6 +62,10 @@ module Chainer
       raise NotImplementedError
     end
 
+    def backward(inputs, grad_outputs)
+      backward_cpu(inputs, grad_outputs)
+    end
+
     def retain_inputs(indexes)
       @input_indexes_to_retain = indexes
     end

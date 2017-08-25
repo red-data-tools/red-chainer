@@ -14,6 +14,13 @@ module Chainer
         @observer_names[observer.object_id] = prefix + name
       end
     end
+
+    def scope(observation)
+      old = @observation
+      @observation = observation
+      yield
+      @observation = old
+    end
   end
 
   class DictSummary
