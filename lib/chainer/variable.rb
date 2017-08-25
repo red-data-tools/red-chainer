@@ -2,9 +2,9 @@ module Chainer
   class Variable
     attr_accessor :data, :grad, :requires_grad, :node
 
-    def initialize(data, **kwargs)
+    def initialize(data=nil, **kwargs)
       args = Utils::Argument.parse_kwargs(kwargs, name: nil, grad: nil, requires_grad: true)
-      unless data.is_a?(Numo::NArray)
+      unless data.nil? || data.is_a?(Numo::NArray)
         raise TypeError, "Numo::NArray are expected."
       end
 
@@ -44,6 +44,18 @@ module Chainer
 
     def grad=(g)
       @node.set_grad_with_check(g, nil, self)
+    end
+
+    def shape
+      self.data.shape
+    end
+
+    def size
+      self.data.size
+    end
+
+    def dtype
+      self.data.class
     end
 
     def rank

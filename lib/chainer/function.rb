@@ -10,7 +10,7 @@ module Chainer
 
     def call(*inputs)
       inputs = inputs.map do |x|
-        if x.instance_of?(Chainer::Variable)
+        if x.kind_of?(Chainer::Variable)
           x
         else
           Variable.new(x, requires_grad: false)
@@ -62,8 +62,19 @@ module Chainer
       raise NotImplementedError
     end
 
+    def backward(inputs, grad_outputs)
+      backward_cpu(inputs, grad_outputs)
+    end
+
     def retain_inputs(indexes)
       @input_indexes_to_retain = indexes
+    end
+
+    def retain_outputs(indexes, retain_after_backward: false)
+      @output_indexes_to_retain = indexes
+      if retain_after_backward
+        @retain_after_backward = retain_after_backward
+      end
     end
   end
 end
