@@ -20,7 +20,7 @@ module Chainer
 
         def call(*args)
           t = args.pop
-          y = args
+          x = args
           @y = nil
           @accuracy = nil
           @y = @predictor.(*x)
@@ -28,6 +28,8 @@ module Chainer
           # TODO: reporter
           if @compute_accuracy
             @accuracy = @accfun.call(@y, t)
+
+            puts "> #{@accuracy.data[0]}"
             # TODO:reporter 
           end
           @loss

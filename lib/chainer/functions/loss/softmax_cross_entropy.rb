@@ -3,7 +3,7 @@ module Chainer
     module Loss
       class SoftmaxCrossEntropy < Function
         def self.softmax_cross_entropy(x, t, normalize: true, cache_score: true, class_weight: nil, ignore_label: -1, reduce: 'mean')
-          self.new(normalize, cache_score, class_weight, ignore_label, reduce).(x, t)
+          self.new(normalize: normalize, cache_score: cache_score, class_weight: class_weight, ignore_label: ignore_label, reduce: reduce).(x, t)
         end
 
         def initialize(normalize: true, cache_score: true, class_weight: nil, ignore_label: -1, reduce: 'mean')
@@ -31,7 +31,7 @@ module Chainer
 
         def forward_cpu(inputs)
           x, t = inputs
-          log_y = Activation._log_softmax(x)
+          log_y = Activation.log_softmax(x)
 
           if @cache_score
             @y = Numo::NMath.exp(log_y)
@@ -41,14 +41,17 @@ module Chainer
             log_y += broadcast_to(@class_weight.reshape(*shape), x.shape)
           end
           log_yd = rollaxis(log_y, 1)
-          log_yd = log_yd.reshape(len(log_yd), -1)
-
-          ravel_arr = t.flatten.dup
+          begin
+            log_yd = log_yd.reshape(log_yd.size, -1)
+          rescue ArgumentError
+          end
+          ravel_arr = t.dup.flatten.dup
           ravel_arr = ravel_arr[ravel_arr<0] = 0
           arange_arr = t.class.new(t.size).seq
           log_p = log_yd[ravel_arr, arange_arr]
 
-          log_p *= (t.flatten.dup != @ignore_label)
+          t.flatten.dup[(t.dup==@ignore_label)] = 0
+          log_p *= t
           if @reduce == 'mean'
             if @normalize
               count = t.ne(@ignore_label).count
@@ -58,11 +61,46 @@ module Chainer
             @coeff = 1.0 / [count, 1].max
 
             y = log_p.sum(keepdims: true) * (-@coeff)
-            [y.reshape([])]
+            [y.reshape(())]
           else
             [-log_p.reshape(t.shape)]
           end
         end
+
+        def backward_cpu(inputs, grad_outputs)
+          x, t = inputs
+          gloss = grad_outputs[0]
+
+          if self.instance_variable_defined?(:'@y')
+            y = @y.dup
+          else
+            y = Activation.log_softmax(x)
+            y = Numo::NMath.exp(y)
+          end
+
+          if y.ndim == 2
+            gx = y
+            t[t<0] = 0
+            gx[Numo::DFloat.new(t.size).seq, t] -= 1
+            if @class_weight
+              shape = x.ndim.times.map { |d| d == 1 ? -1 : 1 }
+              c = broadcast_to(@class_weight.reshape(shape), x.shape)
+              c = c[Numo::DFloat.new(t.size).seq, t]
+              gx *= broadcast_to(t.expand_dims(1), gx.shape)
+            end
+            gx *= t.flatten.dup[(t.dup==@ignore_label)].reshape(t.size, 1)
+          else
+            raise 'TODO: ndim > 2 backward'
+          end
+
+          if @reduce == 'mean'
+            gx *= gloss * @coeff
+          else
+            raise 'TODO: reduce'
+          end
+          return [gx, nil]
+        end
+
 
         private
 

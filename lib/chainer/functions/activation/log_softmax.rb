@@ -1,7 +1,7 @@
 module Chainer
   module Functions
     module Activation
-      def logsumexp(x)
+      def self.logsumexp(x)
         m = x.max(axis: 1, keepdims: true)
         y = x - m
         y = Numo::NMath.exp(y)
@@ -10,7 +10,7 @@ module Chainer
         m + s
       end
 
-      def _log_softmax(x)
+      def self.log_softmax(x)
         log_z = logsumexp(x)
         x - log_z
       end

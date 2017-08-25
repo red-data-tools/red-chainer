@@ -32,6 +32,7 @@ module Chainer
           else
             pred = y.max_index(axis: 1).to_a.map.with_index { |val, idx| val - y.shape[1] * idx}
             pred = y.class[*pred].reshape(*t.shape)
+
             [y.class.cast(y.class[pred.eq(t)].mean)]
           end
         end

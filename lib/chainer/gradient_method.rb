@@ -12,6 +12,50 @@ module Chainer
       end
     end
 
+    def reallocate_cleared_grads
+      @target.namedparams(include_uninit: false).each do |(name, param)|
+        if param.grad.nil?
+          param.grad = Numo::NArray.[](*param.data).new_zeros
+        end
+      end
+    end
+
+    def call_hooks
+      @hooks.each do |hook|
+        _call_hook(hook)
+        reallocate_cleared_grads
+      end
+    end
+
+    def update(lossfun=nil, *args, **kwds)
+      if lossfun
+        use_cleargrads = self.methods.include?(:use_cleargrads) ? self.use_cleargrads : true
+        if args.size > 0 && kwds.keys.size > 0
+          loss = lossfun.(*args, **kwds)
+        elsif args.size > 0
+          loss = lossfun.(*args)
+        elsif kwds.keys.size > 0
+          loss = lossfun.(**kwds)
+        end
+
+        if use_cleargrads
+          @target.cleargrads()
+        else
+          @target.zerograds()
+        end
+        loss.backward()
+      end
+
+      reallocate_cleared_grads
+
+      call_hooks
+
+      @t += 1
+      @target.params.each do |param|
+        param.update
+      end
+    end
+
     def create_update_rule
       raise NotImplementedError
     end

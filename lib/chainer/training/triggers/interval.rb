@@ -8,7 +8,7 @@ module Chainer
           @count = 0
         end
 
-        def call(train)
+        def call(trainer)
           updater = trainer.updater
           if @unit == 'epoch'
             prev = @count

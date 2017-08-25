@@ -22,7 +22,7 @@ module Chainer
         if @order.nil?
           batch = @dataset[i...i_end]
         else
-          batch = @order[i...i_end].map { |index| @dataset[index] }
+          batch = @order[i...i_end].to_a.map { |index| @dataset[index] }
         end
 
         if i_end >= n
@@ -45,6 +45,7 @@ module Chainer
           end
 
           @epoch += 1
+          puts "epoch is #{@epoch}"
           @is_new_epoch = true
         else
           @is_new_epoch = false
@@ -52,6 +53,10 @@ module Chainer
         end
 
         batch
+      end
+
+      def epoch_detail
+        @epoch + @current_position / @dataset.size
       end
 
       def reset

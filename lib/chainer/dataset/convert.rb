@@ -18,8 +18,12 @@ module Chainer
 
           first_elem.size.times do |i|
             x = concat_arrays(batch.map { |b| b[i] }, padding[i])
-            result.append(to_device(device, x))
+            result.push(to_device(device, x))
           end
+
+          return result
+        else
+          return to_device(device, concat_arrays(batch, padding))
         end
       end
 
@@ -32,7 +36,7 @@ module Chainer
           return concat_arrays_with_padding(arrays, padding)
         end
 
-        Numo::NArray.concatenate(arrays.map { |arr| arr[nil] })
+        Numo::NArray.[](*arrays.to_a.map { |arr| arr.kind_of?(Numeric) ? arr : Numo::NArray.[](*arr) })
       end
 
       def self.concat_arrays_with_padding(arrays, padding)

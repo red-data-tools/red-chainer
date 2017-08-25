@@ -3,6 +3,8 @@ module Chainer
     module Extensions
       class Evaluator < Extension
         def initialize(iterator, target, converter: nil, device: nil, eval_hook: nil, eval_func: nil)
+          @priority = Extension::PRIORITY_WRITER
+
           if iterator.kind_of?(Dataset::Iterator)
             iterator = { main: iterator }
           end

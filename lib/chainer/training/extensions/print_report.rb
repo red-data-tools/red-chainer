@@ -17,6 +17,10 @@ module Chainer
           templates = []
           @templates = templates
         end
+
+        def call(trainer)
+
+        end
       end
     end
   end
