@@ -62,11 +62,15 @@ module Chainer
       @node.rank
     end
 
+    def cleargrad
+      @node.grad = nil
+    end
+
     def set_creator(gen_func)
       @node.set_creator(gen_func)
     end
 
-    def backward(retain_grad: false)    
+    def backward(retain_grad: false)
       return if self.creator.nil?
 
       if self.data.size == 1 && self.grad.nil?
@@ -76,7 +80,6 @@ module Chainer
       funcs = [self.creator]
 
       while func = funcs.pop
-      
         outputs = func.outputs.map(&:__getobj__)
         in_data = func.inputs.map(&:data)
         out_grad = outputs.map { |y| y.nil? ? nil : y.grad }
@@ -100,7 +103,6 @@ module Chainer
 
         seen_vars = []
         need_copy = []
-
 
         func.inputs.zip(gxs).each do |x, gx|
           next if gx.nil?

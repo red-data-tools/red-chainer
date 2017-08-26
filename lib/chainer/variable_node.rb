@@ -62,7 +62,7 @@ module Chainer
         @dtype = nil
         @shape = nil
       else
-        @dtype = data.class.to_s.split('::').last
+        @dtype = data.class
         @shape = data.shape
       end
     end

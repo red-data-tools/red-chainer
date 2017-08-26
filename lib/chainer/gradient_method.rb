@@ -13,7 +13,7 @@ module Chainer
     end
 
     def reallocate_cleared_grads
-      @target.namedparams(include_uninit: false).each do |(name, param)|
+      @target.namedparams(include_uninit: false) do |(name, param)|
         if param.grad.nil?
           param.grad = Numo::NArray.[](*param.data).new_zeros
         end
@@ -51,7 +51,7 @@ module Chainer
       call_hooks
 
       @t += 1
-      @target.params.each do |param|
+      @target.params do |param|
         param.update
       end
     end
