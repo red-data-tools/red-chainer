@@ -30,6 +30,11 @@ module Chainer
       @update_rule = nil
     end
 
+    def cleargrad
+      super
+      @grad_initializer = nil if self.data.nil?
+    end
+
     def init(shape)
       data = Chainer::Initializers.generate_array(@initializer, shape)
       ginit = @grad_initializer
@@ -37,6 +42,12 @@ module Chainer
 
       @data[0] = data
       @node.grad = grad
+    end
+
+    def update
+      if @update_rule
+        @update_rule.update
+      end
     end
   end
 end

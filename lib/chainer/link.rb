@@ -17,30 +17,41 @@ module Chainer
 
       begin
         yield
+        set_attr
       ensure
         @within_init_scope = old_flag
       end
     end
 
+    def set_attr
+      self.instance_variables.each do |name|
+        value = self.instance_variable_get(name)
+        if value.instance_of?(Chainer::Parameter)
+          @params << name
+          @persistent.delete(name)
+        end
+      end
+    end
+
     def cleargrads
-      params.each do |param|
+      params do |param|
         param.cleargrad
       end
     end
 
     def params(include_uninit: true)
-      @params.each do |name|
-        data = self.send(name).data
+      @params.map do |name|
+        data = self.instance_variable_get(name).data
         if include_uninit || data
-          yield self.send(name)
+          yield self.instance_variable_get(name)
         end
       end
     end
 
     def namedparams(include_uninit: true)
       @params.each do |name|
-        if include_uninit || self.send(name).data
-          yield ['/' + name, self.send(name)]
+        if include_uninit || self.instance_variable_get(name).data
+          yield ['/' + name.to_s, self.instance_variable_get(name)]
         end
       end
     end
@@ -52,13 +63,23 @@ module Chainer
       @children = []
     end
 
+    def set_attr
+      self.instance_variables.each do |name|
+        value = self.instance_variable_get(name)
+        if value.kind_of?(Chainer::Link)
+          @children << name
+        end
+      end
+      super
+    end
+
     def params(include_uninit: true)
       super(include_uninit: include_uninit) do |param|
         yield param
       end
-      
+
       @children.each do |name|
-        self.send(name).params(include_uninit: include_uninit) do |param|
+        self.instance_variable_get(name).params(include_uninit: include_uninit) do |param|
           yield param
         end
       end
@@ -66,12 +87,12 @@ module Chainer
 
     def namedparams(include_uninit: true)
       super(include_uninit: include_uninit) do |param|
-        yield ret
+        yield param
       end
 
       @children.each do |name|
         prefix = "/#{name}"
-        self.send(name).namedparams(include_uninit: include_uninit).each do |(path, param)|
+        self.instance_variable_get(name).namedparams(include_uninit: include_uninit) do |(path, param)|
           yield [prefix + path, param]
         end
       end
