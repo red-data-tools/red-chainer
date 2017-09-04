@@ -46,7 +46,7 @@ module Chainer
 
     def update
       if @update_rule
-        @update_rule.update
+        @update_rule.update(self)
       end
     end
   end

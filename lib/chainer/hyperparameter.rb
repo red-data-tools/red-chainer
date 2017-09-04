@@ -7,7 +7,7 @@ module Chainer
     end
 
     def method_missing(name)
-      @parent.send(name)
+      @parent.instance_variable_get("@#{name}")
     end
 
     def get_dict
