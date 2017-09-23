@@ -7,7 +7,11 @@ module Chainer
       end
 
       def call(array)
-        Numo::NArray.cast(array)
+        if @dtype
+          raise ArgumentError unless array.dtype == @dtype
+        end
+        array.store(@fill_value)
+        array
       end
     end
   end

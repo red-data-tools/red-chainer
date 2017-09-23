@@ -26,11 +26,10 @@ module Chainer
         return if grad.nil?
 
         hp = @hyperparam
-        m, v = @state[:m], @state[:v]
 
-        m += (1 - hp.beta1) * (grad - m)
-        v += (1 - hp.beta2) * (grad * grad - v)
-        param.data -= lr * m / (Numo::NMath.sqrt(v) + hp.eps)
+        @state[:m] += (1 - hp.beta1) * (grad - @state[:m])
+        @state[:v] += (1 - hp.beta2) * (grad * grad - @state[:v])
+        param.data -= lr * @state[:m] / (Numo::NMath.sqrt(@state[:v]) + hp.eps)
       end
 
       def lr

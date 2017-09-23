@@ -24,12 +24,13 @@ module Chainer
           @y = nil
           @accuracy = nil
           @y = @predictor.(*x)
+
           @loss = @lossfun.call(@y, t)
           # TODO: reporter
           if @compute_accuracy
             @accuracy = @accfun.call(@y, t)
 
-            puts "> #{@accuracy.data[0]}"
+            puts "> #{@accuracy.data.to_a}"
             # TODO:reporter 
           end
           @loss
