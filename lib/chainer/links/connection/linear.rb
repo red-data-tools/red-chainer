@@ -19,7 +19,7 @@ module Chainer
               @b = nil
             else
               initial_bias = 0 if initial_bias.nil?
-              bias_initializer = Chainer::Initializers.get_initializer(initial_bias) 
+              bias_initializer = Chainer::Initializers.get_initializer(initial_bias)
               @b = Chainer::Parameter.new(initializer: bias_initializer, shape: out_size)
             end
           end

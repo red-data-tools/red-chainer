@@ -3,7 +3,6 @@ module Chainer
     def self.generate_array(initializer, shape)
       array = Numo::DFloat.new(shape).rand
       initializer.(array)
-      array
     end
 
     def self.get_initializer(initializer)

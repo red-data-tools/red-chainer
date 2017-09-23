@@ -45,13 +45,20 @@ module Chainer
             log_yd = log_yd.reshape(log_yd.size, -1)
           rescue ArgumentError
           end
-          ravel_arr = t.dup.flatten.dup
-          ravel_arr = ravel_arr[ravel_arr<0] = 0
-          arange_arr = t.class.new(t.size).seq
-          log_p = log_yd[ravel_arr, arange_arr]
 
-          t.flatten.dup[(t.dup==@ignore_label)] = 0
-          log_p *= t
+          ravel_arr = t.dup.flatten.dup
+          ravel_arr[ravel_arr<0] = 0
+          arange_arr = t.class.new(t.size).seq
+
+          # https://github.com/chainer/chainer/blob/v2.0.2/chainer/functions/loss/softmax_cross_entropy.py#L79
+          log_p = []
+          arange_arr.each do |col_idx|
+            log_p << log_yd[ravel_arr, col_idx][col_idx]
+          end
+          log_p = Numo::NArray.[](*log_p)
+
+          log_p[log_p.eq(@ignore_label)] = 0
+
           if @reduce == 'mean'
             if @normalize
               count = t.ne(@ignore_label).count
@@ -81,14 +88,21 @@ module Chainer
           if y.ndim == 2
             gx = y
             t[t<0] = 0
-            gx[Numo::DFloat.new(t.size).seq, t] -= 1
+            t.each_with_index do |v, idx|
+              gx[(idx * 10)...(idx * 10 + 10)][v] -= 1
+            end
+
             if @class_weight
               shape = x.ndim.times.map { |d| d == 1 ? -1 : 1 }
               c = broadcast_to(@class_weight.reshape(shape), x.shape)
               c = c[Numo::DFloat.new(t.size).seq, t]
               gx *= broadcast_to(t.expand_dims(1), gx.shape)
             end
-            gx *= t.flatten.dup[(t.dup==@ignore_label)].reshape(t.size, 1)
+
+            bit = t.flatten.dup
+            bit[t.ne(@ignore_label)] = 1
+            bit[bit.ne(1)] = 0
+            gx *= bit.reshape(t.size, 1)
           else
             raise 'TODO: ndim > 2 backward'
           end

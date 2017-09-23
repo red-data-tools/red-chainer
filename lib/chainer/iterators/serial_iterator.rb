@@ -19,11 +19,7 @@ module Chainer
         i_end = i + @batch_size
         n = @dataset.size
 
-        if @order.nil?
-          batch = @dataset[i...i_end]
-        else
-          batch = @order[i...i_end].to_a.map { |index| @dataset[index] }
-        end
+        batch = @order[i...i_end].to_a.map { |index| @dataset[index] }
 
         if i_end >= n
           if @repeat
@@ -64,7 +60,8 @@ module Chainer
           order = @dataset.size.times.map(&:to_i).shuffle
           @order = Numo::Int64[*order]
         else
-          @order = nil
+          order = @dataset.size.times.map(&:to_i)
+          @order = Numo::Int64[*order]
         end
 
         @current_position = 0
