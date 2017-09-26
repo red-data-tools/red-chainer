@@ -15,20 +15,31 @@ TODO: Delete this and the text above, and describe your gem
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'red-chainer'
+gem 'red-chainer', github: 'red-data-tools/red-chainer' 
 ```
 
 And then execute:
 
-    $ bundle
+```ruby
+$ bundle
+```
 
 Or install it yourself as:
 
-    $ gem install red-chainer
+```ruby
+gem install specific_install
+gem specific_install -l 'https://github.com/red-data-tools/red-chainer'
+```
 
 ## Usage
+mnist sample program is [here](./examples/mnist.rb)
 
-TODO: Write usage instructions here
+```ruby
+# install Gemfile
+$ bundle exec ruby examples/mnist.rb
+# install yourself
+$ ruby examples/mnist.rb
+```
 
 ## Development
 
