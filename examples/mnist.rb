@@ -1,4 +1,6 @@
 require 'chainer'
+require 'fileutils'
+require 'tmpdir'
 
 class MLP < Chainer::Chain
   L = Chainer::Links::Connection::Linear
