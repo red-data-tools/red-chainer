@@ -34,15 +34,22 @@ module Chainer
         path
       end
 
-      def self.cache_or_load_file(path, data)
+      def self.cache_or_load_file(path, &creator)
+        raise 'Please set dataset creator on block' if creator.nil?
+
         return PStore.new(path).transaction { |t| t['data'] } if File.exist?(path)
 
-        pstore = PStore.new(path)
-        pstore.transaction{|t|
-          t["data"] = data
-        }
-
+        data = creator.call
+        PStore.new(path).transaction do |t|
+          t['data'] = data
+        end
         data
+      rescue TypeError => e
+        puts e.message
+        FileUtils.rm_f(path)
+        cache_or_load_file(path) do
+          creator.call
+        end
       end
     end
   end
