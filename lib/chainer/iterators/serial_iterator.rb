@@ -33,9 +33,8 @@ module Chainer
               else
                 batch = @dataset[0...rest].map { |index| @dataset[index] }
               end
-
-              @current_position = rest
             end
+            @current_position = rest
           else
             @current_position = 0
           end
