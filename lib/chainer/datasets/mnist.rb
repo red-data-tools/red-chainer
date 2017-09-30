@@ -48,8 +48,9 @@ module Chainer
       def self.retrieve_mnist(name, urls)
         root = Chainer::Dataset::Download.get_dataset_directory('pfnet/chainer/mnist')
         path = File.expand_path(name, root)
-        creator = make_npz(path, urls)
-        Chainer::Dataset::Download.cache_or_load_file(path, creator)
+        Chainer::Dataset::Download.cache_or_load_file(path) do
+          make_npz(path, urls)
+        end
       end
 
       def self.make_npz(path, urls)
