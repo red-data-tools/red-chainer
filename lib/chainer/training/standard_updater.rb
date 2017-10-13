@@ -21,13 +21,16 @@ module Chainer
       end
 
       def get_all_optimizers
-        @optimizer.to_h
+        @optimizers.to_h
       end
 
       def update
         update_core
-        puts "iteration #{@iteration}"
         @iteration += 1
+      end
+
+      def epoch
+        @iterators[:main].epoch
       end
 
       def epoch_detail

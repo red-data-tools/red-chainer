@@ -22,6 +22,12 @@ module Chainer
       def serialize(serializer)
         raise NotImplementedError
       end
+
+      # this method uses in ERB
+      # example: ERB.new("<%= self %>").result(updater.bind)
+      def bind
+        binding
+      end
     end
   end
 end

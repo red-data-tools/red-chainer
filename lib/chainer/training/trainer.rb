@@ -12,7 +12,7 @@ module Chainer
     end
 
     class Trainer
-      attr_accessor :updater
+      attr_accessor :updater, :stop_trigger, :observation, :out
 
       def initialize(updater, stop_trigger: nil, out: 'result')
         @updater = updater
@@ -23,7 +23,10 @@ module Chainer
         reporter = Reporter.new
         updater.get_all_optimizers().each do |(name, optimizer)|
           reporter.add_observer(name, optimizer.target)
-          reporter.add_observers(name, optimizer.target.namedlinks(skipself: true))
+          optimizer.target.namedlinks(skipself: true) do |suffix, observer|
+            observer_name = name.to_s + suffix
+            reporter.add_observer(observer_name, observer)
+          end
         end
         @reporter = reporter
 
@@ -35,6 +38,13 @@ module Chainer
         @final_elapsed_time = nil
 
         updater.connect_trainer(self)
+      end
+
+      def elapsed_time
+        return @final_elapsed_time if @done
+        raise "training has not been started yet" if @start_at.nil?
+
+        Time.now.to_f - @start_at - @snapshot_elapsed_time.to_f
       end
 
       def extend(extension, name: nil, trigger: nil, priority: nil, invoke_before_training: nil)
@@ -75,11 +85,19 @@ module Chainer
         @extensions[modified_name] = ExtensionEntry.new(extension, priority, trigger, invoke_before_training)
       end
 
+      def get_extension(name)
+        if @extensions.keys.include?(name)
+          @extensions[name].extension
+        else
+          raise "extension #{name} not found"
+        end
+      end
+
       def run
         raise 'cannot run training loop multiple times' if @done
         FileUtils.mkdir_p(@out)
 
-        extensions = @extensions.sort_by { |(_, e)| e.priority }.reverse.map { |(name, extension)| [name, extension] }
+        extensions = @extensions.sort_by { |(_, e)| e.priority }.map { |(name, extension)| [name, extension] }
 
         @start_at = Time.now.to_f
 

@@ -1,6 +1,8 @@
 module Chainer
   module Iterators
     class SerialIterator < Chainer::Dataset::Iterator 
+      attr_reader :epoch
+
       def initialize(dataset, batch_size, repeat: true, shuffle: true)
         @dataset = dataset
         @batch_size = batch_size
@@ -40,7 +42,6 @@ module Chainer
           end
 
           @epoch += 1
-          puts "epoch is #{@epoch}"
           @is_new_epoch = true
         else
           @is_new_epoch = false
@@ -51,7 +52,7 @@ module Chainer
       end
 
       def epoch_detail
-        @epoch + @current_position / @dataset.size
+        @epoch + @current_position.to_f / @dataset.size
       end
 
       def reset

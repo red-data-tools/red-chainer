@@ -55,6 +55,10 @@ module Chainer
         end
       end
     end
+
+    def namedlinks(skipself: false)
+      yield('/', self) unless skipself
+    end
   end
 
   class Chain < Link
@@ -94,6 +98,19 @@ module Chainer
         prefix = "/#{name}"
         self.instance_variable_get(name).namedparams(include_uninit: include_uninit) do |(path, param)|
           yield [prefix + path, param]
+        end
+      end
+    end
+
+    def namedlinks(skipself: false)
+      yield('/' , self) unless skipself
+      d = self.instance_variables.each_with_object({}) { |sym, h| h[sym] = self.instance_variable_get(sym) }
+      @children.each do |name|
+        child = d[name.to_sym]
+        prefix = '/' + name.to_s
+        yield(prefix, child)
+        d[name].namedlinks(skipself: true) do |path, link|
+          yield(prefix + path, link)
         end
       end
     end

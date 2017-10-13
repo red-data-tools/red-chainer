@@ -2,6 +2,8 @@ module Chainer
   module Training
     module Triggers
       class IntervalTrigger
+        attr_reader :period, :unit, :count
+
         def initialize(period, unit)
           @period = period
           @unit = unit

@@ -26,12 +26,10 @@ module Chainer
           @y = @predictor.(*x)
 
           @loss = @lossfun.call(@y, t)
-          # TODO: reporter
+          Chainer::Reporter.save_report({loss: @loss}, self)
           if @compute_accuracy
             @accuracy = @accfun.call(@y, t)
-
-            puts "> #{@accuracy.data.to_a}"
-            # TODO:reporter 
+            Chainer::Reporter.save_report({accuracy: @accuracy}, self)
           end
           @loss
         end
