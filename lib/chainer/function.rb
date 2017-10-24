@@ -31,7 +31,7 @@ module Chainer
       if Chainer.configuration.enable_backprop
         @rank = inputs.map(&:rank).max || 0
 
-        ret.each { |y| y.set_creator(self) }
+        ret.each { |y| y.creator = self }
 
         @inputs = inputs.map(&:node)
         @outputs = ret.map { |y| WeakRef.new(y.node) }
