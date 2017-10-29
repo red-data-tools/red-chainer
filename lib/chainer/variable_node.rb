@@ -41,10 +41,6 @@ module Chainer
       end
     end
 
-    def set_creator(creator)
-      self.creator = creator
-    end
-
     def unchain
       @creator = nil
     end

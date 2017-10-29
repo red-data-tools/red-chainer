@@ -71,10 +71,6 @@ module Chainer
       @node.grad = nil
     end
 
-    def set_creator(gen_func)
-      @node.set_creator(gen_func)
-    end
-
     def backward(retain_grad: false)
       return if self.creator.nil?
 
