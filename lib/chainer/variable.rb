@@ -2,16 +2,15 @@ module Chainer
   class Variable
     attr_accessor :data, :grad, :requires_grad, :node
 
-    def initialize(data=nil, **kwargs)
-      args = Utils::Argument.parse_kwargs(kwargs, name: nil, grad: nil, requires_grad: true)
+    def initialize(data=nil, name: nil, grad: nil, requires_grad: true)
       unless data.nil? || data.is_a?(Numo::NArray)
         raise TypeError, "Numo::NArray are expected."
       end
 
       @data = [data]
-      @grad = args[:grad]
-      @requires_grad = args[:requires_grad]
-      @node = VariableNode.new(variable: self, name: args[:name], grad: args[:grad])
+      @grad = grad
+      @requires_grad = requires_grad
+      @node = VariableNode.new(variable: self, name: name, grad: grad)
     end
 
     def data
