@@ -31,7 +31,7 @@ module Chainer
 
         def forward_cpu(inputs)
           x, t = inputs
-          log_y = Activation.log_softmax(x)
+          log_y = Activation._log_softmax(x)
 
           if @cache_score
             @y = Numo::NMath.exp(log_y)
@@ -81,7 +81,7 @@ module Chainer
           if self.instance_variable_defined?(:'@y')
             y = @y.dup
           else
-            y = Activation.log_softmax(x)
+            y = Activation._log_softmax(x)
             y = Numo::NMath.exp(y)
           end
 

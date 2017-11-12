@@ -10,26 +10,78 @@ module Chainer
         m + s
       end
 
-      def self.log_softmax(x)
+      def self._log_softmax(x)
         log_z = logsumexp(x)
         x - log_z
       end
 
+      # Log-softmax activation function.
       class LogSoftmax < Function
-        def self.relu(x)
+        # Channel-wise log-softmax function.
+        #
+        # (ToDo. This is Sphinx format, but I would like to convert it to YARD(and MathJax).)
+        #
+        #   This function computes its logarithm of softmax along the second axis.
+        #   Let :math:`c = (c_1, c_2, \\dots, c_D)` be the slice of ``x`` along with
+        #   the second axis. For each slice :math:`c`, it computes the logarithm of
+        #   the function :math:`f(c)` defined as
+        #
+        #   .. math::
+        #       f(c) = {\\exp(c) \\over \\sum_{d} \\exp(c_d)}.
+        #
+        #   This method is theoretically equivalent to ``log(softmax(x))`` but is more
+        #   stable.
+        #
+        #   .. note::
+        #       ``log(softmax(x))`` may cause underflow when ``x`` is too small,
+        #       because ``softmax(x)`` may returns ``0``.
+        #       ``log_softmax`` method is more stable.
+        #
+        #   Args:
+        #       x (:class:`~Chainer::Variable.new` or :class:`Numo::DFloat`):
+        #           Input variable.
+        #           A :math:`n`-dimensional (:math:`n \\geq 2`) float array.
+        #
+        #   Returns:
+        #       ~Chainer::Variable: Output variable.
+        #       A :math:`n`-dimensional (:math:`n \\geq 2`) float array, which is the
+        #       same shape with x.
+        #
+        #   .. seealso:: :func:`~Chainer::Functions::Softmax`
+        #
+        #   .. admonition:: Example
+        #
+        #       > x = Numo::DFloat[[0, 1, 2], [0, 2, 4]]
+        #       => Numo::DFloat#shape=[2,3]
+        #       [[0, 1, 2],
+        #        [0, 2, 4]]
+        #       > F = Chainer::Functions::Activation::LogSoftmax
+        #       > F.log_softmax(x).data
+        #       => Numo::DFloat#shape=[2,3]
+        #       [[-2.40761, -1.40761, -0.407606],
+        #        [-4.14293, -2.14293, -0.142932]]
+        #
+        #      (T.B.I : F.log, F.softmax)
+        #       > F.log_softmax(x).data.nearly_eq(F.log(F.softmax(x)).data).all?)
+        #       => true
+        #
+        def self.log_softmax(x)
           self.new.(x)
         end
 
-        def forward_cpu(x)
+        def forward(xs)
+          y = Chainer::Functions::Activation._log_softmax(xs[0])
+          @x_shape = xs[0].shape
+          @x_dtype = xs[0].class
           retain_inputs([])
           retain_outputs([0])
-          x[0][x[0]<=0] = 0
-          [Utils::Array.force_array(x[0])] 
+          [y]
         end
 
-        def backward_cpu(x, gy)
-          y = output_data[0]
-          [Utils::Array.force_array(gy[0] * (y > 0))]
+        def backward(x, gy)
+          y = @output_data[0]
+          gx = gy[0] - Numo::NMath.exp(y) * gy[0].sum(axis: 1, keepdims: true)
+          [gx]
         end
       end
     end
