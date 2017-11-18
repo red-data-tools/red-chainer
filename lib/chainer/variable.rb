@@ -54,6 +54,10 @@ module Chainer
       self.data.shape
     end
 
+    def ndim
+      self.data.ndim
+    end
+
     def size
       self.data.size
     end
