@@ -5,29 +5,20 @@ module Chainer
       class Sigmoid < Function
         # Element-wise sigmoid logistic function.
         #
-        #  (ToDo. This is Sphinx format, but I would like to convert it to YARD(and MathJax).) 
+        # $$
+        # f(x)=(1 + \\exp(-x))^ { -1 }.
+        # $$
         #
-        #    .. math:: f(x)=(1 + \\exp(-x))^{-1}.
-        #
-        #   Args:
-        #       x (:class:`~Chainer::Variable.new` or :class:`Numo::DFloat`):
-        #           Input variable. A :math:`(s_1, s_2, ..., s_N)`-shaped float array.
-        #
-        #   Returns:
-        #       ~Chainer::Variable: Output variable. A
-        #       :math:`(s_1, s_2, ..., s_N)`-shaped float array.
-        #
-        #   .. admonition:: Example
-        #
-        #       It maps the input values into the range of :math:`[0, 1]`.
-        #
-        #       > x = Numo::DFloat.new(3).seq(-2, 2)
-        #       => Numo::DFloat#shape=[3]
-        #       [-2, 0, 2]
-        #       > F = Chainer::Functions::Activation::Sigmoid
-        #       > F.sigmoid(x).data
-        #       => Numo::DFloat#shape=[3]
-        #       [0.119203, 0.5, 0.880797]
+        # @param [Chainer::Variable or Numo::DFloat] x Input variable. A $(s_1, s_2, ..., s_N)$-shaped float array.
+        # @return [Chainer::Variable] Output variable. A $(s_1, s_2, ..., s_N)$-shaped float array.
+        # @example  It maps the input values into the range of $`[0, 1]`$.
+        #   > x = Numo::DFloat.new(3).seq(-2, 2)
+        #   => Numo::DFloat#shape=[3]
+        #   [-2, 0, 2]
+        #   > F = Chainer::Functions::Activation::Sigmoid
+        #   > F.sigmoid(x).data
+        #   => Numo::DFloat#shape=[3]
+        #   [0.119203, 0.5, 0.880797]
         #
         def self.sigmoid(x)
           self.new.(x)

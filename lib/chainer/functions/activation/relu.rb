@@ -5,29 +5,22 @@ module Chainer
       class Relu < Function
         # Rectified Linear Unit function.
         #
-        #  (ToDo. This is Sphinx format, but I would like to convert it to YARD(and MathJax).)
+        # $$
+        # f(x)=\\max(0, x).
+        # $$
         #
-        #   .. math:: f(x)=\\max(0, x).
-        #
-        #   Args:
-        #       x (:class:`~Chainer::Variable.new` or :class:`Numo::DFloat`):
-        #           Input variable. A :math:`(s_1, s_2, ..., s_N)`-shaped float array.
-        #
-        #   Returns:
-        #       ~Chainer::Variable: Output variable. A
-        #       :math:`(s_1, s_2, ..., s_N)`-shaped float array.
-        #
-        #   .. admonition:: Example
-        #
-        #       > x = Numo::DFloat[[-1, 0], [2, -3], [-2, 1]]
-        #       > (x < 0).any?
-        #       => true
-        #       > F = Chainer::Functions::Activation::Relu
-        #       > y = F.relu(x)
-        #       > (y.data < 0).any?
-        #       => false
-        #       > y.shape
-        #       => [3, 2]
+        # @param [Chainer::Variable or Numo::DFloat] x Input variable. A $(s_1, s_2, ..., s_N)$-shaped float array.
+        # @return [Chainer::Variable] Output variable. A $(s_1, s_2, ..., s_N)$-shaped float array.
+        # @example
+        #   > x = Numo::DFloat[[-1, 0], [2, -3], [-2, 1]]
+        #   > (x < 0).any?
+        #   => true
+        #   > F = Chainer::Functions::Activation::Relu
+        #   > y = F.relu(x)
+        #   > (y.data < 0).any?
+        #   => false
+        #   > y.shape
+        #   => [3, 2]
         #
         def self.relu(x)
           self.new.(x)

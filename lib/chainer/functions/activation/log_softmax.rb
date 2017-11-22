@@ -19,51 +19,41 @@ module Chainer
       class LogSoftmax < Function
         # Channel-wise log-softmax function.
         #
-        # (ToDo. This is Sphinx format, but I would like to convert it to YARD(and MathJax).)
+        # This function computes its logarithm of softmax along the second axis.
+        # Let $c = (c_1, c_2, \\dots, c_D)$ be the slice of +x+ along with
+        # the second axis. For each slice $c$, it computes the logarithm of
+        # the function $f(\c)$ defined as
         #
-        #   This function computes its logarithm of softmax along the second axis.
-        #   Let :math:`c = (c_1, c_2, \\dots, c_D)` be the slice of ``x`` along with
-        #   the second axis. For each slice :math:`c`, it computes the logarithm of
-        #   the function :math:`f(c)` defined as
+        # $$
+        # f(\c) = { \\exp(\c) \\over \\sum_{ d } \\exp(c_d) }.
+        # $$
         #
-        #   .. math::
-        #       f(c) = {\\exp(c) \\over \\sum_{d} \\exp(c_d)}.
+        # This method is theoretically equivalent to +log(softmax(x))+ but is more
+        # stable.
         #
-        #   This method is theoretically equivalent to ``log(softmax(x))`` but is more
-        #   stable.
+        # @note
+        #   +log(softmax(x))+ may cause underflow when +x+ is too small,
+        #   because +softmax(x)+ may returns +0+.
+        #   +log_softmax+ method is more stable.
         #
-        #   .. note::
-        #       ``log(softmax(x))`` may cause underflow when ``x`` is too small,
-        #       because ``softmax(x)`` may returns ``0``.
-        #       ``log_softmax`` method is more stable.
+        # @param [Chainer::Variable or Numo::DFloat] x Input variable. A $n$-dimensional ($n \\geq 2$) float array.
+        # @return [Chainer::Variable] Output variable. A $n$-dimensional ($n \\geq 2$) float array, which is the same shape with x.
         #
-        #   Args:
-        #       x (:class:`~Chainer::Variable.new` or :class:`Numo::DFloat`):
-        #           Input variable.
-        #           A :math:`n`-dimensional (:math:`n \\geq 2`) float array.
+        # @see Chainer::Functions::Softmax
         #
-        #   Returns:
-        #       ~Chainer::Variable: Output variable.
-        #       A :math:`n`-dimensional (:math:`n \\geq 2`) float array, which is the
-        #       same shape with x.
-        #
-        #   .. seealso:: :func:`~Chainer::Functions::Softmax`
-        #
-        #   .. admonition:: Example
-        #
-        #       > x = Numo::DFloat[[0, 1, 2], [0, 2, 4]]
-        #       => Numo::DFloat#shape=[2,3]
-        #       [[0, 1, 2],
-        #        [0, 2, 4]]
-        #       > F = Chainer::Functions::Activation::LogSoftmax
-        #       > F.log_softmax(x).data
-        #       => Numo::DFloat#shape=[2,3]
-        #       [[-2.40761, -1.40761, -0.407606],
-        #        [-4.14293, -2.14293, -0.142932]]
-        #
-        #      (T.B.I : F.log, F.softmax)
-        #       > F.log_softmax(x).data.nearly_eq(F.log(F.softmax(x)).data).all?)
-        #       => true
+        # @example
+        #   > x = Numo::DFloat[[0, 1, 2], [0, 2, 4]]
+        #   => Numo::DFloat#shape=[2,3]
+        #   [[0, 1, 2],
+        #    [0, 2, 4]]
+        #   > F = Chainer::Functions::Activation::LogSoftmax
+        #   > F.log_softmax(x).data
+        #   => Numo::DFloat#shape=[2,3]
+        #   [[-2.40761, -1.40761, -0.407606],
+        #    [-4.14293, -2.14293, -0.142932]]
+        # @example (T.B.I : F.log, F.softmax)
+        #   > F.log_softmax(x).data.nearly_eq(F.log(F.softmax(x)).data).all?)
+        #   => true
         #
         def self.log_softmax(x)
           self.new.(x)
