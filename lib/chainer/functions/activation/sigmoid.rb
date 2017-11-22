@@ -36,6 +36,7 @@ module Chainer
         def forward_cpu(x)
           half = 0.5
           y = Utils::Array.force_array((Numo::NMath.tanh(x[0] * half) * half)+ half)
+          retain_inputs([])
           retain_outputs([0])
           return [y]
         end
