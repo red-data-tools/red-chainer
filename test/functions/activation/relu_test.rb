@@ -35,9 +35,13 @@ class Chainer::Functions::Activation::ReLUTest < Test::Unit::TestCase
     y = Chainer::Functions::Activation::Relu.relu(x)
     assert_equal(@dtype, y.data.class)
     expected = @x.dup
-    @x.shape.each_with_index do |x, i|
-      if x < 0
-        expected[i] = 0
+    if expected.shape == []
+      expected[expected < 0] = 0
+    else
+      @x.each_with_index do |x, *i|
+        if x < 0
+          expected[*i] = 0
+        end
       end
     end
     assert_true(y.data.nearly_eq(expected).all?)
@@ -46,6 +50,6 @@ class Chainer::Functions::Activation::ReLUTest < Test::Unit::TestCase
   data(data)
   def test_forward_cpu(data)
     _setup(data)
-    check_forward(@x)
+    check_forward(@x.dup)
   end
 end
