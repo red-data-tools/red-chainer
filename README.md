@@ -5,39 +5,35 @@
 Red Cahiner
 
 ## Description
-
 Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/chainer`. To experiment with that code, run `bin/console` for an interactive prompt.
-
-TODO: Delete this and the text above, and describe your gem
 
 ## Installation
 
 Add this line to your application's Gemfile:
 
-```ruby
-gem 'red-chainer', github: 'red-data-tools/red-chainer' 
+```bash
+gem 'red-chainer'
 ```
 
 And then execute:
 
-```ruby
+```bash
 $ bundle
 ```
 
 Or install it yourself as:
 
-```ruby
-gem install specific_install
-gem specific_install -l 'https://github.com/red-data-tools/red-chainer'
+```bash
+$ gem install red-chainer
 ```
 
 ## Usage
 mnist sample program is [here](./examples/mnist.rb)
 
-```ruby
-# install Gemfile
+```bash
+# when install Gemfile
 $ bundle exec ruby examples/mnist.rb
-# install yourself
+# when install yourself
 $ ruby examples/mnist.rb
 ```
 
