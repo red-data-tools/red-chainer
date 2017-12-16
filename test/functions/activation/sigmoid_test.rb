@@ -33,6 +33,6 @@ class Chainer::Functions::Activation::SigmoidTest < Test::Unit::TestCase
   data(data)
   def test_forward_cpu(data)
     _setup(data)
-    check_forward(@x)
+    check_forward(@x.dup)
   end
 end

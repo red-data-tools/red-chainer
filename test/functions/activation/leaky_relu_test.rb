@@ -2,9 +2,9 @@
 
 require 'numo/narray'
 require 'chainer'
-require 'chainer/functions/activation/relu'
+require 'chainer/functions/activation/leaky_relu'
 
-class Chainer::Functions::Activation::ReLUTest < Test::Unit::TestCase
+class Chainer::Functions::Activation::LeakyReLUTest < Test::Unit::TestCase
   data = {
     # Not Support Numo::SFloat test case. Because, Numo::NMath.exp always returns Numo::DFloat type.
     #'test1' => {shape: [3, 2], dtype: Numo::SFloat},
@@ -20,27 +20,29 @@ class Chainer::Functions::Activation::ReLUTest < Test::Unit::TestCase
     @dtype.srand(1) # To avoid false of "nearly_eq().all?", Use fixed seed value.
     @x = @dtype.new(@shape).rand(2) - 1
     @shape.map do |x|
-      if (-0.1 < x) and (x < 0.1)
+      if (-0.05 < x) and (x < 0.05)
         0.5
       else
         x
       end
     end
     @gy = @dtype.new(@shape).rand(2) - 1
-    @check_backward_options = {}
+    @slope = Random.rand
+    @check_forward_options = {}
+    @check_backward_options = {"dtype" => Numo::DFloat}
   end
 
-  def check_forward(x_data, use_cudnn: "always")
+  def check_forward(x_data)
     x = Chainer::Variable.new(x_data)
-    y = Chainer::Functions::Activation::Relu.relu(x)
+    y = Chainer::Functions::Activation::LeakyReLU.leaky_relu(x, slope: @slope)
     assert_equal(@dtype, y.data.class)
     expected = @x.dup
     if expected.shape == []
-      expected[expected < 0] = 0
+      expected[expected < 0] *= @slope
     else
       @x.each_with_index do |x, *i|
         if x < 0
-          expected[*i] = 0
+          expected[*i] *= @slope
         end
       end
     end
