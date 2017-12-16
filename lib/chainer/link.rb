@@ -67,7 +67,7 @@ module Chainer
         data = serializer.(name.to_s, param.data)
         if param.data.nil? && !data.nil?
           # Initialize the parameter here
-          param.initialize(data.shape)
+          param.init(data.shape)
           if param.data.is_a?(Numo::NArray)
             param.data.store(data)
           else
