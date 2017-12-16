@@ -58,6 +58,18 @@ module Chainer
           iterator.finalize
         end
       end
+
+      def serialize(serializer)
+        @iterators.each do |name, iterator|
+          iterator.serialize(serializer["iterator:#{name}"])
+        end
+        @optimizers.each do |name, optimizer|
+          optimizer.serialize(serializer["optimizer:#{name}"])
+          optimizer.target.serialize(serializer["model:#{name}"])
+        end
+
+        @iteration = serializer.('iteration', @iteration)
+      end
     end
   end
 end

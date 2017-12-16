@@ -131,6 +131,29 @@ module Chainer
         @final_elapsed_time = @elapsed_time
         @done = true
       end
+
+      def serialize(serializer)
+        updater.serialize(serializer['updater'])
+        if @stop_trigger.respond_to?(:serialize)
+          @stop_trigger.serialize(serializer['stop_trigger'])
+        end
+
+        s = serializer['extensions']
+        t = serializer['extension_triggers']
+        @extensions.each do |name, entry|
+          if entry.extension.respond_to?(:serialize)
+            entry.extension.serialize(s[name])
+          end
+          if entry.trigger.respond_to?(:serialize)
+            entry.trigger.serialize(t[name])
+          end
+        end
+        if serializer.is_a?(Chainer::Serializer)
+          serializer.('_snapshot_elapsed_time', elapsed_time)
+        else
+          @snapshot_elapsed_time = serializer.('_snapshot_elapsed_time', 0.0)
+        end
+      end
     end
   end
 end

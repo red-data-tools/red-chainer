@@ -37,7 +37,14 @@ module Chainer
     #
     # @param [any] obj: Target object to be serialized.  
     def save(obj)
-      obj.serialize
+      obj.serialize(self)
+    end
+  end
+
+  # Base class of all deserializers.
+  class Deserializer < AbstractSerializer
+    def load(obj)
+      obj.serialize(self)
     end
   end
 end
