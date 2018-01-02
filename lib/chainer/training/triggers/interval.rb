@@ -14,7 +14,7 @@ module Chainer
           updater = trainer.updater
           if @unit == 'epoch'
             prev = @count
-            @count = updater.epoch_detail.div(@period)
+            @count = updater.epoch_detail.div(@period).floor
             prev != @count
           else
             iteration = updater.iteration

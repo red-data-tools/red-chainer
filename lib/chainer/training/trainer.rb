@@ -44,7 +44,7 @@ module Chainer
         return @final_elapsed_time if @done
         raise "training has not been started yet" if @start_at.nil?
 
-        Time.now.to_f - @start_at - @snapshot_elapsed_time.to_f
+        Time.now.to_f - @start_at + @snapshot_elapsed_time.to_f
       end
 
       def extend(extension, name: nil, trigger: nil, priority: nil, invoke_before_training: nil)
@@ -97,7 +97,7 @@ module Chainer
         raise 'cannot run training loop multiple times' if @done
         FileUtils.mkdir_p(@out)
 
-        extensions = @extensions.sort_by { |(_, e)| e.priority }.map { |(name, extension)| [name, extension] }
+        extensions = @extensions.sort_by { |(_, e)| e.priority }.map { |(name, extension)| [name, extension] }.reverse
 
         @start_at = Time.now.to_f
 
@@ -115,7 +115,7 @@ module Chainer
             @observation = {}
             reporter.scope(@observation) do
               update.call
-              extensions.each do |(_, entry)|
+              extensions.each do |(name, entry)|
                 entry.extension.(self) if entry.trigger.(self)
               end
             end
