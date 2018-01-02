@@ -97,7 +97,7 @@ module Chainer
         raise 'cannot run training loop multiple times' if @done
         FileUtils.mkdir_p(@out)
 
-        extensions = @extensions.sort_by { |(_, e)| e.priority }.map { |(name, extension)| [name, extension] }.reverse
+        extensions = @extensions.sort_by { |(_, e)| -e.priority }.map { |(name, extension)| [name, extension] }
 
         @start_at = Time.now.to_f
 
