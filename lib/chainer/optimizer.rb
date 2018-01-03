@@ -68,7 +68,7 @@ module Chainer
     end
 
 
-    #Serializes the update rule state.
+    # Serializes the update rule state.
     # Be careful that this method only saves/loads the state of the update rule.
     # The parameters of the target link is not saved/loaded by this
     # method, and so you need to serialize the target link separately if you
