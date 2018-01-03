@@ -33,12 +33,12 @@ args = {
 }
 
 opt = OptionParser.new
-opt.on('-b', '--batchsize VALUE', "batchsize (default: #{args[:batchsize]})") { |v| args[:batchsize] = v.to_i }
-opt.on('-e', '--epoch VALUE', "epoch (default: #{args[:epoch]})") { |v| args[:epoch] = v.to_i }
-opt.on('-f', '--frequency VALUE', "frequency (default: #{args[:frequency]})") { |v| args[:frequency] = v.to_i }
-opt.on('-r', '--resume VALUE', "resume") { |v| args[:resume] = v }
-opt.on('-u', '--unit VALUE', "unit (default: #{args[:unit]})") { |v| args[:unit] = v.to_i }
+opt.on('-b', '--batchsize VALUE', "Number of images in each mini-batch (default: #{args[:batchsize]})") { |v| args[:batchsize] = v.to_i }
+opt.on('-e', '--epoch VALUE', "Number of sweeps over the dataset to train (default: #{args[:epoch]})") { |v| args[:epoch] = v.to_i }
+opt.on('-f', '--frequency VALUE', "Frequency of taking a snapshot (default: #{args[:frequency]})") { |v| args[:frequency] = v.to_i }
 opt.on('-o', '--out VALUE', "Directory to output the result (default: #{args[:out]})") { |v| args[:out] = v }
+opt.on('-r', '--resume VALUE', "Resume the training from snapshot") { |v| args[:resume] = v }
+opt.on('-u', '--unit VALUE', "Number of units (default: #{args[:unit]})") { |v| args[:unit] = v.to_i }
 opt.parse!(ARGV)
 
 model = Chainer::Links::Model::Classifier.new(MLP.new(args[:unit], 10))
