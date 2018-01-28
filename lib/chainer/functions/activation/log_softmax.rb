@@ -36,19 +36,19 @@ module Chainer
         #   because +softmax(x)+ may returns +0+.
         #   +log_softmax+ method is more stable.
         #
-        # @param [Chainer::Variable or Numo::DFloat] x Input variable. A $n$-dimensional ($n \\geq 2$) float array.
+        # @param [Chainer::Variable or Numo::NArray] x Input variable. A $n$-dimensional ($n \\geq 2$) float array.
         # @return [Chainer::Variable] Output variable. A $n$-dimensional ($n \\geq 2$) float array, which is the same shape with x.
         #
         # @see Chainer::Functions::Softmax
         #
         # @example
-        #   > x = Numo::DFloat[[0, 1, 2], [0, 2, 4]]
-        #   => Numo::DFloat#shape=[2,3]
+        #   > x = Numo::SFloat[[0, 1, 2], [0, 2, 4]]
+        #   => Numo::SFloat#shape=[2,3]
         #   [[0, 1, 2],
         #    [0, 2, 4]]
         #   > F = Chainer::Functions::Activation::LogSoftmax
         #   > F.log_softmax(x).data
-        #   => Numo::DFloat#shape=[2,3]
+        #   => Numo::SFloat#shape=[2,3]
         #   [[-2.40761, -1.40761, -0.407606],
         #    [-4.14293, -2.14293, -0.142932]]
         # @example (T.B.I : F.log, F.softmax)

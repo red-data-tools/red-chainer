@@ -6,11 +6,11 @@ require 'chainer/functions/activation/log_softmax'
 
 class Chainer::Functions::Activation::LogSoftmaxTest < Test::Unit::TestCase
   data = {
-    # Not Support Numo::SFloat test case. Because, Numo::NMath.exp always returns Numo::DFloat type.
+    # Not Support test1 case. See Numo::NArray issue #78.
     #'test1' => {shape: nil, dtype: Numo::SFloat},
-    #'test2' => {shape: [2, 3], dtype: Numo::SFloat},
-    #'test3' => {shape: [2, 2, 3], dtype: Numo::SFloat},
-    #'test4' => {shape: [2, 2, 2, 3], dtype: Numo::SFloat},
+    'test2' => {shape: [2, 3], dtype: Numo::SFloat},
+    'test3' => {shape: [2, 2, 3], dtype: Numo::SFloat},
+    'test4' => {shape: [2, 2, 2, 3], dtype: Numo::SFloat},
     'test5' => {shape: nil, dtype: Numo::DFloat},
     'test6' => {shape: [2, 3], dtype: Numo::DFloat},
     'test7' => {shape: [2, 2, 3], dtype: Numo::DFloat},
@@ -21,7 +21,7 @@ class Chainer::Functions::Activation::LogSoftmaxTest < Test::Unit::TestCase
     @dtype = data[:dtype]
     if @shape.nil?
       value = -1000
-      @x = Numo::NArray.cast([[value, 1]])
+      @x = @dtype.cast([[value, 1]])
     else
       @dtype.srand(1) # To avoid false of "nearly_eq().all?", Use fixed seed value.
       @x = @dtype.new(@shape).rand(2) - 1

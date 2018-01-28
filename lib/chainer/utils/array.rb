@@ -2,8 +2,11 @@ module Chainer
   module Utils
     module Array
       def self.force_array(x, dtype=nil)
-        # TODO: conversion by dtype
-        Numo::NArray.[](*x)
+        if dtype == nil
+          x.class.[](*x)
+        else
+          dtype.[](*x)
+        end
       end
     end
   end

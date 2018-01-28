@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require 'chainer'
-require 'numo/narray'
 
 class Chainer::VariableTest < Test::Unit::TestCase
   data = {
@@ -12,7 +11,7 @@ class Chainer::VariableTest < Test::Unit::TestCase
     @x_shape = data[:x_shape]
     @label = data[:label]
     @c_shape = data[:c_shape]
-    @x = Numo::DFloat.new(@x_shape).rand(2) - 1
+    @x = Numo::SFloat.new(@x_shape).rand(2) - 1
 
     if @x_shape.length != 0
         @size = (Numo::NArray.cast(@x_shape).prod()).to_i

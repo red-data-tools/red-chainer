@@ -1,14 +1,11 @@
 # frozen_string_literal: true
 
-require 'numo/narray'
-require 'chainer'
 require 'chainer/functions/activation/sigmoid'
 
 class Chainer::Functions::Activation::SigmoidTest < Test::Unit::TestCase
   data = {
-    # Not Support Numo::SFloat test case. Because, Numo::NMath.exp always returns Numo::DFloat type.
-    #'test1' => {shape: [3, 2], dtype: Numo::SFloat},
-    #'test2' => {shape: [], dtype: Numo::SFloat},
+    'test1' => {shape: [3, 2], dtype: Numo::SFloat},
+    'test2' => {shape: [], dtype: Numo::SFloat},
     'test3' => {shape: [3, 2], dtype: Numo::DFloat},
     'test4' => {shape: [], dtype: Numo::DFloat}}
 
