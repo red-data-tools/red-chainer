@@ -19,6 +19,17 @@ module Chainer
         hook(self)
       end
     end
+
+    def serialize(serializer)
+      @t = serializer.('t', @t)
+      @epoch = serializer.('epoch', @epoch)
+      
+      @target.namedparams() do |(name, param)|
+        if param.respond_to?(:update_rule)
+          param.update_rule.serialize(serializer[name.to_s])
+        end
+      end
+    end
   end
 
   class UpdateRule
@@ -54,6 +65,33 @@ module Chainer
 
     def init_state(param)
       raise NotImplementedError
+    end
+
+
+    # Serializes the update rule state.
+    # Be careful that this method only saves/loads the state of the update rule.
+    # The parameters of the target link is not saved/loaded by this
+    # method, and so you need to serialize the target link separately if you
+    # want to fully recover the training state including parameters.
+    #
+    # @param [Chainer::AbstractSerializer] serializer: Serializer object.
+    def serialize(serializer)
+      if @state.nil?
+        if serializer.is_a?(Chainer::Deserializer)
+          # try to initialize the state to retrieve state entries
+          @state = {}
+          self_copy = self.dup
+          arr = Numo::DFloat.new(1)
+          self_copy.init_state(Chainer::Variable.new(arr, grad: arr))
+          @state.keys.each do |key|
+            @state[key] = serializer.(key.to_s, nil)
+          end
+        end
+      else
+        @state.each do |key, val|
+          @state[key] = serializer.(key.to_s, val)
+        end
+      end                                                                                 
     end
 
     private

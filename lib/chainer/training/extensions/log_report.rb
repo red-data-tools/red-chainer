@@ -61,6 +61,21 @@ module Chainer
           init_summary
         end
 
+        def serialize(serializer)
+          if @trigger.respond_to?(:serialize)
+            @trigger.serialize(serializer['_trigger'])
+          end
+          # Note that this serialization may lose some information of small
+          # numerical differences.
+          if serializer.is_a?(Chainer::Serializer)
+            log = JSON.generate(@log)
+            serializer.('_log', log)
+          else
+            log = serializer.('_log', '')
+            @log = JSON.parse(log)
+          end
+        end
+
         private
 
         def init_summary

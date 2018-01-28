@@ -44,7 +44,7 @@ module Chainer
         return @final_elapsed_time if @done
         raise "training has not been started yet" if @start_at.nil?
 
-        Time.now.to_f - @start_at - @snapshot_elapsed_time.to_f
+        Time.now.to_f - @start_at + @snapshot_elapsed_time.to_f
       end
 
       def extend(extension, name: nil, trigger: nil, priority: nil, invoke_before_training: nil)
@@ -97,7 +97,7 @@ module Chainer
         raise 'cannot run training loop multiple times' if @done
         FileUtils.mkdir_p(@out)
 
-        extensions = @extensions.sort_by { |(_, e)| e.priority }.map { |(name, extension)| [name, extension] }
+        extensions = @extensions.sort_by { |(_, e)| -e.priority }.map { |(name, extension)| [name, extension] }
 
         @start_at = Time.now.to_f
 
@@ -115,7 +115,7 @@ module Chainer
             @observation = {}
             reporter.scope(@observation) do
               update.call
-              extensions.each do |(_, entry)|
+              extensions.each do |(name, entry)|
                 entry.extension.(self) if entry.trigger.(self)
               end
             end
@@ -130,6 +130,29 @@ module Chainer
 
         @final_elapsed_time = @elapsed_time
         @done = true
+      end
+
+      def serialize(serializer)
+        updater.serialize(serializer['updater'])
+        if @stop_trigger.respond_to?(:serialize)
+          @stop_trigger.serialize(serializer['stop_trigger'])
+        end
+
+        s = serializer['extensions']
+        t = serializer['extension_triggers']
+        @extensions.each do |name, entry|
+          if entry.extension.respond_to?(:serialize)
+            entry.extension.serialize(s[name])
+          end
+          if entry.trigger.respond_to?(:serialize)
+            entry.trigger.serialize(t[name])
+          end
+        end
+        if serializer.is_a?(Chainer::Serializer)
+          serializer.('_snapshot_elapsed_time', elapsed_time)
+        else
+          @snapshot_elapsed_time = serializer.('_snapshot_elapsed_time', 0.0)
+        end
       end
     end
   end

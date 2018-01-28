@@ -15,7 +15,7 @@ module Chainer
       def next
         raise StopIteration if !@repeat && @epoch > 0
 
-        @previous_epoch_detail = @epoch_detail
+        @previous_epoch_detail = epoch_detail
 
         i = @current_position
         i_end = i + @batch_size
@@ -53,6 +53,31 @@ module Chainer
 
       def epoch_detail
         @epoch + @current_position.to_f / @dataset.size
+      end
+
+      def serialize(serializer)
+        @current_position = serializer.('current_position', @current_position)
+        @epoch = serializer.('epoch', @epoch)
+        @is_new_epoch = serializer.('is_new_epoch', @is_new_epoch)
+        unless @order.nil?
+          begin
+            serializer.('order', @order)
+          rescue KeyError
+            serializer('_order', @order)
+          end
+        end
+
+        begin
+          @previous_epoch_detail = serializer.( 'previous_epoch_detail', @previous_epoch_detail)
+        rescue KeyError
+          # guess previous_epoch_detail for older version
+          @previous_epoch_detail = @epoch + (@current_position - @batch_size) / @dataset.size
+          if epoch_detail > 0
+            @previous_epoch_detail = [@previous_epoch_detail, 0.0].max
+          else
+            @previous_epoch_detail = -1.0
+          end
+        end
       end
 
       def reset

@@ -59,6 +59,27 @@ module Chainer
     def namedlinks(skipself: false)
       yield('/', self) unless skipself
     end
+
+    def serialize(serializer)
+      d = self.instance_variables.each_with_object({}) { |sym, h| h[sym] = self.instance_variable_get(sym) }
+      @params.each do |name|
+        param = d[name]
+        data = serializer.(name.to_s, param.data)
+        if param.data.nil? && !data.nil?
+          # Initialize the parameter here
+          param.init(data.shape)
+          if param.data.is_a?(Numo::NArray)
+            param.data.store(data)
+          else
+            param.data.set(Numo::NArray.cast(data))
+          end
+        end
+      end
+
+      @persistent.each do |name|
+        d[name] = serializer.(name.to_s, d[name])
+      end
+    end
   end
 
   class Chain < Link
@@ -112,6 +133,14 @@ module Chainer
         d[name].namedlinks(skipself: true) do |path, link|
           yield(prefix + path, link)
         end
+      end
+    end
+
+    def serialize(serializer)
+      super(serializer)
+      d = self.instance_variables.each_with_object({}) { |sym, h| h[sym] = self.instance_variable_get(sym) }
+      @children.each do |name|
+        d[name].serialize(serializer[name.to_s])
       end
     end
   end

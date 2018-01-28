@@ -44,6 +44,12 @@ module Chainer
           end
         end
 
+        def serialize(serializer)
+          if @log_report.is_a?(Chainer::Training::Extensions::LogReport)
+            @log_report.serialize(serializer['_log_report'])
+          end
+        end
+
         private
 
         def print(observation)
