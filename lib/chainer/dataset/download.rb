@@ -4,7 +4,7 @@ require "pstore"
 module Chainer
   module Dataset
     module Download
-      DATASET_ROOT = ENV.fetch("RED_CHAINER_DATASET_ROOT", File.expand_path(".chainer/dataset", "~"))
+      DATASET_ROOT = ENV.fetch("RED_CHAINER_DATASET_ROOT", File.expand_path(".red-chainer/dataset", "~"))
 
       def self.cached_download(url)
         cache_root = File.expand_path('_dl_cache', DATASET_ROOT)
