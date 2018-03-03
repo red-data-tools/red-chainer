@@ -28,7 +28,7 @@ class Chainer::Functions::Activation::LogSoftmaxTest < Test::Unit::TestCase
     end
     @gy = @dtype.new(@x.shape).rand(2) - 1
     @check_forward_options = {}
-    @check_backward_options = {"dtype" => Numo::DFloat}
+    @check_backward_options = {dtype: Numo::DFloat}
   end
 
   def check_forward(x_data, use_cudnn: "always")
@@ -45,5 +45,15 @@ class Chainer::Functions::Activation::LogSoftmaxTest < Test::Unit::TestCase
   def test_forward_cpu(data)
     _setup(data)
     check_forward(@x.dup)
+  end
+
+  def check_backward(x_data, gy_data, use_cudnn: "always")
+    Chainer::check_backward(Chainer::Functions::Activation::LogSoftmax.method(:log_softmax), x_data, gy_data, @check_backward_options)
+  end
+
+  data(data)
+  def test_backward_cpu(data)
+    _setup(data)
+    check_backward(@x.dup, @gy.dup)
   end
 end

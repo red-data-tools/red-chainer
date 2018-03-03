@@ -2,10 +2,10 @@ module Chainer
   module Utils
     module Array
       def self.force_array(x, dtype=nil)
-        if dtype == nil
-          x.class.[](*x)
+        if dtype.nil?
+          x.class.cast(x.dup)
         else
-          dtype.[](*x)
+          dtype.cast(x.dup)
         end
       end
     end

@@ -2,6 +2,23 @@
 
 require 'chainer'
 
+class Constant < Chainer::Function
+  def initialize(outputs)
+    @outputs = outputs
+  end
+  def forward_cpu(inputs)
+    return @outputs
+  end
+
+  def backward_cpu(inputs, grad_outputs)
+    return inputs.map{|_| _.new_zeros()}.to_a
+  end
+end
+
+def constant(xs, value)
+  return Constant.new(value).(*xs)
+end
+
 class Chainer::VariableTest < Test::Unit::TestCase
   data = {
     'test1' => {x_shape: [10], c_shape: [2, 5], label: '(2, 5), Numo::SFloat'},
@@ -12,9 +29,10 @@ class Chainer::VariableTest < Test::Unit::TestCase
     @label = data[:label]
     @c_shape = data[:c_shape]
     @x = Numo::SFloat.new(@x_shape).rand(2) - 1
+    @a = Numo::SFloat.new(@x_shape).rand(9.9) + 0.1
 
     if @x_shape.length != 0
-        @size = (Numo::NArray.cast(@x_shape).prod()).to_i
+        @size = Numo::NArray.cast(@x_shape).prod().to_i
     else
         @size = 1
     end
@@ -61,5 +79,61 @@ class Chainer::VariableTest < Test::Unit::TestCase
   def test_label_cpu(data)
     _setup(data)
     check_label(@label, false)
+  end
+
+  def check_backward(inputs, intermediates, outputs, retain_grad)
+    for o in outputs
+      o.backward(retain_grad: retain_grad)
+    end
+    assert(inputs.map{|x| !x.grad.nil?}.all?)
+    if retain_grad
+      assert(intermediates.map{|x| !x.grad.nil?}.all?)
+    else
+      assert(intermediates.map{|x| x.grad.nil?}.all?)
+    end
+    assert(outputs.map{|x| !x.grad.nil?}.any?)
+  end
+
+  def create_linear_chain(length, gpu)
+    x = Chainer::Variable.new(@x)
+    ret = [x]
+    length.times{|i|
+      ret.push(constant([ret[i]], [@a]))
+    }
+    ret[-1].grad = ret[-1].data.new_zeros()
+    return ret
+  end
+
+  data(data)
+  def test_backward_cpu(data)
+    _setup(data)
+    ret = create_linear_chain(2, false)
+    check_backward([ret[0]], [ret[1]], [ret[2]], false)
+  end
+
+  def test_grad_type_check_pass()
+    a = Chainer::Variable.new(Numo::SFloat.new([3]))
+    a.grad = Numo::SFloat.new([3])
+  end
+
+  def test_grad_type_check_type()
+    a = Chainer::Variable.new(Numo::SFloat.new([]))
+    #assert_raise(TypeError) { ## No Error
+      a.grad = Numo::SFloat.new()
+    #}
+  end
+
+  def test_grad_type_check_dtype()
+    a = Chainer::Variable.new(Numo::SFloat.new([3]))
+    assert_raise(TypeError) {
+      a.grad = Numo::DFloat.new([3])
+    }
+  end
+
+  def test_grad_type_check_shape()
+    a = Chainer::Variable.new(Numo::SFloat.new([3]))
+    assert_raise(TypeError) {
+      a.grad = Numo::SFloat.new([2])
+    }
   end
 end

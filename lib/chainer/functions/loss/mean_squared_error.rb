@@ -24,7 +24,7 @@ module Chainer
         end
 
         def backward(inputs, gy)
-          coeff = gy[0] * gy[0].dtype.type(2.0 / @diff.size)
+          coeff = gy[0] * gy[0].class.cast(2.0 / @diff.size)
           gx0 = coeff * @diff
           [gx0, -(gx0)]
         end

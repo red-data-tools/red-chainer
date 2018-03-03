@@ -33,7 +33,7 @@ module Chainer
 
         def backward_cpu(x, gy)
           y = @output_data[0]
-          one = y.dtype.type(1)
+          one = y.class.cast(1)
           [Utils::Array.force_array(gy[0] * (one - y * y))]
         end
       end

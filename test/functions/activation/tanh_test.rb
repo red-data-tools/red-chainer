@@ -31,4 +31,14 @@ class Chainer::Functions::Activation::TanhTest < Test::Unit::TestCase
     _setup(data)
     check_forward(@x.dup)
   end
+
+  def check_backward(x_data, gy_data, use_cudnn: "always")
+    Chainer::check_backward(Chainer::Functions::Activation::Tanh.method(:tanh), x_data, gy_data, @check_backward_options)
+  end
+
+  data(data)
+  def test_backward_cpu(data)
+    _setup(data)
+    check_backward(@x.dup, @gy.dup)
+  end
 end

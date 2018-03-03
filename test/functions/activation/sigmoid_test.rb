@@ -32,4 +32,14 @@ class Chainer::Functions::Activation::SigmoidTest < Test::Unit::TestCase
     _setup(data)
     check_forward(@x.dup)
   end
+
+  def check_backward(x_data, y_grad, use_cudnn: "always")
+    Chainer::check_backward(Chainer::Functions::Activation::Sigmoid.method(:sigmoid), x_data, y_grad, @check_backward_options)
+  end
+
+  data(data)
+  def test_backward_cpu(data)
+    _setup(data)
+    check_backward(@x.dup, @gy.dup)
+  end
 end
