@@ -1,0 +1,106 @@
+require 'numo/narray'
+require 'chainer'
+require "datasets"
+
+class IrisChain < Chainer::Chain
+  L = Chainer::Links::Connection::Linear
+  F = Chainer::Functions
+
+  def initialize(n_units, n_out)
+    super()
+    init_scope do
+      @l1 = L.new(nil, out_size: n_units)
+      @l2 = L.new(nil, out_size: n_out)
+    end
+  end
+
+  def call(x, y)
+    return F::Loss::MeanSquaredError.mean_squared_error(fwd(x), y)
+  end
+
+  def fwd(x)
+    h1 = F::Activation::Sigmoid.sigmoid(@l1.(x))
+    h2 = @l2.(h1)
+    return h2
+  end
+end
+
+model = IrisChain.new(6,3)
+
+optimizer = Chainer::Optimizers::Adam.new
+optimizer.setup(model)
+
+iris = Datasets::Iris.new
+x = iris.each.map {|r| [r.sepal_length, r.sepal_width, r.petal_length, r.petal_width]}
+x = Numo::DFloat.cast(x)
+
+# target
+y_class = iris.each.map {|r| r.class}
+
+# class index array
+# ["Iris-setosa", "Iris-versicolor", "Iris-virginica"]
+class_name = y_class.uniq
+# y => [0, 0, 0, 0, ,,, 1, 1, ,,, ,2, 2]
+y = y_class.map{|s|
+  class_name.index(s)
+}
+
+# y_onehot => One-hot [[1.0, 0.0, 0.0], [1.0, 0.0, 0.0],,, [0.0, 1.0, 0.0], ,, [0.0, 0.0, 1.0]]
+y_onehot = y_class.map{|s|
+  i = class_name.index(s)
+  a = Array.new(class_name.length, 0.0)
+  a[i] = 1.0
+  a
+}
+
+puts "Iris Datasets"
+puts "No. [sepal_length, sepal_width, petal_length, petal_width] one-hot #=> class"
+i = 0
+iris.each do |r|
+  printf("%3d : ", i)
+  puts "[#{r.sepal_length}, #{r.sepal_width}, #{r.petal_length}, #{r.petal_width}] #{y_onehot[i]} #=> #{r.class}(#{y[i]})"
+  # [5.1, 3.5, 1.4, 0.2, "Iris-setosa"]     => 50 data
+  # [7.0, 3.2, 4.7, 1.4, "Iris-versicolor"] => 50 data
+  # [6.3, 3.3, 6.0, 2.5, "Iris-virginica"]  => 50 data
+  i += 1
+end
+
+y = Numo::DFloat.cast(y)
+y_onehot = Numo::DFloat.cast(y_onehot)
+
+x_train = x[(1..-1).step(2), nil] #=> 75
+y_train = y_onehot[(1..-1).step(2), nil] #=> 75
+x_test = x[(0..-1).step(2), nil] #=> 75
+y_test = y[(0..-1).step(2)] #=> 75
+
+# Train
+10000.times{|i|
+  x = Chainer::Variable.new(x_train)
+  y = Chainer::Variable.new(y_train)
+  model.cleargrads()
+  loss = model.(x, y)
+  loss.backward()
+  optimizer.update()
+}
+
+# Test
+xt = Chainer::Variable.new(x_test)
+yt = model.fwd(xt)
+n_row, n_col = yt.data.shape
+
+puts "Result : Correct Answer : Answer <= One-Hot"
+ok = 0
+n_row.times{|i|
+  ans = yt.data[i, nil].max_index()
+  if ans == y_test[i]
+    ok += 1
+    printf("OK")
+  else
+    printf("--")
+  end
+  printf(" : #{y_test[i].to_i} :")
+
+  puts " #{ans.to_i} <= #{yt.data[i, 0..-1].to_a}"
+}
+puts "Row: #{n_row}, Column: #{n_col}"
+puts "Accuracy rate : #{ok}/#{n_row} = #{ok.to_f / n_row}"
