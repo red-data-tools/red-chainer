@@ -3,7 +3,7 @@ module Chainer
 
   def _copy_arrays(xs)
     xp = Chainer::get_array_module(*xs)
-    return xs.map{|x| x.dup}
+    xs.map{|x| (x.is_a? Numo::NArray) ? x.dup : x}
   end
 
   # Computes numerical gradient by finite differences.
@@ -36,7 +36,7 @@ module Chainer
 
     for (x, gx) in tmp
       x.each_with_index{|xx, *i|
-        orig = x[*i].dup()
+        orig = x[*i]
         x[*i] = orig + eps
         ys1 = _copy_arrays(f.call(x))
         x[*i] = orig - eps
@@ -44,7 +44,11 @@ module Chainer
         x[*i] = orig
         for (y1, y2, gy) in ys1.zip(ys2, grad_outputs)
           if !gy.nil?
-            dot = ((y1 - y2) * gy).sum()
+            if  ((y1 - y2) * gy).is_a? Numo::NArray
+              dot = ((y1 - y2) * gy).sum()
+            else
+              dot = ((y1 - y2) * gy).inject(:+)
+            end
             gx[*i] += dot / (2*eps).to_f
           end
         end

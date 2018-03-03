@@ -5,7 +5,7 @@ def _uniform(*shape)
 end
 
 def _dot(x, y)
-  return x.zip(y).map{|a| a[0] * a[1]}.sum
+  x.zip(y).map{|a| a[0] * a[1]}.inject(:+)
 end
 
 class NumericalGradientTest < Test::Unit::TestCase
