@@ -1,7 +1,8 @@
 sudo: false
 language: ruby
 rvm:
-  - 2.3.5
-  - 2.4.2
+  - 2.3.6
+  - 2.4.3
+  - 2.5.0
 before_install: gem install bundler -v 1.15.1
 script: ruby test/run_test.rb
