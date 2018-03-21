@@ -23,7 +23,7 @@ module Chainer
         pad_bottom = ph + sy - 1
         pad_right = pw + sx - 1
         pad_img = img.class.new(n, c, (h + ph + pad_bottom), (w + pw + pad_right)).fill(pval)
-        pad_img[nil, nil, ph...(ph+h), pw...(pw+h)] = img
+        pad_img[nil, nil, ph...(ph+h), pw...(pw+w)] = img
 
         col = pad_img.class.new(n, c, kh, kw, out_h, out_w).rand(1)
 
