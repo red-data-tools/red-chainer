@@ -32,8 +32,13 @@ module Chainer
           w.shape[0].times do |n|
             y[n, nil, nil, nil] = @col.transpose(0, 4, 5, 1, 2, 3).mulsum(w[n, nil, nil, nil], 3, 4, 5)
           end
-          y += b if b
-
+          
+          if b
+            y.shape[0].times do |n|
+              y[n, nil, nil, nil] += b[n]
+            end
+          end
+          
           [y.transpose(1, 0, 2, 3)]
         end
       end
