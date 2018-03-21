@@ -2,6 +2,44 @@ module Chainer
   module Functions
     module Connection
       class Convolution2DFunction < Chainer::Function
+        # Two-dimensional convolution function.
+        # This is an implementation of two-dimensional convolution in ConvNets.
+        # It takes three variables: the input image `x`, the filter weight `w`, and the bias vector `b`.
+        #
+        # a notation for dimensionalities.
+        #
+        # - :math:`n` is the batch size.
+        # - :math:`c_I` and :math:`c_O` are the number of the input and output channels, respectively.
+        # - :math:`h_I` and :math:`w_I` are the height and width of the input image, respectively.
+        # - :math:`h_K` and :math:`w_K` are the height and width of the filters, respectively.
+        # - :math:`h_P` and :math:`w_P` are the height and width of the spatial padding size, respectively.
+        #
+        # Then the `Convolution2D` function computes correlations between filters and patches of size :math:`(h_K, w_K)` in `x`.
+        # Patches are extracted at positions shifted by multiples of `stride` from the first position `(-h_P, -w_P)` for each spatial axis.
+        # The right-most (or bottom-most) patches do not run over the padded spatial size.
+        # Let :math:`(s_Y, s_X)` be the stride of filter application.
+        # Then, the output size :math:`(h_O, w_O)` is determined by the following equations:
+        # 
+        # math:
+        #  h_O &= (h_I + 2h_P - h_K) / s_Y + 1,\\\\
+        #   w_O &= (w_I + 2w_P - w_K) / s_X + 1.
+        # If `cover_all` option is `true`, the filter will cover the all spatial locations.
+        # So, if the last stride of filter does not cover the end of spatial locations,
+        # an addtional stride will be applied to the end part of spatial locations.
+        # In this case, the output size :math:`(h_O, w_O)` is determined by the following equations:
+        # 
+        # math:
+        #  h_O &= (h_I + 2h_P - h_K + s_Y - 1) / s_Y + 1,\\\\
+        #  w_O &= (w_I + 2w_P - w_K + s_X - 1) / s_X + 1.
+        # If the bias vector is given, then it is added to all spatial locations of the output of convolution.
+        #
+        # @param [Chainer::Variable or Numo::NArray] x Input variable of shape :math:`(n, c_I, h_I, w_I)`.
+        # @param [Chainer::Variable or Numo::NArray] w Weight variable of shape :math:`(c_O, c_I, h_K, w_K)`.
+        # @param [Chainer::Variable or Numo::NArray] b Bias variable of length :math:`c_O`
+        # @param [Int or 2-D Array] stride Stride of filter applications. `stride=s` and `stride=(s, s)` are equivalent.
+        # @param [Int or 2-D Array] pad Spatial padding width for input arrays.
+        # @param [Boolean] cover_all If `true`, all spatial locations are convoluted into some output pixels.
+        # @return [Chainer::Variable] Output variable of shape :math:`(n, c_O, h_O, w_O)`.
         def self.convolution_2d(x, w, b: nil, stride: 1, pad: 0, cover_all: false)
           func = self.new(stride: stride, pad: pad, cover_all: cover_all)
           if b.nil?
