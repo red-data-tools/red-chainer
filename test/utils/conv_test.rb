@@ -3,28 +3,29 @@
 class Chainer::Utils::ConvTest < Test::Unit::TestCase
   data({
     test1: {
-      case: { size: 4, k: 2, s: 1, p: 1 },
+      case: { size: 4, k: 2, s: 1, p: 1, options: {} },
       expected: 5
     },
     test2: {
-      case: { size: 4, k: 2, s: 2, p: 1 },
+      case: { size: 4, k: 2, s: 2, p: 1, options: {} },
       expected: 3
     },
     test3: {
-      case: { size: 4, k: 2, s: 2, p: 2 },
+      case: { size: 4, k: 2, s: 2, p: 2, options: {} },
       expected: 4
     },
     test4: {
-      case: { size: 4, k: 2, s: 2, p: 2, cover_all: true },
+      case: { size: 4, k: 2, s: 2, p: 2, options: { cover_all: true } },
       expected: 4
     },
     test5: {
-      case: { size: 4, k: 2, s: 2, p: 2, cover_all: true, d: 3 },
+      case: { size: 4, k: 2, s: 2, p: 2, options: { cover_all: true, d: 3 } },
       expected: 3
     },
   })
   def test_get_conv_outsize(data)
-    actual = Chainer::Utils::Conv.get_conv_outsize(**data[:case])
+    test_case = data[:case]
+    actual = Chainer::Utils::Conv.get_conv_outsize(test_case[:size], test_case[:k], test_case[:s], test_case[:p], **test_case[:options])
     assert_equal(data[:expected], actual)
   end
 

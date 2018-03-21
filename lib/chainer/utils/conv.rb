@@ -1,7 +1,7 @@
 module Chainer
   module Utils
     module Conv
-      def self.get_conv_outsize(size:, k:, s:, p:, cover_all: false, d: 1)
+      def self.get_conv_outsize(size, k, s, p, cover_all: false, d: 1)
         dk = k + (k - 1) * (d - 1)
         if cover_all
           (size + p * 2 - dk + s - 1).div(s) + 1
@@ -13,9 +13,9 @@ module Chainer
       def self.im2col_cpu(img, kh, kw, sy, sx, ph, pw, pval: 0, cover_all: false, dy: 1, dx: 1)
         n, c, h, w = img.shape
         
-        out_h = self.get_conv_outsize(size: h, k: kh, s: sy, p: ph, cover_all: cover_all, d: dy)
+        out_h = self.get_conv_outsize(h, kh, sy, ph, cover_all: cover_all, d: dy)
         raise 'Height in the output should be positive.' if out_h <= 0
-        out_w = self.get_conv_outsize(size: w, k: kw, s: sx, p: pw, cover_all: cover_all, d: dx)
+        out_w = self.get_conv_outsize(w, kw, sx, pw, cover_all: cover_all, d: dx)
         raise 'Width in the output should be positive.' if out_w <= 0
 
         # padding
