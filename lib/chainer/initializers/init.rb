@@ -1,7 +1,11 @@
 module Chainer
   module Initializers
     def self.generate_array(initializer, shape)
-      array = Numo::DFloat.new(shape).rand
+      klass = Numo::DFloat
+      if initializer.respond_to?(:dtype) && initializer.dtype
+        klass = initializer.dtype
+      end
+      array = klass.new(shape).rand
       initializer.(array)
     end
 
