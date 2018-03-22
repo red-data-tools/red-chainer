@@ -62,13 +62,13 @@ module Chainer
           if self.instance_variable_defined?(:@gamma)
             gamma = @gamma
           else
-            gamma = Chainer::Variable.new(x.class.ones[*@avg_mean.shape])
+            gamma = Chainer::Variable.new(x.data.class.ones(@avg_mean.shape))
           end
 
           if self.instance_variable_defined?(:@beta)
             beta = @beta
           else
-            beta = Chainer::Variable.new(x.class.ones[*@avg_mean.shape])
+            beta = Chainer::Variable.new(x.data.class.zeros(*@avg_mean.shape))
           end
           
           if Chainer.configuration.train
@@ -82,7 +82,7 @@ module Chainer
             func = Chainer::Functions::Normalization::BatchNormalizationFunction.new(eps: @eps, mean: @avg_mean, var: @avg_var, decay: decay)
             ret = func.(x, gamma, beta)
 
-            @avg_mean[false]  = func.running_mean
+            @avg_mean[false] = func.running_mean
             @avg_var[false] = func.running_var
           else
             mean = Chainer::Variable(@avg_mean)

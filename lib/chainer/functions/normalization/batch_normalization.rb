@@ -55,6 +55,7 @@ module Chainer
           if Chainer.configuration.train
             axis = [0] + (head_ndim...(x.ndim)).to_a
             mean = x.mean(axis: axis)
+            # FIXME: numpy.var
             var = x.var(axis: axis)
             var += @eps
           else
