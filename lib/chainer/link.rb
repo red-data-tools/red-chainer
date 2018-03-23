@@ -39,6 +39,17 @@ module Chainer
       end
     end
 
+    # Registers an attribute of a given name as a persistent value.
+    # This is a convenient method to register an existing attribute as a persistent value.
+    # If `name` has been already registered as a parameter,
+    # this method removes it from the list of parameter names and re-registers it as a persistent value.
+    #
+    # @param [string] name Name of the attribute to be registered.
+    def register_persistent(name)
+      @persistent << name
+      @params.delete(name)
+    end
+
     def params(include_uninit: true)
       @params.map do |name|
         data = self.instance_variable_get(name).data
