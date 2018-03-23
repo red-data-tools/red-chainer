@@ -24,7 +24,7 @@ module Chainer
 
         def forward(x)
           retain_inputs([])
-          unless self.respond_to?(:mask)
+          unless self.instance_variable_defined?(:@mask)
             scale = x[0].class[*[1.0 / (1 - @dropout_ratio)]][0]
             flag = Numo::DFloat.new(*x[0].shape).rand >= @dropout_ratio
 
