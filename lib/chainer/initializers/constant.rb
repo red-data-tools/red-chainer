@@ -8,7 +8,7 @@ module Chainer
 
       def call(array)
         if @dtype
-          raise ArgumentError unless array.dtype == @dtype
+          raise ArgumentError unless array.class == @dtype
         end
         array.store(@fill_value)
         array
