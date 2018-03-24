@@ -29,8 +29,7 @@ module Chainer
         def forward_cpu(x)
           retain_inputs([])
           retain_outputs([0])
-          x[0][x[0]<=0] = 0
-          [Utils::Array.force_array(x[0])] 
+          [Utils::Array.force_array(x[0].class.maximum(x[0], 0))]
         end
 
         def backward_cpu(x, gy)

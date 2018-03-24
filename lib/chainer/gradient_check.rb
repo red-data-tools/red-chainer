@@ -31,12 +31,12 @@ module Chainer
     if inputs[0].ndim < 2
       tmp = [[inputs[0], grads[0]]]
     else
-      tmp = (0...inputs[0].shape[0]).map{|i|[inputs[0][i, *Array.new(inputs[0].ndim - 1, nil)], grads[0][i, *Array.new(grads[0].ndim - 1, nil)]]}
+      tmp = (0...inputs[0].shape[0]).map{|i|[inputs[0][i, false], grads[0][i, false]]}
     end
 
     for (x, gx) in tmp
       x.each_with_index{|xx, *i|
-        orig = x[*i]
+        orig = x[*i]   # hold original value
         x[*i] = orig + eps
         ys1 = _copy_arrays(f.call(x))
         x[*i] = orig - eps
@@ -86,7 +86,7 @@ module Chainer
   # calls +backward+ method to get gradients of the inputs.
   # To check correctness of the gradients, the function calls
   # +numerical_grad+ to calculate numerically the gradients and compares
-  # the types of gradients with :func:`chainer.testing.assert_allclose`.
+  # the types of gradients with +Chainer::Testing.assert_allclose+.
   # If input objects (+x1_data+ or/and +x2_data+ in this example) represent
   # integer variables, their gradients are ignored.
   #
@@ -142,6 +142,8 @@ module Chainer
   #   If +params+ is one +Chainer::Variable+ object,
   #   it is treated as +(params,)+.
   # @param [Float] eps Epsilon value to be passed to +numerical_grad+.
+  # @param [Float] atol Absolute tolerance to be passed to +Chainer::Testing.assert_allclose+.
+  # @param [Float] rtol Relative tolerance to be passed to +Chainer::Testing.assert_allclose+.
   # @param [Array<Boolean>] no_grads Flag to skip variable for gradient assertion.
   #   It should be same length as +x_data+.
   # @param [Numo::NArray.class] dtype +x_data+ and +y_grad+ are casted to this
@@ -150,7 +152,7 @@ module Chainer
   # @see
   #   .numerical_grad
   #
-  def check_backward(func, x_data, y_grad, params=[], eps: 0.001, no_grads: nil, dtype: nil)
+  def check_backward(func, x_data, y_grad, params=[], eps: 0.001, atol: 1e-5, rtol: 1e-4, no_grads: nil, dtype: nil)
     x_data = _as_tuple(x_data)
     if !y_grad.nil?
       y_grad = _as_tuple(y_grad)
@@ -176,6 +178,8 @@ module Chainer
       end
       y_grad = [1]
     end
+    # We only need to call `backward` for one result `Chainer::Variable`.
+    # `Chainer::Variable.backward` method calls `Chainer::Function.backward` of its creator.
     y[0].backward()
 
     if dtype.nil?
@@ -187,7 +191,13 @@ module Chainer
       if (params).size > 0
         raise TypeError, "`dtype` is available only if `params` is empty"
       end
-      casted_xs = x_data.map{|x| Chainer::Variable.new(x)}
+      casted_xs = x_data.map{|x|
+                    if x.class == Numo::DFloat or x.class == Numo::SFloat
+                      Chainer::Variable.new(dtype.cast(x))
+                    else
+                      Chainer::Variable.new(x)
+                    end
+                  }
     end
 
     f = lambda do |_|
@@ -210,9 +220,7 @@ module Chainer
         next
       end
       gx, = numerical_grad(f, [cx.data], y_grad, eps)
-      unless x.grad.nearly_eq(gx)
-        raise
-      end
+      Chainer::Testing.assert_allclose(x.grad, gx, atol: atol, rtol: rtol)
       if dtype.nil?
         raise unless gx.class == x.grad.class
       else
@@ -223,10 +231,8 @@ module Chainer
     end
 
     for p in params
-      gp, = numerical_grad(method(:f), [p.data], y_grad, eps)
-      unless p.grad.nearly_eq(gp)
-        raise
-      end
+      gp, = numerical_grad(f, [p.data], y_grad, eps)
+      Chainer::Testing.assert_allclose(p.grad, gp, atol: atol, rtol: rtol)
       raise unless gp.dtype === p.grad.dtype
     end
   end

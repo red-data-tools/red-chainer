@@ -32,7 +32,7 @@ class NumericalGradientTest < Test::Unit::TestCase
     dx_actual = Chainer::numerical_grad(func, xs, gys, eps)
     assert_equal((dx_actual).size, (dx_expect).size)
     for (e, a) in dx_expect.zip(dx_actual)
-      a.each_with_index{|a_val, *i| assert_in_delta(e[*i], a_val, 0.001)}
+      Chainer::Testing.assert_allclose(e, a, atol: 1e-3, rtol: 1e-3)
     end
   end
 
@@ -61,11 +61,13 @@ class NumericalGradientReferenceTest < Test::Unit::TestCase
   end
 
   def check_reference(x)
+    # A returned value and an input refers the same memory.
+    # See issue https://github.com/chainer/chainer/issues/488
     func = lambda do |x|
       return [x]
     end
     gx, = Chainer::numerical_grad(func, [x], [1])
-    gx.each{|gx_val| assert_in_delta(1, gx_val, 0.0001)}
+    Chainer::Testing.assert_allclose(1, gx)
   end
 
   def test_reference_cpu()

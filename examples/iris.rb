@@ -31,8 +31,7 @@ optimizer = Chainer::Optimizers::Adam.new
 optimizer.setup(model)
 
 iris = Datasets::Iris.new
-x = iris.each.map {|r| [r.sepal_length, r.sepal_width, r.petal_length, r.petal_width]}
-x = Numo::DFloat.cast(x)
+x = iris.each.map {|r| r.each.to_a[0..3]}
 
 # target
 y_class = iris.each.map {|r| r.class}
@@ -55,23 +54,21 @@ y_onehot = y_class.map{|s|
 
 puts "Iris Datasets"
 puts "No. [sepal_length, sepal_width, petal_length, petal_width] one-hot #=> class"
-i = 0
-iris.each do |r|
-  printf("%3d : ", i)
-  puts "[#{r.sepal_length}, #{r.sepal_width}, #{r.petal_length}, #{r.petal_width}] #{y_onehot[i]} #=> #{r.class}(#{y[i]})"
-  # [5.1, 3.5, 1.4, 0.2, "Iris-setosa"]     => 50 data
-  # [7.0, 3.2, 4.7, 1.4, "Iris-versicolor"] => 50 data
-  # [6.3, 3.3, 6.0, 2.5, "Iris-virginica"]  => 50 data
-  i += 1
-end
+x.each_with_index{|r, i|
+  puts "#{'%3d' % i} : [#{r.join(', ')}] #{y_onehot[i]} #=> #{y_class[i]}(#{y[i]})"
+}
+# [5.1, 3.5, 1.4, 0.2, "Iris-setosa"]     => 50 data
+# [7.0, 3.2, 4.7, 1.4, "Iris-versicolor"] => 50 data
+# [6.3, 3.3, 6.0, 2.5, "Iris-virginica"]  => 50 data
 
+x = Numo::DFloat.cast(x)
 y = Numo::DFloat.cast(y)
 y_onehot = Numo::DFloat.cast(y_onehot)
 
-x_train = x[(1..-1).step(2), nil] #=> 75
-y_train = y_onehot[(1..-1).step(2), nil] #=> 75
-x_test = x[(0..-1).step(2), nil] #=> 75
-y_test = y[(0..-1).step(2)] #=> 75
+x_train = x[(1..-1).step(2), true]        #=> 75 data (Iris-setosa : 25, Iris-versicolor : 25, Iris-virginica : 25)
+y_train = y_onehot[(1..-1).step(2), true] #=> 75 data (Iris-setosa : 25, Iris-versicolor : 25, Iris-virginica : 25)
+x_test = x[(0..-1).step(2), true]         #=> 75 data (Iris-setosa : 25, Iris-versicolor : 25, Iris-virginica : 25)
+y_test = y[(0..-1).step(2)]               #=> 75 data (Iris-setosa : 25, Iris-versicolor : 25, Iris-virginica : 25)
 
 # Train
 10000.times{|i|
@@ -91,7 +88,7 @@ n_row, n_col = yt.data.shape
 puts "Result : Correct Answer : Answer <= One-Hot"
 ok = 0
 n_row.times{|i|
-  ans = yt.data[i, nil].max_index()
+  ans = yt.data[i, true].max_index()
   if ans == y_test[i]
     ok += 1
     printf("OK")

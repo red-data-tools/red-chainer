@@ -54,7 +54,7 @@ module Chainer
                  elsif extension.default_name
                    extension.default_name
                  else
-                   raise ArgumentError 'name is not given for the extension'
+                   raise ArgumentError, 'name is not given for the extension'
                  end
         end
 
