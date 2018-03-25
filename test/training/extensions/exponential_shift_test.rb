@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Chainer::Training::Extensions::ExponentialShiftTest < Test::Unit::TestCase
   data({
     test1: {
