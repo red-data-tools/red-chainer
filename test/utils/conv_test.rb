@@ -65,6 +65,12 @@ class Chainer::Utils::ConvTest < Test::Unit::TestCase
         img: Numo::DFloat.new(1, 1, 4, 4).seq, kh: 2, kw: 2, sy: 2, sx: 2, ph: 0, pw: 0, options: {}
       },
       expected: Numo::DFloat[[[[[[0.0, 2.0], [8.0, 10.0]], [[1.0, 3.0], [9.0, 11.0]]], [[[4.0, 6.0], [12.0, 14.0]], [[5.0, 7.0], [13.0, 15.0]]]]]]
+    },
+    test7: { # cover_all
+      case: {
+        img: Numo::DFloat.new(1, 1, 4, 6).seq, kh: 2, kw: 2, sy: 3, sx: 3, ph: 0, pw: 0, options: { cover_all: true }
+      },
+      expected: Numo::DFloat[[[[[[0.0, 3.0, 0.0], [18.0, 21.0, 0.0]], [[1.0, 4.0, 0.0], [19.0, 22.0, 0.0]]], [[[6.0, 9.0, 0.0], [0.0, 0.0, 0.0]], [[7.0, 10.0, 0.0], [0.0, 0.0, 0.0]]]]]]
     }
   })
   def test_im2col_cpu(data)
