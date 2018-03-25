@@ -14,7 +14,6 @@ module Chainer
       end
    
       def init_state(param)
-        p @state
         @state[:v] = param.data.new_zeros
       end
 
