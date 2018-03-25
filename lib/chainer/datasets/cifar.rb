@@ -74,11 +74,11 @@ module Chainer
           train_x = train_x.reshape(50000, 3072)
           train_y = train_y.reshape(50000)
         else
-          train_x = Numo::UInt8.new(50000, 3072).rand(1)
-          train_y = Numo::UInt8.new(50000).rand(1)
-          test_x = Numo::UInt8.new(10000, 3072).rand(1)
-          test_y = Numo::UInt8.new(10000).rand(1)
-          dir = File.expand_path("cifar-100-batches-bin", root)
+          train_x = Numo::UInt8.new(50017, 3072).rand(1)
+          train_y = Numo::UInt8.new(50017).rand(1)
+          test_x = Numo::UInt8.new(10004, 3072).rand(1)
+          test_y = Numo::UInt8.new(10004).rand(1)
+          dir = File.expand_path("cifar-100-binary", root)
           
           file_name = "#{dir}/train.bin"
           open(file_name, "rb") do |f| 
