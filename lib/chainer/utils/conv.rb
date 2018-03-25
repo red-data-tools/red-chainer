@@ -12,7 +12,7 @@ module Chainer
 
       def self.im2col_cpu(img, kh, kw, sy, sx, ph, pw, pval: 0, cover_all: false, dy: 1, dx: 1)
         n, c, h, w = img.shape
-        
+
         out_h = self.get_conv_outsize(h, kh, sy, ph, cover_all: cover_all, d: dy)
         raise 'Height in the output should be positive.' if out_h <= 0
         out_w = self.get_conv_outsize(w, kw, sx, pw, cover_all: cover_all, d: dx)
@@ -29,10 +29,10 @@ module Chainer
 
         kh.times do |j|
           jdy = j * dy
-          j_lim = jdy + sy * out_h
+          j_lim = [jdy + sy * out_h, pad_img.shape[2]].min
           kw.times do |i|
             idx = i * dx
-            i_lim = idx + sx * out_w
+            i_lim = [idx + sx * out_w, pad_img.shape[3]].min
             col[nil, nil, j, i, nil, nil] = pad_img[nil, nil, (jdy...j_lim).step(sy), (idx...i_lim).step(sx)]
           end
         end
