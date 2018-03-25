@@ -20,6 +20,10 @@ module Chainer
         @iteration = 0
       end
 
+      def get_optimizer(name)
+        @optimizers[name]
+      end
+
       def get_all_optimizers
         @optimizers.to_h
       end

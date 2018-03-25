@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'chainer'
+
 class Chainer::WeightDecayTest < Test::Unit::TestCase
   data({
     test1: {
