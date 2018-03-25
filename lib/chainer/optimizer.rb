@@ -104,4 +104,29 @@ module Chainer
       @state.select! { |_, v| v.kind_of?(Numo::NArray) }
     end
   end
+
+  # Optimizer/UpdateRule hook function for weight decay regularization
+  #
+  # This hook function adds a scaled parameter to the correspondeing gradient
+  # It can be used as a regularization
+  #
+  # @param [Float] rate Coefficient for the weight decay
+  class WeightDecay
+    def self.name
+      "WeightDecay"
+    end
+
+    def self.call_for_each_param
+      true
+    end
+
+    def initialize(rate)
+      @rate = rate
+    end
+
+    def call(rule, param)
+      return if param.data.nil? || param.grad.nil?
+      param.grad += @rate * param.data
+    end
+  end
 end
