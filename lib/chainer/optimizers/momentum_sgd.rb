@@ -27,15 +27,18 @@ module Chainer
         param.data += v
       end 
     end
-
+    
     # Momentum SGD optimizer
     class MomentumSGD < GradientMethod
+      attr_accessor :lr, :momentum
       # @param [Float] lr Learning rate
       # @param [Float] momentum Exponential decay rate of the first order moment
       def initialize(lr: nil, momentum: nil)
         super()
         @hyperparam.instance_variable_set('@lr', lr || 0.01)
         @hyperparam.instance_variable_set('@momentum', momentum || 0.9)
+        Chainer::HyperparameterProxy.new(self, "lr")
+        Chainer::HyperparameterProxy.new(self, "momentum")
       end
      
       def create_update_rule
