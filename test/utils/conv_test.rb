@@ -78,4 +78,33 @@ class Chainer::Utils::ConvTest < Test::Unit::TestCase
     actual = Chainer::Utils::Conv.im2col_cpu(test_case[:img], test_case[:kh], test_case[:kw], test_case[:sy], test_case[:sx], test_case[:ph], test_case[:pw], **test_case[:options])
     assert_equal(data[:expected], actual)
   end
+
+  data({
+    test1: {
+      case: {
+        col: Numo::DFloat[[[[[[0.0, 2.0], [8.0, 10.0]], [[1.0, 3.0], [9.0, 11.0]]], [[[4.0, 6.0], [12.0, 14.0]], [[5.0, 7.0], [13.0, 15.0]]]]]],
+        sy: 2, sx: 2, ph: 1, pw: 1, h: 2, w:2 
+      },
+      expected: Numo::DFloat[[[[5.0, 6.0], [9.0, 10.0]]]]
+    },
+    test2: {
+      case: {
+        col: Numo::DFloat[[[[[[0.0, 3.0, 0.0], [18.0, 21.0, 0.0]], [[1.0, 4.0, 0.0], [19.0, 22.0, 0.0]]], [[[6.0, 9.0, 0.0], [0.0, 0.0, 0.0]], [[7.0, 10.0, 0.0], [0.0, 0.0, 0.0]]]]]],
+        sy: 1, sx: 1, ph: 1, pw: 1, h: 2, w:2
+      },
+      expected: Numo::DFloat[[[[56.0, 32.0], [0.0, 0.0]]]]
+    },
+    test3: {
+      case: {
+        col: Numo::DFloat.new(2, 2, 2, 2, 3, 4).seq,
+        sy: 2, sx: 2, ph: 2, pw: 2, h: 3, w: 4
+      },
+      expected: Numo::DFloat[[[[5.0, 17.0, 6.0, 18.0], [29.0, 41.0, 30.0, 42.0], [9.0, 21.0, 10.0, 22.0]], [[53.0, 65.0, 54.0, 66.0], [77.0, 89.0, 78.0, 90.0], [57.0, 69.0, 58.0, 70.0]]], [[[101.0, 113.0, 102.0, 114.0], [125.0, 137.0, 126.0, 138.0], [105.0, 117.0, 106.0, 118.0]], [[149.0, 161.0, 150.0, 162.0], [173.0, 185.0, 174.0, 186.0], [153.0, 165.0, 154.0, 166.0]]]],
+    }
+  })
+  def test_col2im_cpu(data)
+    test_case = data[:case]
+    actual = Chainer::Utils::Conv.col2im_cpu(test_case[:col], test_case[:sy], test_case[:sx], test_case[:ph], test_case[:pw], test_case[:h], test_case[:w])
+    assert_equal(data[:expected], actual)
+  end
 end

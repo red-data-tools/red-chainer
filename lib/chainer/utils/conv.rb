@@ -39,6 +39,21 @@ module Chainer
 
         col
       end
+
+      def self.col2im_cpu(col, sy, sx, ph, pw, h, w, dy: 1, dx: 1)
+        n, c, kh, kw, out_h, out_w = col.shape
+        img = col.class.zeros(n, c, h + 2 * ph + sy - 1, w + 2 * pw + sx - 1)
+        kh.times do |j|
+          jdy = j * dy
+          j_lim = [jdy + sy * out_h, img.shape[2]].min
+          kw.times do |i|
+            idx = i * dx
+            i_lim = [idx + sx * out_w, img.shape[3]].min
+            img[nil, nil, (jdy...j_lim).step(sy), (idx...i_lim).step(sx)] += col[nil, nil, j, i, nil, nil]
+          end
+        end
+        return img[nil, nil, (ph...(h + ph)), (pw...(w + pw))]
+      end
     end
   end
 end
