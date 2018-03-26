@@ -25,11 +25,31 @@ module Chainer
 
           # TODO: numpy.argmax(axis=2)
           d = col.shape[3..-1].reduce(:*) || 1
+          dx = col.shape[2..-1].reduce(:*) || 1
           max_index = col.max_index(2)
-          @indexes = max_index.flatten.map_with_index { |val, idx| (val - idx) / (d * (1 + idx / d)) }.reshape(*max_index.shape)
+          @indexes = max_index.flatten.map_with_index { |val, idx| (val - (dx * (idx / d))) / d }.reshape(*max_index.shape)
 
           y = col.max(axis: 2)
           [y]
+        end
+
+        def backward_cpu(x, gy)
+          n, c, out_h, out_w = gy[0].shape
+          h, w  = @in_shape[2..-1]
+          kh, kw = @kh, @kw
+
+          gcol = @in_dtype.zeros(n * c * out_h * out_w * kh * kw)
+
+          indexes = @indexes.flatten
+          indexes += Numo::Int64.new((indexes.size * kh * kw) / (kh * kw)).seq(0, kh * kw)
+         
+          gcol[indexes] = gy[0].flatten.dup
+          gcol = gcol.reshape(n, c, out_h, out_w, kh, kw)
+          gcol = gcol.swapaxes(2, 4)
+          gcol = gcol.swapaxes(3, 5)
+
+          gx = Chainer::Utils::Conv.col2im_cpu(gcol, @sy, @sx, @ph, @pw, h, w)
+          [gx]
         end
       end
     end
