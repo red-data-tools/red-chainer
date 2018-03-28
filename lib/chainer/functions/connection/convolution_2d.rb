@@ -63,21 +63,28 @@ module Chainer
           kh, kw = w.shape[2], w.shape[3]
 
           @col = Chainer::Utils::Conv.im2col_cpu(x, kh, kw, @sy, @sx, @ph, @pw, cover_all: @cover_all)
-          col_shape = @col.shape
+          y = Chainer::Utils::Math.tensordot(@col, w, [[1, 2, 3], [1, 2, 3]])
+          y += b if b
+          
+          [y.transpose(0, 3, 1, 2)]
+        end
 
-          # TODO: numpy.tensordot
-          y = @col.class.zeros(w.shape[0] ,col_shape[0], col_shape[4], col_shape[5])
-          w.shape[0].times do |n|
-            y[n, nil, nil, nil] = @col.transpose(0, 4, 5, 1, 2, 3).mulsum(w[n, nil, nil, nil], 3, 4, 5)
+        def backward_cpu(inputs, grad_outputs)
+          x, w, b = inputs[0], inputs[1], inputs[2]
+          gy = grad_outputs[0]
+          height, width = x.shape[2..-1]
+
+          gw = Chainer::Utils::Math.tensordot(gy, @col, [[0, 2, 3], [0, 4, 5]])
+          gcol = Chainer::Utils::Math.tensordot(w, gy, [0, 1])
+          gcol = gcol.transpose(3, 0, 1, 2)
+          gx = Chainer::Utils::Conv.col2im_cpu(gcol, @sy, @sx, @ph, @pw, height, width)
+
+          if b.nil?
+            [gx, gw]
+          else
+            gb = gy.sum(axis: [0, 2, 3])
+            [gx, gw, gb]
           end
-          
-          if b
-            y.shape[0].times do |n|
-              y[n, nil, nil, nil] += b[n]
-            end
-          end
-          
-          [y.transpose(1, 0, 2, 3)]
         end
       end
     end
