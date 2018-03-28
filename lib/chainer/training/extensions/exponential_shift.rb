@@ -55,8 +55,8 @@ module Chainer
         end
 
         def serialize(serializer)
-          @t = serializer('t', @t)
-          @last_value = serializer('last_value', @last_value)
+          @t = serializer.('t', @t)
+          @last_value = serializer.('last_value', @last_value)
           if @last_value.is_a?(Numo::NArray)
             @last_value = @last_value[0]
           end
