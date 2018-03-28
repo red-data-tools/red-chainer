@@ -40,7 +40,8 @@ module Chainer
 
         def as_mat(x)
           return x if x.ndim == 2
-          x.reshape(x.size, -1)
+          sum = x.shape.reduce(:*)
+          x.reshape(x.shape[0], sum / x.shape[0])
         end
       end
     end
