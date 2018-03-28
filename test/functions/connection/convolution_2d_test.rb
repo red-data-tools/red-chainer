@@ -33,5 +33,43 @@ class Chainer::Functions::Connection::Convolution2DTest < Test::Unit::TestCase
     actual = Chainer::Functions::Connection::Convolution2DFunction.convolution_2d(test_case[:x], test_case[:w], **test_case[:options])
     assert_equal(data[:expected], actual.data)
   end
+
+  data({
+    test1: {
+      case: {
+        x: Numo::DFloat.new(2, 1, 4, 3).seq,
+        w: Numo::DFloat.new(2, 1, 3, 3).seq,
+        b: nil,
+        gy: Numo::DFloat.new(2, 2, 3, 2).seq
+      },
+      expected: {
+        gx: Numo::DFloat[[[[78.0, 171.0, 95.0], [178.0, 386.0, 212.0], [112.0, 239.0, 129.0], [246.0, 522.0, 280.0]]], [[[282.0, 579.0, 299.0], [586.0, 1202.0, 620.0], [316.0, 647.0, 333.0], [654.0, 1338.0, 688.0]]]],
+        gw: Numo::DFloat[[[[676.0, 1304.0, 624.0], [476.0, 916.0, 436.0], [572.0, 1096.0, 520.0]]], [[[988.0, 1928.0, 936.0], [716.0, 1396.0, 676.0], [884.0, 1720.0, 832.0]]]],
+        gb: nil
+      }
+    },
+    test2: {
+      case: {
+        x: Numo::DFloat.new(2, 1, 4, 3).seq,
+        w: Numo::DFloat.new(2, 1, 3, 3).seq,
+        b: Numo::DFloat.new(2).seq,
+        gy: Numo::DFloat.new(2, 2, 3, 2).seq
+      },
+      expected: {
+        gx: Numo::DFloat[[[[78.0, 171.0, 95.0], [178.0, 386.0, 212.0], [112.0, 239.0, 129.0], [246.0, 522.0, 280.0]]], [[[282.0, 579.0, 299.0], [586.0, 1202.0, 620.0], [316.0, 647.0, 333.0], [654.0, 1338.0, 688.0]]]],
+        gw: Numo::DFloat[[[[676.0, 1304.0, 624.0], [476.0, 916.0, 436.0], [572.0, 1096.0, 520.0]]], [[[988.0, 1928.0, 936.0], [716.0, 1396.0, 676.0], [884.0, 1720.0, 832.0]]]],
+        gb: Numo::DFloat[102.0, 174.0]
+      }
+    }
+  })
+  def test_backward(data)
+    l = Chainer::Functions::Connection::Convolution2DFunction.new(stride: 2, pad: 1, cover_all: true)
+    inputs = [data[:case][:x], data[:case][:w], data[:case][:b]]
+    l.forward_cpu(inputs)
+    actual = l.backward_cpu(inputs, [data[:case][:gy]])
+    assert_equal(data[:expected][:gx], actual[0])
+    assert_equal(data[:expected][:gw], actual[1])
+    assert_equal(data[:expected][:gb], actual[2])
+  end
 end
 
