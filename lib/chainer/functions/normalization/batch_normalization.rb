@@ -89,6 +89,47 @@ module Chainer
 
           [y,]
         end
+
+        def backward(inputs, grad_outputs)
+          x, gamma = inputs[0], inputs[1]
+          gy = grad_outputs[0]
+          head_ndim = gamma.ndim + 1
+          m = gamma.class[x.size.div(gamma.size)][0]
+          axis = [0] + (head_ndim...(x.ndim)).to_a
+
+          if inputs.size == 5
+            mean = inputs[3]
+            var = inputs[4]
+            std = Numo::NMath.sqrt(var)
+            gs = gamma / std
+            gbeta = gy.sum(axis: axis)
+
+            mean_expander = [1] + mean.shape + [1] * (x.ndim - head_ndim)
+            x_mu = x - mean.reshape(*mean_expander)
+            std_expander = [1] + std.shape + [1] * (x.ndim - head_ndim)
+            x_mu /= std.reshape(*std_expander)
+            x_hat = x_mu
+            ggamma = (gy * x_hat).sum(axis: axis)
+            gmean = -gs * gbeta
+            gvar = -0.5 * gamma / var * ggamma
+            gs_expander = [1] + gs.shape + [1] * (x.ndim - head_ndim)
+            gx = gs.reshape(*gs_expander)
+            return [gx, ggamma, gbeta, gmean, gvar]
+          end
+
+          gbeta = gy.sum(axis: axis)
+          ggamma = (gy * @x_hat).sum(axis: axis)
+          tmp = (gamma / @std)
+          tmp_expander = [1] + tmp.shape + [1] * (x.ndim - head_ndim)
+          tmp = tmp.reshape(*tmp_expander)
+
+          ggamma_expander = [1] + ggamma.shape + [1] * (x.ndim - head_ndim)
+          gbeta_expander = [1] + gbeta.shape + [1] * (x.ndim - head_ndim)
+          
+          gx = tmp * (gy - (@x_hat * ggamma.reshape(*ggamma_expander) + gbeta.reshape(*gbeta_expander)) / m )
+
+          [gx, ggamma, gbeta]
+        end
       end
     end
   end
