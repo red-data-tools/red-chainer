@@ -57,14 +57,12 @@ module Chainer
           n2 *= bs[axis]
         end
         tmp = b.shape.reduce(:*) / n2
-        # newshape_b = [n2, -1]
         newshape_b = [n2, tmp]
         oldb = notin.map { |axis| bs[axis] }
 
         at = a.transpose(*newaxes_a).reshape(*newshape_a)
         bt = b.transpose(*newaxes_b).reshape(*newshape_b)
         res = at.dot(bt)
-       
 
         return res.reshape(*(olda + oldb))
       end
