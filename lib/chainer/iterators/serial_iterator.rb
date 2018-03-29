@@ -18,8 +18,8 @@ module Chainer
         @previous_epoch_detail = epoch_detail
 
         i = @current_position
-        i_end = i + @batch_size
         n = @dataset.size
+        i_end = [i + @batch_size, n].min
 
         batch = @order[i...i_end].to_a.map { |index| @dataset[index] }
 
