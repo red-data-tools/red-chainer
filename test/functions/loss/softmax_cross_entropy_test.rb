@@ -172,7 +172,7 @@ class TestSoftmaxCrossEntropy < Test::Unit::TestCase
     x = Chainer::Functions::Loss.rollaxis(@x, 1, start:@x.ndim).reshape(@t.size, @x.shape[1])
     t = @t.flatten.dup
 
-    for (xi, ti) in (0...x.shape[0]).map{|i|[x[i, false], t[i]]}
+    (0...x.shape[0]).map{|i|[x[i, false], t[i]]}.each do |xi, ti|
       if ti == -1
         next
       end
@@ -313,7 +313,7 @@ class TestElementwiseSoftmaxCrossEntropy < Test::Unit::TestCase
     t = @t.flatten.dup
     l = loss_value.flatten.dup
 
-    for (xi, ti, li) in (0...x.shape[0]).map{|i|[x[i, false], t[i], l[i]]}
+    (0...x.shape[0]).map{|i|[x[i, false], t[i], l[i]]}.each do |xi, ti, li|
       if ti == -1
         next
       end

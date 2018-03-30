@@ -31,7 +31,8 @@ class NumericalGradientTest < Test::Unit::TestCase
     end
     dx_actual = Chainer::numerical_grad(func, xs, gys, eps)
     assert_equal((dx_actual).size, (dx_expect).size)
-    for (e, a) in dx_expect.zip(dx_actual)
+
+    dx_expect.zip(dx_actual).each do |e, a|
       Chainer::Testing.assert_allclose(e, a, atol: 1e-3, rtol: 1e-3)
     end
   end
@@ -44,7 +45,8 @@ class NumericalGradientTest < Test::Unit::TestCase
         eps = [eps]
       end
     end
-    for e in eps
+
+    eps.each do |e|
       check_numerical_grad_one(f, df, xs, gys, e)
     end
   end

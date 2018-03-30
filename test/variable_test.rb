@@ -82,7 +82,7 @@ class Chainer::VariableTest < Test::Unit::TestCase
   end
 
   def check_backward(inputs, intermediates, outputs, retain_grad)
-    for o in outputs
+    outputs.each do |o|
       o.backward(retain_grad: retain_grad)
     end
     assert(inputs.map{|x| !x.grad.nil?}.all?)

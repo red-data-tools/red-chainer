@@ -34,7 +34,7 @@ module Chainer
       tmp = (0...inputs[0].shape[0]).map{|i|[inputs[0][i, false], grads[0][i, false]]}
     end
 
-    for (x, gx) in tmp
+    tmp.each do |x, gx|
       x.each_with_index{|xx, *i|
         orig = x[*i]   # hold original value
         x[*i] = orig + eps
@@ -42,7 +42,8 @@ module Chainer
         x[*i] = orig - eps
         ys2 = _copy_arrays(f.call(x))
         x[*i] = orig
-        for (y1, y2, gy) in ys1.zip(ys2, grad_outputs)
+
+        ys1.zip(ys2, grad_outputs).each do |y1, y2, gy|
           if !gy.nil?
             if  ((y1 - y2) * gy).is_a? Numo::NArray
               dot = ((y1 - y2) * gy).sum()
@@ -169,7 +170,8 @@ module Chainer
       if (y).size != (y_grad).size
         raise TypeError, "`y_grad` must have the same length of output values"
       end
-      for (iy, igy) in y.zip(y_grad)
+
+      y.zip(y_grad).each do |iy, igy|
         iy.grad = igy
       end
     else
@@ -214,7 +216,7 @@ module Chainer
       end
     end
 
-    for (skip, x, cx) in no_grads.zip(xs, casted_xs)
+    no_grads.zip(xs, casted_xs).each do |skip, x, cx|
       if skip
         raise unless x.grad.nil?
         next
@@ -230,7 +232,7 @@ module Chainer
       end
     end
 
-    for p in params
+    params.each do |p|
       gp, = numerical_grad(f, [p.data], y_grad, eps)
       Chainer::Testing.assert_allclose(p.grad, gp, atol: atol, rtol: rtol)
       raise unless gp.dtype === p.grad.dtype
