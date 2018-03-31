@@ -141,7 +141,7 @@ module Chainer
         end
 
         tile_shape = []
-        shape_check = shape[-array.shape.length..-1]
+        shape_check = shape[-array.shape.size..-1]
         shape_check.each_with_index{|s, i|
           if array.shape[i] == 1
             tile_shape << s
@@ -152,7 +152,7 @@ module Chainer
           end
         }
 
-        array.tile(*shape[0...-array.shape.length], *tile_shape)
+        array.tile(*shape[0...-array.shape.size], *tile_shape)
       end
 
       module_function :rollaxis, :broadcast_to

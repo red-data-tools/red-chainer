@@ -47,7 +47,7 @@ y = y_class.map{|s|
 # y_onehot => One-hot [[1.0, 0.0, 0.0], [1.0, 0.0, 0.0],,, [0.0, 1.0, 0.0], ,, [0.0, 0.0, 1.0]]
 y_onehot = y_class.map{|s|
   i = class_name.index(s)
-  a = Array.new(class_name.length, 0.0)
+  a = Array.new(class_name.size, 0.0)
   a[i] = 1.0
   a
 }

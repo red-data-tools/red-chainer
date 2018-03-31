@@ -31,7 +31,7 @@ class Chainer::VariableTest < Test::Unit::TestCase
     @x = Numo::SFloat.new(@x_shape).rand(2) - 1
     @a = Numo::SFloat.new(@x_shape).rand(9.9) + 0.1
 
-    if @x_shape.length != 0
+    if @x_shape.size != 0
         @size = Numo::NArray.cast(@x_shape).prod().to_i
     else
         @size = 1
