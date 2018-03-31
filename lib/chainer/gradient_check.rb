@@ -1,6 +1,4 @@
 module Chainer
-  require 'test-unit'
-
   def _copy_arrays(xs)
     xp = Chainer::get_array_module(*xs)
     xs.map{|x| (x.is_a? Numo::NArray) ? x.dup : x}
