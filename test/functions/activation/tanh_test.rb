@@ -1,14 +1,11 @@
 # frozen_string_literal: true
 
-require 'numo/narray'
-require 'chainer'
 require 'chainer/functions/activation/tanh'
 
 class Chainer::Functions::Activation::TanhTest < Test::Unit::TestCase
   data = {
-    # Not Support Numo::SFloat test case. Because, Numo::NMath.exp always returns Numo::DFloat type.
-    #'test1' => {shape: [3, 2], dtype: Numo::SFloat},
-    #'test2' => {shape: [], dtype: Numo::SFloat},
+    'test1' => {shape: [3, 2], dtype: Numo::SFloat},
+    'test2' => {shape: [], dtype: Numo::SFloat},
     'test3' => {shape: [3, 2], dtype: Numo::DFloat},
     'test4' => {shape: [], dtype: Numo::DFloat}}
 
@@ -33,5 +30,15 @@ class Chainer::Functions::Activation::TanhTest < Test::Unit::TestCase
   def test_forward_cpu(data)
     _setup(data)
     check_forward(@x.dup)
+  end
+
+  def check_backward(x_data, gy_data, use_cudnn: "always")
+    Chainer::check_backward(Chainer::Functions::Activation::Tanh.method(:tanh), x_data, gy_data, @check_backward_options)
+  end
+
+  data(data)
+  def test_backward_cpu(data)
+    _setup(data)
+    check_backward(@x.dup, @gy.dup)
   end
 end

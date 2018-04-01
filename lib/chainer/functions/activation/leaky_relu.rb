@@ -13,19 +13,19 @@ module Chainer
         # 
         # where $a$ is a configurable slope value.
         # 
-        # @param [Chainer::Variable or Numo::DFloat] x Input variable. A $(s_1, s_2, ..., s_N)$-shaped float array.
+        # @param [Chainer::Variable or Numo::NArray] x Input variable. A $(s_1, s_2, ..., s_N)$-shaped float array.
         # @param [float] slope Slope value $a$.
         # @return [Chainer::Variable] Output variable. A $(s_1, s_2, ..., s_N)$-shaped float array.
         # @example
-        #   > x = Numo::DFloat[[-1, 0], [2, -3], [-2, 1]]
+        #   > x = Numo::SFloat[[-1, 0], [2, -3], [-2, 1]]
         #   > x
-        #   => Numo::DFloat#shape=[3,2]
+        #   => Numo::SFloat#shape=[3,2]
         #   [[-1, 0], 
         #    [2, -3], 
         #    [-2, 1]]
         #   > F = Chainer::Functions::Activation::LeakyReLU
         #   > F.leaky_relu(x, slope:0.2).data
-        #   => Numo::DFloat#shape=[3,2]
+        #   => Numo::SFloat#shape=[3,2]
         #   [[-0.2, 0], 
         #    [2, -0.6], 
         #    [-0.4, 1]]

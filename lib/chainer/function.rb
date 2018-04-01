@@ -23,6 +23,7 @@ module Chainer
       @input_indexes_to_retain = nil
       @output_indexes_to_retain = nil
       outputs = forward(in_data)
+      raise if !outputs.is_a? Array
 
       ret = outputs.map do |y|
         Variable.new(y, requires_grad: requires_grad)
