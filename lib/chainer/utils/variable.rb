@@ -10,8 +10,12 @@ module Chainer
           raise TypeError, "Type of data and grad mismatch\n#{x.data.class} != #{gx.class}"
         end
 
+        unless gx.class == x.data.class
+          raise TypeError, "Dtype(Class) of data and grad mismatch\n#{x.data.class} != #{gx.class}"
+        end
+
         unless gx.shape == x.data.shape
-          raise TypeError, "Shape of data and grad mismatch\n#{x.class} != #{gx.class}"
+          raise TypeError, "Shape of data and grad mismatch\n#{x.data.shape} != #{gx.shape}"
         end
       end
     end

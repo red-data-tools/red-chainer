@@ -1,14 +1,11 @@
 # frozen_string_literal: true
 
-require 'numo/narray'
-require 'chainer'
 require 'chainer/functions/activation/sigmoid'
 
 class Chainer::Functions::Activation::SigmoidTest < Test::Unit::TestCase
   data = {
-    # Not Support Numo::SFloat test case. Because, Numo::NMath.exp always returns Numo::DFloat type.
-    #'test1' => {shape: [3, 2], dtype: Numo::SFloat},
-    #'test2' => {shape: [], dtype: Numo::SFloat},
+    'test1' => {shape: [3, 2], dtype: Numo::SFloat},
+    'test2' => {shape: [], dtype: Numo::SFloat},
     'test3' => {shape: [3, 2], dtype: Numo::DFloat},
     'test4' => {shape: [], dtype: Numo::DFloat}}
 
@@ -34,5 +31,15 @@ class Chainer::Functions::Activation::SigmoidTest < Test::Unit::TestCase
   def test_forward_cpu(data)
     _setup(data)
     check_forward(@x.dup)
+  end
+
+  def check_backward(x_data, y_grad, use_cudnn: "always")
+    Chainer::check_backward(Chainer::Functions::Activation::Sigmoid.method(:sigmoid), x_data, y_grad, @check_backward_options)
+  end
+
+  data(data)
+  def test_backward_cpu(data)
+    _setup(data)
+    check_backward(@x.dup, @gy.dup)
   end
 end

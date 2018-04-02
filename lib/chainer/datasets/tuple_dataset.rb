@@ -16,8 +16,9 @@ module Chainer
       end
 
       def [](index)
-        batches = @datasets.map { |dataset| dataset[index, false] }
-            
+        batches = @datasets.map do |dataset|
+          dataset.ndim > 1 ? dataset[index, false] : dataset[index]
+        end
         if index.kind_of?(Enumerable)
           length = batches[0].shape[0]
           length.times.map {|i| batches.map { |m| m[i] } }

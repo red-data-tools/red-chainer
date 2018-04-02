@@ -1,14 +1,11 @@
 # frozen_string_literal: true
 
-require 'numo/narray'
-require 'chainer'
 require 'chainer/functions/activation/leaky_relu'
 
 class Chainer::Functions::Activation::LeakyReLUTest < Test::Unit::TestCase
   data = {
-    # Not Support Numo::SFloat test case. Because, Numo::NMath.exp always returns Numo::DFloat type.
-    #'test1' => {shape: [3, 2], dtype: Numo::SFloat},
-    #'test2' => {shape: [], dtype: Numo::SFloat},
+    'test1' => {shape: [3, 2], dtype: Numo::SFloat},
+    'test2' => {shape: [], dtype: Numo::SFloat},
     'test3' => {shape: [3, 2], dtype: Numo::DFloat},
     'test4' => {shape: [], dtype: Numo::DFloat}}
 
@@ -29,7 +26,7 @@ class Chainer::Functions::Activation::LeakyReLUTest < Test::Unit::TestCase
     @gy = @dtype.new(@shape).rand(2) - 1
     @slope = Random.rand
     @check_forward_options = {}
-    @check_backward_options = {"dtype" => Numo::DFloat}
+    @check_backward_options_dtype = Numo::DFloat
   end
 
   def check_forward(x_data)
@@ -53,5 +50,15 @@ class Chainer::Functions::Activation::LeakyReLUTest < Test::Unit::TestCase
   def test_forward_cpu(data)
     _setup(data)
     check_forward(@x.dup)
+  end
+
+  def check_backward(x_data, y_grad)
+    Chainer::check_backward(Chainer::Functions::Activation::LeakyReLU.new(slope: @slope), x_data, y_grad, dtype: @check_backward_options_dtype)
+  end
+
+  data(data)
+  def test_backward_cpu(data)
+    _setup(data)
+    check_backward(@x.dup, @gy.dup)
   end
 end
