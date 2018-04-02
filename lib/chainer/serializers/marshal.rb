@@ -4,6 +4,12 @@ module Chainer
       attr_accessor :target, :path
 
       def self.save_file(filename, obj)
+        if filename.instance_of?(String)
+          File.open(filename, 'wb') do |f|
+            self.save_file(f, obj)
+          end
+          return
+        end
         s = self.new
         s.save(obj)
         Marshal.dump(s.target, filename)
