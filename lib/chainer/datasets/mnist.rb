@@ -15,9 +15,9 @@ module Chainer
       def self.preprocess_mnist(raw, withlabel, ndim, scale, image_dtype, label_dtype)
         images = raw[:x]
         if ndim == 2
-          images = images.reshape(nil, 28, 28)
+          images = images.reshape(true, 28, 28)
         elsif ndim == 3
-          images = images.reshape(nil, 1, 28, 28)
+          images = images.reshape(true, 1, 28, 28)
         elsif ndim != 1
           raise "invalid ndim for MNIST dataset"
         end

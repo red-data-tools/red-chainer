@@ -40,7 +40,7 @@ module Chainer
 
         def as_mat(x)
           return x if x.ndim == 2
-          x.reshape(x.shape.first, nil)
+          x.reshape(x.shape.first, true)
         end
       end
     end
