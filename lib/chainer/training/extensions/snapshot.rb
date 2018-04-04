@@ -23,7 +23,7 @@ module Chainer
           filename = filename_proc.call(trainer)
           prefix = "tmp#{filename}"
           temp_file = Tempfile.create(basename: prefix, tmpdir: trainer.out)
-          save_class.save_file(temp_file, trainer)
+          save_class.save_file(temp_file.path, trainer)
           FileUtils.move(temp_file.path, File.join(trainer.out, filename))
         end
       end

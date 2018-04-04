@@ -3,10 +3,14 @@ module Chainer
     class MarshalSerializer < Chainer::Serializer      
       attr_accessor :target, :path
 
-      def self.save_file(filename, obj)
+      # @param [string] file_path Target file path
+      # @param [Object] obj Object to be serialized
+      def self.save_file(file_path, obj)
         s = self.new
         s.save(obj)
-        Marshal.dump(s.target, filename)
+        File.open(file_path, 'wb') do |f|
+          Marshal.dump(s.target, f)
+        end
       end
 
       def initialize(target: nil, path: "")
