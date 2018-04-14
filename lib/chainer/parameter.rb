@@ -15,7 +15,7 @@ module Chainer
         else
           super(name: name)
           @initializer = initializer
-          dtype = initializer.respond_to?(:dtype) ? initializer.dtype : 'DFloat'
+          dtype = initializer.respond_to?(:dtype) ? initializer.dtype : 'SFloat'
           @grad_initializer = Chainer::Initializers.nan()
         end
       else

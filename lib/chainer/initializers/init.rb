@@ -1,7 +1,7 @@
 module Chainer
   module Initializers
     def self.generate_array(initializer, shape)
-      klass = Numo::DFloat
+      klass = Numo::SFloat
       if initializer.respond_to?(:dtype) && initializer.dtype
         klass = initializer.dtype
       end

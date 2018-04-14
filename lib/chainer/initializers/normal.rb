@@ -8,7 +8,7 @@ module Chainer
 
       def call(array)
         args = { loc: 0.0, scale: @scale, size: array.shape}
-        Numo::DFloat.new(array.shape).rand_norm(0.0, @scale)
+        array.class.new(array.shape).rand_norm(0.0, @scale)
       end
     end
 

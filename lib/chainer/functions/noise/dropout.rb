@@ -26,9 +26,9 @@ module Chainer
           retain_inputs([])
           unless self.instance_variable_defined?(:@mask)
             scale = x[0].class[*[1.0 / (1 - @dropout_ratio)]][0]
-            flag = Numo::DFloat.new(*x[0].shape).rand >= @dropout_ratio
+            flag = x[0].class.new(*x[0].shape).rand >= @dropout_ratio
 
-            @mask = Numo::DFloat.zeros(*x[0].shape)
+            @mask = x[0].class.zeros(*x[0].shape)
             @mask[flag] = 1
             @mask *= scale
           end

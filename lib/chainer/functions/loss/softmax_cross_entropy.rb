@@ -84,12 +84,12 @@ module Chainer
 
           if y.ndim == 2
             gx = y
-            Numo::DFloat.new(t.shape[0]).seq(0).to_a.zip(Numo::DFloat.maximum(t, 0).to_a).each{|v| gx[*v] -= 1}
+            t.class.new(t.shape[0]).seq(0).to_a.zip(t.class.maximum(t, 0).to_a).each{|v| gx[*v] -= 1}
 
             if @class_weight
               shape = x.ndim.times.map { |d| d == 1 ? true : 1 }
               c = Chainer::Functions::Loss.broadcast_to(@class_weight.reshape(*shape), x.shape)
-              c = c.class.cast(Numo::DFloat.new(t.shape[0]).seq.to_a.zip(Numo::DFloat.maximum(t, 0).to_a).map{|v| c[*v]})
+              c = c.class.cast(t.class.new(t.shape[0]).seq.to_a.zip(t.class.maximum(t, 0).to_a).map{|v| c[*v]})
               gx *= Chainer::Functions::Loss.broadcast_to(c.expand_dims(1), gx.shape)
             end
 
@@ -106,12 +106,12 @@ module Chainer
             gx = y.reshape(y.shape[0], y.shape[1], true)
             fst_index = Numo::Int32.new(t.size).seq(0) / n_unit
             trd_index = Numo::Int32.new(t.size).seq(0) % n_unit
-            fst_index.to_a.zip(Numo::DFloat.maximum(t.flatten.dup, 0).to_a, trd_index.to_a).each{|v| gx[*v] -= 1}
+            fst_index.to_a.zip(t.class.maximum(t.flatten.dup, 0).to_a, trd_index.to_a).each{|v| gx[*v] -= 1}
             if @class_weight
               shape = x.ndim.times.map{|d| d == 1 ? true : 1}
               c = Chainer::Functions::Loss.broadcast_to(@class_weight.reshape(*shape), x.shape)
               c = c.reshape(*gx.shape)
-              c = c.class.cast(fst_index.to_a.zip(Numo::DFloat.maximum(t.flatten.dup, 0).to_a, trd_index.to_a).map{|v| c[*v]})
+              c = c.class.cast(fst_index.to_a.zip(t.class.maximum(t.flatten.dup, 0).to_a, trd_index.to_a).map{|v| c[*v]})
               c = c.reshape(y.shape[0], 1, true)
               gx *= Chainer::Functions::Loss.broadcast_to(c, gx.shape)
             end
