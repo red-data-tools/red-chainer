@@ -28,7 +28,7 @@ module Chainer
           arr = Numo::Bit[1]
         elsif value.is_a?(FalseClass)
           arr = Numo::Bit[0]
-        elsif value.instance_of?(String)
+        elsif value.instance_of?(String) || value.nil?
           arr = value
         else
           arr = Numo::NArray.cast(value)

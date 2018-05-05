@@ -6,8 +6,8 @@ module Chainer
           return
         end
 
-        unless gx.instance_of?(x.data.class)
-          raise TypeError, "Type of data and grad mismatch\n#{x.class} != #{gx.class}"
+        unless gx.is_a?(x.data.class.superclass)
+          raise TypeError, "Type of data and grad mismatch\n#{x.data.class} != #{gx.class}"
         end
 
         unless gx.class == x.data.class
