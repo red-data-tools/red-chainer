@@ -1,5 +1,5 @@
 require 'chainer'
-require './models/vgg'
+require __dir__ + '/models/vgg'
 require 'optparse'
 
 args = {
@@ -29,11 +29,11 @@ opt.parse!(ARGV)
 if args[:dataset] == 'cifar10'
     puts 'Using CIFAR10 dataset.'
     class_labels = 10
-    train, test = Chainer::Datasets::Cifar.get_cifar10
+    train, test = Chainer::Datasets::CIFAR.get_cifar10
 elsif args[:dataset] == 'cifar100'
     puts 'Using CIFAR100 dataset.'
     class_labels = 100
-    train, test = Chainer::Datasets::Cifar.get_cifar100
+    train, test = Chainer::Datasets::CIFAR.get_cifar100
 else
     raise 'Invalid dataset choice.'
 end
@@ -44,9 +44,6 @@ model = Chainer::Links::Model::Classifier.new(VGG.new(class_labels: class_labels
 
 optimizer = Chainer::Optimizers::MomentumSGD.new(lr: args[:learnrate])
 optimizer.setup(model)
-
-# TODO
-# optimizer.add_hook(chainer.optimizer.WeightDecay(5e-4))  
 
 train_iter = Chainer::Iterators::SerialIterator.new(train, args[:batchsize])
 test_iter = Chainer::Iterators::SerialIterator.new(test, args[:batchsize], repeat: false, shuffle: false)
