@@ -30,10 +30,6 @@ module Chainer
       def self.concat_arrays(arrays, padding)
         unless arrays[0].kind_of?(Numo::NArray)
           arrays = Numo::NArray.cast(arrays)
-          if padding
-            return concat_arrays_with_padding(arrays, padding)
-          end
-          return arrays
         end
 
         if padding
