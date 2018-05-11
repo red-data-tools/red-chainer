@@ -29,31 +29,51 @@ module Chainer
 
       def self.concat_arrays(arrays, padding)
         unless arrays[0].kind_of?(Numo::NArray)
+          # [1, 2, 3, 4] => Numo::Int32[1, 2, 3, 4]
           arrays = Numo::NArray.cast(arrays)
+          if padding
+            return concat_arrays_with_padding(arrays, padding)
+          end
+          return arrays
         end
 
         if padding
           return concat_arrays_with_padding(arrays, padding)
         end
 
+        # [Numo::SFloat[1, 2], Numo::SFloat[3, 4]]
+        #  => Numo::SFloat#shape=[2,2]
+        # [[1, 2], [3, 4]]
         a = arrays.map{|arr| arr[:-, false]}
         a[0].concatenate(*a[1..-1])
       end
 
       def self.concat_arrays_with_padding(arrays, padding)
-        shape = Numo::Int32.[](arrays[0].shape)
-        arrays[1...arrays.len].each do |array|
-          if Numo::Bit.[](shape != array.shape).any?
-            # TODO: numpy maximum
+        if arrays[0].is_a? Numo::NArray
+          shape = Numo::Int32.cast(arrays[0].shape)
+          arrays[1..-1].each do |array|
+            if Numo::Bit.[](shape != array.shape).any?
+              shape = Numo::Int32.maximum(shape, array.shape)
+            end
           end
+        else # Integer
+          shape = []
         end
 
-        shape = [shape.insert(0, arrays.size)]
-        result = arrays[0].dtype.[](*shape).full(padding)
+        shape = shape.insert(0, arrays.size).to_a
+        if arrays[0].is_a? Numo::NArray
+          result = arrays[0].class.new(shape).fill(padding)
+        else # Integer
+          result = Numo::Int32.new(shape).fill(padding)
+        end
+
         arrays.size.times do |i|
           src = arrays[i]
-          slices = src.shape.map { |s| [s] }
-          result[[i] + slices] = src
+          if src.is_a? Numo::NArray
+            result[i, 0...src.shape[0], 0...src.shape[1]] = src
+          else # Integer
+            result[i] = src
+          end
         end
 
         result
