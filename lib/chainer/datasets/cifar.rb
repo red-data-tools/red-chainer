@@ -40,7 +40,7 @@ module Chainer
         else
           raise 'invalid ndim for CIFAR dataset'
         end
-        images = images.cast_to(Numo::DFloat)
+        images = images.cast_to(Numo::SFloat)
         images *= scale / 255.0
 
         if withlabel

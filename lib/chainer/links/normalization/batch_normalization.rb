@@ -23,7 +23,7 @@ module Chainer
         # @param [Numo::NArray.dtype] dtype Type to use in computing.
         # @param [boolean] use_gamma If `true`, use scaling parameter. Otherwise, use unit(1) which makes no effect.
         # @param [boolean] use_beta If `true`, use shifting parameter. Otherwise, use unit(0) which makes no effect.
-        def initialize(size, decay: 0.9, eps: 2e-5, dtype: Numo::DFloat, use_gamma: true, use_beta: true, initial_gamma: nil, initial_beta: nil)
+        def initialize(size, decay: 0.9, eps: 2e-5, dtype: Numo::SFloat, use_gamma: true, use_beta: true, initial_gamma: nil, initial_beta: nil)
           super()
           @avg_mean = dtype.zeros(size)
           register_persistent('avg_mean')
