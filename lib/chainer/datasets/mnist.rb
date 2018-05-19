@@ -3,7 +3,7 @@ require 'zlib'
 module Chainer
   module Datasets
     module Mnist
-      def self.get_mnist(withlabel: true, ndim: 1, scale: 1.0, dtype: Numo::DFloat, label_dtype: Numo::Int32)
+      def self.get_mnist(withlabel: true, ndim: 1, scale: 1.0, dtype: Numo::SFloat, label_dtype: Numo::Int32)
         train_raw = retrieve_mnist_training
         train = preprocess_mnist(train_raw, withlabel, ndim, scale, dtype, label_dtype)
 
