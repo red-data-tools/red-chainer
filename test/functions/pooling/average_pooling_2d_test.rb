@@ -8,9 +8,9 @@ class Chainer::Functions::Pooling::AveragePooling2DTest < Test::Unit::TestCase
       },
       expected: Numo::SFloat[[[[ 3.5,  5.5,  7.5],
                                [15.5, 17.5, 19.5]],
-															[[27.5, 29.5, 31.5],
+                              [[27.5, 29.5, 31.5],
                                [39.5, 41.5, 43.5]],
-															[[51.5, 53.5, 55.5],
+                              [[51.5, 53.5, 55.5],
                                [63.5, 65.5, 67.5]]]]
     },
     test2: {
