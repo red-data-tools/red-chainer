@@ -15,7 +15,7 @@ class Block < Chainer::Chain
 end
 
 class VGG < Chainer::Chain
-  def initialize(class_labels: 10)
+  def initialize(n_classes: 10)
     super()
     init_scope do
       @block1_1 = Block.new(64, 3)
@@ -33,7 +33,7 @@ class VGG < Chainer::Chain
       @block5_3 = Block.new(512, 3)
       @fc1 = Chainer::Links::Connection::Linear.new(nil, out_size: 512, nobias: true)
       @bn_fc1 = Chainer::Links::Normalization::BatchNormalization.new(512)
-      @fc2 = Chainer::Links::Connection::Linear.new(nil, out_size: class_labels, nobias: true)
+      @fc2 = Chainer::Links::Connection::Linear.new(nil, out_size: n_classes, nobias: true)
     end
   end
 

@@ -1,5 +1,6 @@
 require 'chainer'
 require __dir__ + '/models/vgg'
+require __dir__ + '/models/resnet18'
 require 'optparse'
 
 args = {
@@ -9,7 +10,8 @@ args = {
   learnrate: 0.05,
   epoch: 300,
   out: 'result',
-  resume: nil
+  resume: nil,
+  model: 'vgg',
 }
 
 
@@ -21,6 +23,7 @@ opt.on('-l', '--learnrate VALUE', "Learning rate for SGD (default: #{args[:learn
 opt.on('-e', '--epoch VALUE', "Number of sweeps over the dataset to train (default: #{args[:epoch]})") { |v| args[:epoch] = v.to_i }
 opt.on('-o', '--out VALUE', "Directory to output the result (default: #{args[:out]})") { |v| args[:out] = v }
 opt.on('-r', '--resume VALUE', "Resume the training from snapshot") { |v| args[:resume] = v }
+opt.on('-m', '--model VALUE', "Use model") { |v| args[:model] = v }
 opt.parse!(ARGV)
 
 # Set up a neural network to train.
@@ -38,9 +41,15 @@ else
     raise 'Invalid dataset choice.'
 end
 
-puts "setup..."
+if args[:model] == 'vgg'
+  puts 'Using VGG model'
+  model_class = VGG
+elsif args[:model] == 'resnet18'
+  puts 'Using ResNet-18 model'
+  model_class = ResNet18::Model
+end
 
-model = Chainer::Links::Model::Classifier.new(VGG.new(class_labels: class_labels))
+model = Chainer::Links::Model::Classifier.new(model_class.new(n_classes: class_labels))
 
 optimizer = Chainer::Optimizers::MomentumSGD.new(lr: args[:learnrate])
 optimizer.setup(model)
@@ -58,7 +67,7 @@ trainer.extend(Chainer::Training::Extensions::ExponentialShift.new('lr', 0.5), t
 frequency = args[:frequency] == -1 ? args[:epoch] : [1, args[:frequency]].max
 trainer.extend(Chainer::Training::Extensions::Snapshot.new, trigger: [frequency, 'epoch'])
 
-trainer.extend(Chainer::Training::Extensions::LogReport.new)    
+trainer.extend(Chainer::Training::Extensions::LogReport.new)
 trainer.extend(Chainer::Training::Extensions::PrintReport.new(['epoch', 'main/loss', 'validation/main/loss', 'main/accuracy', 'validation/main/accuracy', 'elapsed_time']))
 trainer.extend(Chainer::Training::Extensions::ProgressBar.new)
 
