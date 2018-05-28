@@ -279,7 +279,7 @@ module Chainer
     def serialize(serializer)
       super
       @children.each_with_index do |child, idx|
-        child.serialize(serialize[idx.to_s])
+        child.serialize(serializer[idx.to_s])
       end
     end
   end
