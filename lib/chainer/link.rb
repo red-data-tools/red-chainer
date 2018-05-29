@@ -1,5 +1,7 @@
 module Chainer
   class Link
+    attr_accessor :name
+
     def initialize
       @params = []
       @persistent = []
@@ -17,20 +19,26 @@ module Chainer
 
       begin
         yield
-        set_attr
+        self.instance_variables.each do |name|
+          set_attr(name, self.instance_variable_get(name))
+        end
       ensure
         @within_init_scope = old_flag
       end
     end
 
-    def set_attr
-      self.instance_variables.each do |name|
-        value = self.instance_variable_get(name)
-        if value.instance_of?(Chainer::Parameter)
-          @params << name
-          @persistent.delete(name)
-        end
+    def set_attr(name, value)
+      if within_init_scope && value.kind_of?(Chainer::Parameter)
+        value.name = name
+        @params << name
+        @persistent.delete(name)
       end
+    end
+
+    def del_attr(name)
+      @params.delete(name)
+      @persistent.delete(name)
+      self.remove_instance_variable(name)
     end
 
     def cleargrads
@@ -99,13 +107,19 @@ module Chainer
       @children = []
     end
 
-    def set_attr
-      self.instance_variables.each do |name|
-        value = self.instance_variable_get(name)
-        if value.kind_of?(Chainer::Link)
-          @children << name
+    def set_attr(name, value)
+      if within_init_scope && value.kind_of?(Chainer::Link)
+        if self.respond_to?(name)
+          raise TypeError, "cannot register a new link #{name}: attribute exists"
         end
+        value.name = name
+        @children << name
       end
+      super
+    end
+
+    def del_attr(name)
+      @children.delete(name)
       super
     end
 
@@ -152,6 +166,120 @@ module Chainer
       d = self.instance_variables.each_with_object({}) { |sym, h| h[sym] = self.instance_variable_get(sym) }
       @children.each do |name|
         d[name].serialize(serializer[name.to_s])
+      end
+    end
+  end
+
+
+  # Composable link with list-like interface.
+  #
+  # This is another example of compositional link. Unlike :class:`Chainer::Chain`,
+  # this class can be used like a list of child links.
+  # Each child link is indexed by a non-negative integer,
+  # and it maintains the current number of registered child links.
+  # The :meth:`add_link` method inserts a new link at the end of the list.
+  # It is useful to write a chain with arbitrary number of child links,
+  # e.g. an arbitrarily deep multi-layer perceptron.
+  class ChainList < Link
+    attr_reader :children
+
+    def initialize(*links)
+      super()
+      @children = []
+
+      links.each do |link|
+        add_link(link)
+      end
+    end
+
+    def set_attr(name, value)
+      if within_init_scope && value.kind_of?(Chainer::Link)
+        raise TypeError, 'cannot register a new link within a "with chainlist.init_scope:" block.'
+      end
+      super
+    end
+
+    def [](index)
+      @children[index]
+    end
+
+    def each(&block)
+      @children.each(&block)
+    end
+
+    def size
+      @children.size
+    end
+
+    def <<(link)
+      add_link(link)
+    end
+
+    def add_link(link)
+      link.name = @children.size.to_s
+      @children << link
+    end
+
+    def params(include_uninit: true)
+      super(include_uninit: include_uninit) do |param|
+        yield param
+      end
+
+      @children.each do |link|
+        link.params(include_uninit: include_uninit) do |param|
+          yield param
+        end
+      end
+    end
+
+    def namedparams(include_uninit: true)
+      super(include_uninit: include_uninit) do |ret|
+        yield ret
+      end
+      @children.each_with_index do |link, idx|
+        prefix = "/#{idx}"
+        link.namedparams(include_uninit: include_uninit) do |path, param|
+          yield [prefix + path, param]
+        end
+      end
+    end
+
+    def links(skipself: false)
+      unless skipself
+        yield self
+      end
+
+      @children.each do |child|
+        child.links do |link|
+          yield link
+        end
+      end
+    end
+
+    def namedlinks(skipself: false)
+      unless skipself
+        yield '/', self
+      end
+
+      @children.each_with_index do |child, idx|
+        prefix = "/#{idx}"
+        yield prefix, child
+        child.namedlinks(skipself: true) do |path, link|
+          yield [prefix + path, link]
+        end
+      end
+    end
+
+    def children
+      @children.each do |child|
+        yield child
+      end
+    end
+
+    def serialize(serializer)
+      super
+      @children.each_with_index do |child, idx|
+        child.serialize(serializer[idx.to_s])
       end
     end
   end
