@@ -21,7 +21,7 @@ module Chainer
         end
         if index.kind_of?(Enumerable)
           length = batches[0].shape[0]
-          length.times.map {|i| batches.map { |m| m[i] } }
+          length.times.map {|i| batches.map { |m| m.ndim > 1 ? m[i, false] : m[i] } }
         else
           batches
         end
