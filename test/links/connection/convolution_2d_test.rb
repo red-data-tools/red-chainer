@@ -6,7 +6,7 @@ class Chainer::Links::Connection::Convolution2DTest < Test::Unit::TestCase
       case: { x: Numo::DFloat.new(1, 3, 10, 10).seq, in_channels: 3, out_channels: 7, ksize: 5, options: {} },
       expected: [1, 7, 6, 6]
     },
-    test1: {
+    test2: {
       case: { x: Numo::DFloat.new(3, 3, 6, 6).seq, in_channels: nil, out_channels: 4, ksize: 3, options: { stride: 3, pad: 3, initial_w: Numo::DFloat.new(4, 3, 3, 3).seq } },
       expected: [3, 4, 4, 4]
     },
