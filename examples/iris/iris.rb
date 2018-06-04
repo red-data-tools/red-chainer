@@ -45,7 +45,7 @@ y = y_class.map{|s|
 }
 
 # y_onehot => One-hot [[1.0, 0.0, 0.0], [1.0, 0.0, 0.0],,, [0.0, 1.0, 0.0], ,, [0.0, 0.0, 1.0]]
-y_onehot = Numo::SFloat.eye(3)[y,false]
+y_onehot = Numo::SFloat.eye(class_name.size)[y,false]
 
 puts "Iris Datasets"
 puts "No. [sepal_length, sepal_width, petal_length, petal_width] one-hot #=> class"
