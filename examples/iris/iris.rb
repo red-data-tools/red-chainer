@@ -31,10 +31,11 @@ optimizer = Chainer::Optimizers::Adam.new
 optimizer.setup(model)
 
 iris = Datasets::Iris.new
-x = iris.to_table.to_h.values[0..3].transpose
+iris_table = iris.to_table.to_h
+x = [iris_table[:sepal_length], iris_table[:sepal_width], iris_table[:petal_length], iris_table[:petal_width]].transpose
 
 # target
-y_class = iris.to_table.to_h[:class]
+y_class = iris_table[:class]
 
 # class index array
 # ["Iris-setosa", "Iris-versicolor", "Iris-virginica"]
