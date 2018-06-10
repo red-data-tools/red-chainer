@@ -31,10 +31,11 @@ optimizer = Chainer::Optimizers::Adam.new
 optimizer.setup(model)
 
 iris = Datasets::Iris.new
-x = iris.each.map {|r| r.each.to_a[0..3]}
+iris_table = iris.to_table
+x = iris_table.fetch_values(:sepal_length, :sepal_width, :petal_length, :petal_width).transpose
 
 # target
-y_class = iris.each.map {|r| r.class}
+y_class = iris_table[:class]
 
 # class index array
 # ["Iris-setosa", "Iris-versicolor", "Iris-virginica"]
@@ -45,17 +46,12 @@ y = y_class.map{|s|
 }
 
 # y_onehot => One-hot [[1.0, 0.0, 0.0], [1.0, 0.0, 0.0],,, [0.0, 1.0, 0.0], ,, [0.0, 0.0, 1.0]]
-y_onehot = y_class.map{|s|
-  i = class_name.index(s)
-  a = Array.new(class_name.size, 0.0)
-  a[i] = 1.0
-  a
-}
+y_onehot = Numo::SFloat.eye(class_name.size)[y,false]
 
 puts "Iris Datasets"
 puts "No. [sepal_length, sepal_width, petal_length, petal_width] one-hot #=> class"
 x.each_with_index{|r, i|
-  puts "#{'%3d' % i} : [#{r.join(', ')}] #{y_onehot[i]} #=> #{y_class[i]}(#{y[i]})"
+  puts "#{'%3d' % i} : [#{r.join(', ')}] #{y_onehot[i, false].to_a} #=> #{y_class[i]}(#{y[i]})"
 }
 # [5.1, 3.5, 1.4, 0.2, "Iris-setosa"]     => 50 data
 # [7.0, 3.2, 4.7, 1.4, "Iris-versicolor"] => 50 data
@@ -70,8 +66,13 @@ y_train = y_onehot[(1..-1).step(2), true] #=> 75 data (Iris-setosa : 25, Iris-ve
 x_test = x[(0..-1).step(2), true]         #=> 75 data (Iris-setosa : 25, Iris-versicolor : 25, Iris-virginica : 25)
 y_test = y[(0..-1).step(2)]               #=> 75 data (Iris-setosa : 25, Iris-versicolor : 25, Iris-virginica : 25)
 
+puts
+
 # Train
+print("Training ")
+
 10000.times{|i|
+  print(".") if i % 1000 == 0
   x = Chainer::Variable.new(x_train)
   y = Chainer::Variable.new(y_train)
   model.cleargrads()
@@ -79,6 +80,8 @@ y_test = y[(0..-1).step(2)]               #=> 75 data (Iris-setosa : 25, Iris-ve
   loss.backward()
   optimizer.update()
 }
+
+puts
 
 # Test
 xt = Chainer::Variable.new(x_test)
