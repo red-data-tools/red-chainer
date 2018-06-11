@@ -4,7 +4,7 @@ A flexible framework for neural network for Ruby
 
 ## Description
 
-It ported python's Chainer with Ruby.
+It ported python's [Chainer](https://github.com/chainer/chainer) with Ruby.
 
 ## Requirements
 
