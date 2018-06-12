@@ -1,11 +1,14 @@
-# README
+# Red Chainer : A deep learning framework
 
-## Name
-
-Red Chainer
+A flexible framework for neural network for Ruby
 
 ## Description
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/chainer`. To experiment with that code, run `bin/console` for an interactive prompt.
+
+It ported python's [Chainer](https://github.com/chainer/chainer) with Ruby.
+
+## Requirements
+
+* Ruby 2.3 or later
 
 ## Installation
 
@@ -40,3 +43,15 @@ $ ruby examples/mnist.rb
 ## License
 
 The MIT license. See [LICENSE.txt](./LICENSE.txt) for details.
+
+## Red Chainer implementation status
+
+|    |  Chainer 2.0<br>(Initial ported version)  | Red Chainer (0.3.1) | example |
+| ---- | ---- | ---- | ---- |
+|  [activation](https://github.com/red-data-tools/red-chainer/tree/master/lib/chainer/functions/activation)  |  15  | 5 | LogSoftmax, ReLU, LeakyReLU, Sigmoid, Tanh |
+|  [loss](https://github.com/red-data-tools/red-chainer/tree/master/lib/chainer/functions/loss)  |  17  | 2 | SoftMax, MeanSquaredError |
+|  [optimizer](https://github.com/red-data-tools/red-chainer/tree/master/lib/chainer/optimizers)  |  9  | 2 | Adam, MomentumSGDRule |
+|  [connection](https://github.com/red-data-tools/red-chainer/tree/master/lib/chainer/functions/connection)  |  12  | 2 | Linear, Convolution2D |
+|  [pooling](https://github.com/red-data-tools/red-chainer/tree/master/lib/chainer/functions/pooling)  |  14  | 3 | Pooling2D, MaxPooling2D, AveragePooling2D |
+|  [example](https://github.com/red-data-tools/red-chainer/tree/master/examples)  |  31  | 3 | MNIST, Iris, CIFAR |
+|  GPU  | use cupy  | ToDo | want to support [Cumo](https://github.com/sonots/cumo) |
