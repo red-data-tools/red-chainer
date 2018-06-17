@@ -6,6 +6,8 @@ module Chainer
   class Reporter
     include ReportService
 
+    attr_accessor :observer_names, :observation
+
     def initialize
       @observer_names = {}
       @observation = {}
@@ -14,6 +16,14 @@ module Chainer
     def self.save_report(values, observer=nil)
       reporter = @@reporters[-1]
       reporter.report(values, observer)
+    end
+
+    def self.report_scope(observation)
+      current = @@reporters[-1]
+      old = current.observation
+      current.observation = observation
+      yield
+      current.observation = old
     end
 
     def report(values, observer=nil)
@@ -35,6 +45,12 @@ module Chainer
 
     def add_observer(name, observer)
       @observer_names[observer.object_id] = name
+    end
+
+    def add_observers(prefix, observers, skipself: true)
+      observers.call(skipself: skipself) do |name, observer|
+        @observer_names[observer.object_id] = "#{prefix}#{name}"
+      end
     end
 
     def scope(observation)
