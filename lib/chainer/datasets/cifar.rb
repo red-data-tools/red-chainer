@@ -12,18 +12,17 @@ module Chainer
       end
 
       def self.get_cifar(n_classes, with_label, ndim, scale)
-        train_data = []
-        train_labels = []
-        ::Datasets::CIFAR.new(n_classes: n_classes, type: :train).each do |record|
-          train_data << record.pixels
-          train_labels << (n_classes == 10 ? record.label : record.fine_label)
-        end
+        train_table = ::Datasets::CIFAR.new(n_classes: n_classes, type: :train).to_table
+        test_table = ::Datasets::CIFAR.new(n_classes: n_classes, type: :test).to_table
 
-        test_data = []
-        test_labels = []
-        ::Datasets::CIFAR.new(n_classes: n_classes, type: :test).each do |record|
-          test_data << record.pixels
-          test_labels << (n_classes == 10 ? record.label : record.fine_label)
+        train_data = train_table[:pixels]
+        test_data = test_table[:pixels]
+        if n_classes == 10
+          train_labels = train_table[:label]
+          test_labels = test_table[:label]
+        else
+          train_labels = train_table[:fine_label]
+          test_labels = test_table[:fine_label]
         end
 
         [
