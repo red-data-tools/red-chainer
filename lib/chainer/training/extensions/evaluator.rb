@@ -36,8 +36,8 @@ module Chainer
         #             												`Chainer::Dataset.concat_examples` is used by default.
         # @param [integer] device Device to which the training data is sent. Negative value indicates the host memory (CPU).
         # @param [Function] eval_hook Function to prepare for each evaluation process.
-				#															It is called at the beginning of the evaluation.
-				# 														The evaluator extension object is passed at each call.
+        #															It is called at the beginning of the evaluation.
+        # 														The evaluator extension object is passed at each call.
         # @param [Function] eval_func Evaluation function called at each iteration.
         #                             The target link to evaluate as a callable is used by default.
         def initialize(iterator, target, converter: nil, device: nil, eval_hook: nil, eval_func: nil)
@@ -60,9 +60,9 @@ module Chainer
         end
 
         # Executes the evaluator extension.
-				#
-				# Unlike usual extensions, this extension can be executed without passing a trainer object.
-				# This extension reports the performance on validation dataset using the `Chainer.report` function.
+        #
+        # Unlike usual extensions, this extension can be executed without passing a trainer object.
+        # This extension reports the performance on validation dataset using the `Chainer.report` function.
         # Thus, users can use  this extension independently from any trainer by manually configuring a `Chainer::Reporter` object.
         #
         # @param [Chainer::Training::Trainer] trainer Trainer object that invokes this extension.
@@ -93,7 +93,7 @@ module Chainer
         # It accumulates the reported values to `DictSummary` and returns a dictionary whose values are means computed by the summary.
         #
         # Users can override this method to customize the evaluation routine.
-				# @return dict Result dictionary. This dictionary is further reported via `Chainer.save_report` without specifying any observer.
+        # @return dict Result dictionary. This dictionary is further reported via `Chainer.save_report` without specifying any observer.
         def evaluate
           iterator = @iterators[:main]
           target = @targets[:main]
