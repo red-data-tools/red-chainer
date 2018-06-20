@@ -31,13 +31,13 @@ $ gem install red-chainer
 ```
 
 ## Usage
-mnist sample program is [here](./examples/mnist.rb)
+mnist sample program is [here](./examples/mnist/mnist.rb)
 
 ```bash
 # when install Gemfile
-$ bundle exec ruby examples/mnist.rb
+$ bundle exec ruby examples/mnist/mnist.rb
 # when install yourself
-$ ruby examples/mnist.rb
+$ ruby examples/mnist/mnist.rb
 ```
 
 ## License
