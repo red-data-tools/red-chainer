@@ -42,6 +42,7 @@ module Chainer
         #                             The target link to evaluate as a callable is used by default.
         def initialize(iterator, target, converter: nil, device: nil, eval_hook: nil, eval_func: nil)
           @priority = Extension::PRIORITY_WRITER
+          @trigger = [1, 'epoch']
 
           if iterator.kind_of?(Dataset::Iterator)
             iterator = { main: iterator }
@@ -137,10 +138,6 @@ module Chainer
 
         def default_name
           "validation"
-        end
-
-        def trigger
-          [1, 'epoch']
         end
       end
     end

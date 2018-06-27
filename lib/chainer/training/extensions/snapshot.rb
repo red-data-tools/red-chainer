@@ -13,6 +13,8 @@ module Chainer
         end
 
         def initialize(save_class: nil, filename_proc: nil, target: nil)
+          @priority = -100
+          @trigger = [1, 'epoch']
           @save_class = save_class || Chainer::Serializers::MarshalSerializer
           @filename_proc = filename_proc || Proc.new { |trainer| "snapshot_iter_#{trainer.updater.iteration}" }
           @target = target
