@@ -2,7 +2,7 @@ module Chainer
   module Training
     module Extensions
       class PrintReport < Extension
-        def initialize(entries, log_report: 'Chainer::Training::Extensions::LogReport', out: STDOUT)
+        def initialize(entries, log_report: 'LogReport', out: STDOUT)
           @entries = entries
           @log_report = log_report
           @out = out
@@ -27,7 +27,7 @@ module Chainer
             @out.write(@header)
             @header = nil
           end
-         
+
           if @log_report.is_a?(String)
             log_report = trainer.get_extension(@log_report)
           elsif @log_report.is_a?(LogReport)

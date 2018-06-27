@@ -9,7 +9,7 @@ module Chainer
 
         def initialize(keys: nil, trigger: [1, 'epoch'], postprocess: nil, log_name: 'log')
           @keys = keys
-          @trigger = Chainer::Training::Util.get_trigger(trigger)
+          @_trigger = Chainer::Training::Util.get_trigger(trigger)
           @postprocess = postprocess
           @log_name = log_name
           @log = []
@@ -25,11 +25,11 @@ module Chainer
           else
             symbolized_observation = Hash[observation.map{|(k,v)| [k.to_sym,v]}]
             filterd_keys = @keys.select {|k| observation.keys.include?(k.to_sym) }
-            @summary.add(filterd_keys.each_with_object({}) {|k, hash| hash[k.to_s] = observation[k.to_sym] })            
+            @summary.add(filterd_keys.each_with_object({}) {|k, hash| hash[k.to_s] = observation[k.to_sym] })
           end
 
-          # if trigger is true, output the result
-          return unless @trigger.(trainer)
+          # if @_trigger is true, output the result
+          return unless @_trigger.(trainer)
 
           stats = @summary.compute_mean
           stats_cpu = {}
@@ -41,9 +41,9 @@ module Chainer
           stats_cpu['epoch'] = updater.epoch
           stats_cpu['iteration'] = updater.iteration
           stats_cpu['elapsed_time'] = trainer.elapsed_time
-        
+
           @postprocess.(stats_cpu) unless @postprocess.nil?
-          
+
           @log << stats_cpu
 
           unless @log_name.nil?
@@ -62,8 +62,8 @@ module Chainer
         end
 
         def serialize(serializer)
-          if @trigger.respond_to?(:serialize)
-            @trigger.serialize(serializer['_trigger'])
+          if @_trigger.respond_to?(:serialize)
+            @_trigger.serialize(serializer['_trigger'])
           end
           # Note that this serialization may lose some information of small
           # numerical differences.

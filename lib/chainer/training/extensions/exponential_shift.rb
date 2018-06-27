@@ -2,12 +2,12 @@ module Chainer
   module Training
     module Extensions
       # Trainer extension to exponentially shift an optimizer attribute.
-      # 
+      #
       # This extension exponentially increases or decreases the specified attribute of the optimizer.
       # The typical use case is an exponential decay of the learning rate.
       # This extension is also called before the training loop starts by default.
       class ExponentialShift < Extension
-        attr_reader :last_value        
+        attr_reader :last_value
 
         # @param [string] attr Name of the attribute to shift
         # @param [float] rate Rate of the exponential shift.
@@ -62,7 +62,7 @@ module Chainer
           end
         end
 
-        private 
+        private
 
         def get_optimizer(trainer)
           @optimizer || trainer.updater.get_optimizer(:main)
