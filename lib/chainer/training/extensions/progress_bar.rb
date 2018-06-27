@@ -14,7 +14,7 @@ module Chainer
           @recent_timing = []
         end
 
-        def call(trainer) 
+        def call(trainer)
           if @training_length.nil?
             t = trainer.stop_trigger
             raise TypeError, "cannot retrieve the training length #{t.class}" unless t.is_a?(Chainer::Training::Triggers::IntervalTrigger)
@@ -27,7 +27,7 @@ module Chainer
 
           length, unit = @training_length
           iteration = trainer.updater.iteration
-          
+
           # print the progress bar according to interval
           return unless iteration % @update_interval == 0
 
@@ -69,7 +69,7 @@ module Chainer
           else
             estimated_time = (length - epoch) / speed_e
           end
-          
+
           @out.write(sprintf("%10.5g iters/sec. Estimated time to finish: %s.\n", speed_t, (Time.parse("1991/01/01") + (estimated_time)).strftime("%H:%m:%S")))
 
           # move the cursor to the head of the progress bar
