@@ -41,6 +41,32 @@ module Chainer
           end
         end
       end
+
+      def self.rollaxis(y, axis, start: 0)
+        axes = (0...y.ndim).to_a
+        axes.delete_at(axis)
+        axes.insert(start <= axes.size ? start : -1, axis)
+        y.transpose(*axes)
+      end
+
+      def self.broadcast_to(x, shape)
+        if x.shape.size > shape.size
+           raise TypeError, "Shape of data  mismatch\n x.shape.size(#{x.shape.size}) > shape.size(#{shape.size})"
+        end
+
+        tile_shape = []
+        shape[-x.shape.size..-1].each_with_index do |s, i|
+          if  x.shape[i] == 1
+            tile_shape << s
+          elsif x.shape[i] == s
+            tile_shape << 1
+          else
+            raise TypeError, "Shape of data  mismatch\n#{x.shape} != #{shape}"
+          end
+        end
+
+        x.tile(*shape[0...-x.shape.size], *tile_shape)
+      end
     end
   end
 end

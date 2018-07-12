@@ -38,9 +38,9 @@ module Chainer
           end
           if @class_weight
             shape = x.ndim.times.map { |e| e == 1 ? true : 1 }
-            log_y *= Chainer::Functions::Loss.broadcast_to(@class_weight.reshape(*shape), x.shape)
+            log_y *= Chainer::Utils::Array.broadcast_to(@class_weight.reshape(*shape), x.shape)
           end
-          log_yd = Chainer::Functions::Loss.rollaxis(log_y, 1)
+          log_yd = Chainer::Utils::Array.rollaxis(log_y, 1)
           begin
             log_yd = log_yd.reshape(log_yd.shape[0], true)
           rescue ArgumentError
@@ -88,9 +88,9 @@ module Chainer
 
             if @class_weight
               shape = x.ndim.times.map { |d| d == 1 ? true : 1 }
-              c = Chainer::Functions::Loss.broadcast_to(@class_weight.reshape(*shape), x.shape)
+              c = Chainer::Utils::Array.broadcast_to(@class_weight.reshape(*shape), x.shape)
               c = c.class.cast(t.class.new(t.shape[0]).seq.to_a.zip(t.class.maximum(t, 0).to_a).map{|v| c[*v]})
-              gx *= Chainer::Functions::Loss.broadcast_to(c.expand_dims(1), gx.shape)
+              gx *= Chainer::Utils::Array.broadcast_to(c.expand_dims(1), gx.shape)
             end
 
             bit = t.flatten.dup
@@ -109,11 +109,11 @@ module Chainer
             fst_index.to_a.zip(t.class.maximum(t.flatten.dup, 0).to_a, trd_index.to_a).each{|v| gx[*v] -= 1}
             if @class_weight
               shape = x.ndim.times.map{|d| d == 1 ? true : 1}
-              c = Chainer::Functions::Loss.broadcast_to(@class_weight.reshape(*shape), x.shape)
+              c = Chainer::Utils::Array.broadcast_to(@class_weight.reshape(*shape), x.shape)
               c = c.reshape(*gx.shape)
               c = c.class.cast(fst_index.to_a.zip(t.class.maximum(t.flatten.dup, 0).to_a, trd_index.to_a).map{|v| c[*v]})
               c = c.reshape(y.shape[0], 1, true)
-              gx *= Chainer::Functions::Loss.broadcast_to(c, gx.shape)
+              gx *= Chainer::Utils::Array.broadcast_to(c, gx.shape)
             end
             gx *= (t.ne @ignore_label).reshape(t.shape[0], 1, true)
             gx = gx.reshape(*y.shape)
@@ -127,35 +127,6 @@ module Chainer
           return [gx, nil]
         end
       end
-
-      def rollaxis(y, axis, start: 0)
-        axes = (0...y.ndim).to_a
-        axes.delete_at(axis)
-        axes.insert(start <= axes.size ? start : -1, axis)
-        y.transpose(*axes)
-      end
-
-      def broadcast_to(array, shape)
-        if array.shape.size > shape.size
-           raise TypeError, "Shape of data  mismatch\n array.shape.size(#{array.shape.size}) > shape.size(#{shape.size})"
-        end
-
-        tile_shape = []
-        shape_check = shape[-array.shape.size..-1]
-        shape_check.each_with_index{|s, i|
-          if array.shape[i] == 1
-            tile_shape << s
-          elsif array.shape[i] == s
-            tile_shape << 1
-          else
-            raise TypeError, "Shape of data  mismatch\n#{array.shape} != #{shape}"
-          end
-        }
-
-        array.tile(*shape[0...-array.shape.size], *tile_shape)
-      end
-
-      module_function :rollaxis, :broadcast_to
     end
   end
 end

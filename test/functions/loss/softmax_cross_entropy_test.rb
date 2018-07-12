@@ -2,110 +2,6 @@
 
 require 'chainer/functions/loss/softmax_cross_entropy'
 
-class TestBroadcastTo < Test::Unit::TestCase
-  def test_rollaxis
-     # shape : [3, 4, 5, 6] => [3, 6, 4, 5]
-     a = Numo::DFloat.ones([3, 4, 5, 6])
-     y = Chainer::Functions::Loss.rollaxis(a, 3, start:1).shape
-     assert_equal([3, 6, 4, 5], y)
-
-     # shape : [3, 4, 5, 6] => [5, 3, 4, 6]
-     y = Chainer::Functions::Loss.rollaxis(a, 2).shape
-     assert_equal([5, 3, 4, 6], y)
-
-     # shape : [3, 4, 5, 6] => [3, 5, 6, 4]
-     y = Chainer::Functions::Loss.rollaxis(a, 1, start:4).shape
-     assert_equal([3, 5, 6, 4], y)
-
-     # shape : [2, 3, 2] => [3, 2, 2]
-     a = Numo::DFloat.ones([2, 3, 2])
-     y = Chainer::Functions::Loss.rollaxis(a, 1).shape
-     assert_equal([3, 2, 2], y)
-  end
-
-  def test_broadcast_to
-     # shape : [3] => [3]
-     a = [1, 2, 3]
-     x = Numo::SFloat.cast(a)
-     y = Chainer::Functions::Loss.broadcast_to(x, x.shape)
-     assert_equal(x.shape, y.shape)
-     assert_equal(x, y)
-
-     # shape : [3] => [2, 3]
-     shape = [2, 3]
-     y = Chainer::Functions::Loss.broadcast_to(x, shape)
-     assert_equal(shape, y.shape)
-     assert_equal(Numo::SFloat[a, a], y)
-
-     # shape : [3] => [2, 2, 3]
-     shape = [2, 2, 3]
-     y = Chainer::Functions::Loss.broadcast_to(x, shape)
-     assert_equal(shape, y.shape)
-     assert_equal(Numo::SFloat[[a, a],[a, a]], y)
-
-     # shape : [2, 3] => [2, 3]
-     a = [[0, 1, 2], [3, 4, 5]]
-     x = Numo::SFloat.cast(a)
-     y = Chainer::Functions::Loss.broadcast_to(x, x.shape)
-     assert_equal(x.shape, y.shape)
-     assert_equal(x, y)
-
-     # shape : [2, 3] => [2, 2, 3]
-     shape = [2, 2, 3]
-     y = Chainer::Functions::Loss.broadcast_to(x, shape)
-     assert_equal(shape, y.shape)
-     assert_equal(Numo::SFloat[a, a], y)
-
-     # shape : [2, 3] => [2, 2, 2, 3]
-     shape = [2, 2, 2, 3]
-     y = Chainer::Functions::Loss.broadcast_to(x, shape)
-     assert_equal(shape, y.shape)
-     assert_equal(Numo::SFloat[[a, a],[a, a]], y)
-
-
-     # shape : [1, 3] => [1, 3]
-     a = [1, 2, 3]
-     x = Numo::SFloat.cast([a]) # [[1, 2, 3]]
-     y = Chainer::Functions::Loss.broadcast_to(x, x.shape)
-     assert_equal(x.shape, y.shape)
-     assert_equal(x, y)
-
-     # shape : [1, 3] => [2, 3]
-     shape = [2, 3]
-     y = Chainer::Functions::Loss.broadcast_to(x, shape)
-     assert_equal(shape, y.shape)
-     assert_equal(Numo::SFloat[a, a], y) # [[1, 2, 3], [1, 2, 3]]
-
-     # shape : [1, 3] => [2, 2, 3]
-     shape = [2, 2, 3]
-     y = Chainer::Functions::Loss.broadcast_to(x, shape)
-     assert_equal(shape, y.shape)
-     # [[[1, 2, 3], [1, 2, 3]],
-     #  [[1, 2, 3], [1, 2, 3]]]
-     assert_equal(Numo::SFloat[[a, a],[a, a]], y)
-
-
-     # shape : [1, 3, 1] => [1, 3, 1]
-     a = [[1], [2], [3]]
-     x = Numo::SFloat.cast([a]) # [[[1], [2], [3]]]
-     y = Chainer::Functions::Loss.broadcast_to(x, x.shape)
-     assert_equal(x.shape, y.shape)
-     assert_equal(x, y)
-
-     # shape : [1, 3, 1] => [1, 3, 2]
-     shape = [1, 3, 2]
-     y = Chainer::Functions::Loss.broadcast_to(x, shape)
-     assert_equal(shape, y.shape)
-     assert_equal(Numo::SFloat[[[1, 1], [2, 2], [3, 3]]], y)
-
-     # shape : [1, 3, 1] => [1, 3, 1]
-     shape = [2, 3, 1]
-     y = Chainer::Functions::Loss.broadcast_to(x, shape)
-     assert_equal(shape, y.shape)
-     assert_equal(Numo::SFloat[a, a], y)
-  end
-end
-
 class TestSoftmaxCrossEntropy < Test::Unit::TestCase
   shape        = [nil, [2, 3], [2, 3, 2], [2, 3, 2, 2]]
   cache_score  = [true, false]
@@ -169,7 +65,7 @@ class TestSoftmaxCrossEntropy < Test::Unit::TestCase
     loss_value = loss.data.to_f
     loss_expect = 0.0
     count = 0
-    x = Chainer::Functions::Loss.rollaxis(@x, 1, start:@x.ndim).reshape(@t.size, @x.shape[1])
+    x = Chainer::Utils::Array.rollaxis(@x, 1, start:@x.ndim).reshape(@t.size, @x.shape[1])
     t = @t.flatten.dup
 
     (0...x.shape[0]).map{|i|[x[i, false], t[i]]}.each do |xi, ti|
@@ -309,7 +205,7 @@ class TestElementwiseSoftmaxCrossEntropy < Test::Unit::TestCase
     assert_equal(@cache_score, loss.creator.instance_variable_defined?(:@y))
     loss_value = loss.data
 
-    x = Chainer::Functions::Loss.rollaxis(@x, 1, start:@x.ndim).reshape(@t.size, @x.shape[1])
+    x = Chainer::Utils::Array.rollaxis(@x, 1, start:@x.ndim).reshape(@t.size, @x.shape[1])
     t = @t.flatten.dup
     l = loss_value.flatten.dup
 

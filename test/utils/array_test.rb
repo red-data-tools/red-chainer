@@ -102,4 +102,130 @@ class Chainer::Utils::ArrayTest < Test::Unit::TestCase
       assert_equal data[:expect], result
     end
   end
+
+  sub_test_case "rollaxis" do
+    data({
+      test1: {
+        # shape : [3, 4, 5, 6] => [3, 6, 4, 5]
+        a: Numo::DFloat.ones([3, 4, 5, 6]),
+        axis: 3,
+        start: 1,
+        expected: [3, 6, 4, 5]
+      },
+      test2: {
+        # shape : [3, 4, 5, 6] => [5, 3, 4, 6]
+        a: Numo::DFloat.ones([3, 4, 5, 6]),
+        axis: 2,
+        start: 0,
+        expected: [5, 3, 4, 6]
+      },
+      test3: {
+        a: Numo::DFloat.ones([3, 4, 5, 6]),
+        axis: 1,
+        start: 4,
+        expected: [3, 5, 6, 4]
+      },
+      test4: {
+        a: Numo::DFloat.ones([2, 3, 2]),
+        axis: 1,
+        start: 0,
+        expected: [3, 2, 2]
+
+      }
+    })
+
+    def test_rollaxis(data)
+       assert_equal(data[:expected], Chainer::Utils::Array.rollaxis(data[:a], data[:axis], start: data[:start]).shape)
+    end
+  end
+
+  sub_test_case "broadcast_to" do
+    data({
+      test1: {
+        # shape : [3] => [3]
+        a: [1, 2, 3],
+        shape: [3],
+        expected: Numo::SFloat[1, 2, 3]
+      },
+      test2: {
+        # shape : [3] => [2, 3]
+        a: [1, 2, 3],
+        shape: [2, 3],
+        expected: Numo::SFloat[[1, 2, 3], [1, 2, 3]]
+      },
+      test3: {
+        # shape : [3] => [2, 2, 3]
+        a: [1, 2, 3],
+        shape: [2, 2, 3],
+        expected: Numo::SFloat[[[1, 2, 3], [1, 2, 3]],
+                               [[1, 2, 3], [1, 2, 3]]]
+      },
+      test4: {
+        # shape : [2, 3] => [2, 3]
+        a: [[0, 1, 2], [3, 4, 5]],
+        shape: [2, 3],
+        expected: Numo::SFloat[[0, 1, 2], [3, 4, 5]]
+      },
+      test5: {
+        # shape : [2, 3] => [2, 2, 3]
+        a: [[0, 1, 2], [3, 4, 5]],
+        shape: [2, 2, 3],
+        expected: Numo::SFloat[[[0, 1, 2], [3, 4, 5]],
+                               [[0, 1, 2], [3, 4, 5]]]
+      },
+      test6: {
+        # shape : [2, 3] => [2, 2, 2, 3]
+        a: [[0, 1, 2], [3, 4, 5]],
+        shape: [2, 2, 2, 3],
+        expected: Numo::SFloat[[[[0, 1, 2], [3, 4, 5]],
+                                [[0, 1, 2], [3, 4, 5]]],
+                               [[[0, 1, 2], [3, 4, 5]],
+                                [[0, 1, 2], [3, 4, 5]]]]
+      },
+      test7: {
+        # shape : [1, 3] => [1, 3]
+        a: [[1, 2, 3]],
+        shape: [1, 3],
+        expected: Numo::SFloat[[1, 2, 3]]
+      },
+      test8: {
+        # shape : [1, 3] => [2, 3]
+        a: [[1, 2, 3]],
+        shape: [2, 3],
+        expected: Numo::SFloat[[1, 2, 3], [1, 2, 3]]
+      },
+      test9: {
+        # shape : [1, 3] => [2, 2, 3]
+        a: [[1, 2, 3]],
+        shape: [2, 2, 3],
+        expected: Numo::SFloat[[[1, 2, 3], [1, 2, 3]],
+                               [[1, 2, 3], [1, 2, 3]]]
+      },
+      test10: {
+        # shape : [1, 3, 1] => [1, 3, 1]
+        a: [[[1], [2], [3]]],
+        shape: [1, 3, 1],
+        expected: Numo::SFloat[[[1], [2], [3]]]
+      },
+      test11: {
+        # shape : [1, 3, 1] => [1, 3, 2]
+        a: [[1], [2], [3]],
+        shape: [1, 3, 2],
+        expected: Numo::SFloat[[[1, 1], [2, 2], [3, 3]]]
+      },
+      test12: {
+        # shape : [1, 3, 1] => [2, 3, 1]
+        a: [[1], [2], [3]],
+        shape: [2, 3, 1],
+        expected: Numo::SFloat[[[1], [2], [3]], [[1], [2], [3]]]
+      }
+    })
+
+    def test_broadcast_to(data)
+      x = Numo::SFloat.cast(data[:a])
+      y = Chainer::Utils::Array.broadcast_to(x, data[:shape])
+      assert_equal(data[:shape], y.shape)
+      assert_equal(data[:expected], y)
+    end
+  end
 end
