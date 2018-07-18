@@ -8,9 +8,9 @@ module Chainer
             stride = ksize
           end
 
-          @kh, @kw = ksize.is_a?(Array) ? ksize : [ksize, ksize]
-          @sy, @sx = stride.is_a?(Array) ? stride : [stride, stride]
-          @ph, @pw = pad.is_a?(Array) ? pad: [pad, pad]
+          @kh, @kw = ksize.is_a?(::Array) ? ksize : [ksize, ksize]
+          @sy, @sx = stride.is_a?(::Array) ? stride : [stride, stride]
+          @ph, @pw = pad.is_a?(::Array) ? pad: [pad, pad]
 
           @cover_all = cover_all
         end
