@@ -70,6 +70,10 @@ module Chainer
       @node.rank
     end
 
+    def reshape(*shape)
+      self.data.reshape(*shape)
+    end
+
     def cleargrad
       @node.grad = nil
     end
