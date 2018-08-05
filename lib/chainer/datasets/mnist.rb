@@ -2,7 +2,7 @@ require 'datasets'
 
 module Chainer
   module Datasets
-    module Mnist
+    module MNIST
       def self.get_mnist(withlabel: true, ndim: 1, scale: 1.0, dtype: Numo::SFloat, label_dtype: Numo::Int32)
         train_raw = retrieve_mnist(type: :train)
         train = preprocess_mnist(train_raw, withlabel, ndim, scale, dtype, label_dtype)

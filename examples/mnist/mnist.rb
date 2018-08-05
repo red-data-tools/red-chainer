@@ -45,7 +45,7 @@ model = Chainer::Links::Model::Classifier.new(MLP.new(args[:unit], 10))
 
 optimizer = Chainer::Optimizers::Adam.new
 optimizer.setup(model)
-train, test = Chainer::Datasets::Mnist.get_mnist
+train, test = Chainer::Datasets::MNIST.get_mnist
 
 train_iter = Chainer::Iterators::SerialIterator.new(train, args[:batchsize])
 test_iter = Chainer::Iterators::SerialIterator.new(test, args[:batchsize], repeat: false, shuffle: false)

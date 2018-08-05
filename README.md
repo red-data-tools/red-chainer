@@ -31,7 +31,7 @@ $ gem install red-chainer
 ```
 
 ## Usage
-mnist sample program is [here](./examples/mnist/mnist.rb)
+MNIST sample program is [here](./examples/mnist/mnist.rb)
 
 ```bash
 # when install Gemfile
