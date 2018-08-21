@@ -50,8 +50,8 @@ module Chainer
         end
 
         def initialize(stride: 1, pad: 0, cover_all: false)
-          @sy, @sx = stride.is_a?(Array) ? stride : [stride, stride]
-          @ph, @pw = pad.is_a?(Array) ? pad : [pad, pad]
+          @sy, @sx = stride.is_a?(::Array) ? stride : [stride, stride]
+          @ph, @pw = pad.is_a?(::Array) ? pad : [pad, pad]
           @cover_all = cover_all
         end
 

@@ -91,7 +91,7 @@ module Chainer
         func.output_data = outputs.map { |y| y.nil? ? nil : y.data }
         gxs = func.backward(in_data, out_grad)
 
-        raise unless gxs.size == in_data.size
+        raise "Unmatched matries size: gxs.size(#{gxs.size}) != in_data.size(#{in_data.size})" unless gxs.size == in_data.size
 
         unless func.retain_after_backward
           func.output_data = nil
