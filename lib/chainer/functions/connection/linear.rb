@@ -20,7 +20,13 @@ module Chainer
           x = inputs[0]
           w = inputs[1]
 
+          if x.shape[0] == 0
+            y = x.class.new(0, w.shape[0])
+            return [y]
+          end
+
           y = x.dot(w.transpose).cast_to(x.class)
+
           if inputs.size == 3
             b = inputs[2]
             y += b

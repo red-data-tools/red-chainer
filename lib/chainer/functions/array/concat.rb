@@ -21,7 +21,7 @@ module Chainer::Functions::Array
       gy[0].split(sizes, axis: @axis)
     end
 
-    def self.concat(xs, axis: 2)
+    def self.concat(xs, axis: 1)
       # Concatenates given variables along an axis.
 
       # Args:
