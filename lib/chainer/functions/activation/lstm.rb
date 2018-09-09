@@ -56,10 +56,10 @@ module Chainer::Functions::Activation
       # multiply f later
       gc_prev[*batch_idx] = gh * @o * LSTM.grad_tanh(co) + gc_update
       gc = gc_prev[*batch_idx]
-      ga[:*, :*, :*] = gc * @i * LSTM.grad_tanh(@a)
-      gi[:*, :*, :*] = gc * @a * LSTM.grad_sigmoid(@i)
-      gf[:*, :*, :*] = gc * c_prev[*batch_idx] * LSTM.grad_sigmoid(@f)
-      go[:*, :*, :*] = gh * co * LSTM.grad_sigmoid(@o)
+      ga[*([:*] * gc.shape.size)] = gc * @i * LSTM.grad_tanh(@a)
+      gi[*([:*] * gc.shape.size)] = gc * @a * LSTM.grad_sigmoid(@i)
+      gf[*([:*] * gc.shape.size)] = gc * c_prev[*batch_idx] * LSTM.grad_sigmoid(@f)
+      go[*([:*] * gc.shape.size)] = gh * co * LSTM.grad_sigmoid(@o)
       gc_prev[*batch_idx] *= @f  # multiply f here
       gc_prev[*batch_idx_rest] = gc_rest
 

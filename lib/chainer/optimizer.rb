@@ -49,6 +49,37 @@ module Chainer
         end
       end
     end
+
+    # Registers a hook function.
+    #
+    # Hook function is typically called right after the gradient computation,
+    # though the timing depends on the optimization method.
+    #
+    # Args:
+    #     hook (function): Hook function. If ``hook.call_for_each_param`` is
+    #         true, this hook function is called for each parameter by
+    #         passing the update rule and the parameter. Otherwise, this hook
+    #         function is called only once each iteration by passing the
+    #         optimizer.
+    #     name (str): Name of the registration. If omitted, ``hook.name`` is
+    #         used by default.
+    def add_hook(hook, name: nil)
+      raise TypeError.new("hook function is not callable") unless hook.respond_to?("call")
+      raise RuntimeError.new("call `setup` method before `add_hook` method") unless @hooks
+
+      name = hook.inspect unless name
+      raise KeyError.new("hook #{name} already exists") if @hooks.key?(name)
+      @hooks[name] = hook
+    end
+
+    # Removes the specified hook function.
+    #
+    # Args:
+    #     name (str): Name of the hook function to be removed. The hook
+    #         function registered with this name will be removed.
+    def remove_hook(name)
+      @hooks.delete(name)
+    end
   end
 
   class UpdateRule
@@ -93,7 +124,7 @@ module Chainer
     end
 
     def init_state(param)
-      raise NotImplementedError
+      #raise NotImplementedError
     end
 
 

@@ -135,7 +135,7 @@ converter = Proc.new do |batch, device|
 end
 
 train = Datasets::PennTreebank.new(type: :train)
-valid = Datasets::PennTreebank.new(type: :train)
+valid = Datasets::PennTreebank.new(type: :valid)
 
 bow = BagOfWords.new(:train, train)
 bow.add(:valid, valid)

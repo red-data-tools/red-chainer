@@ -3,6 +3,7 @@ module Chainer
     module Model
       class Classifier < Chain
         attr_accessor :compute_accuracy
+        attr_reader :predictor
 
         # @param [Chainer::Link] predictor Predictor network.
         # @param [Function] lossfun Loss function.
