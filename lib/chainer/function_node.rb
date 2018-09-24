@@ -78,6 +78,45 @@ module Chainer
       ret
     end
 
+    # Computes the output arrays from the input arrays.
+    #
+    # @param [Array] inputs input array(s)
+    # @return [Array] output array(s)
+    def forward(inputs)
+      raise TypeError, "mustt inputs > 0, inputs size is #{inputs.size}" if inputs.size.zero?
+      # TODO GPU
+      forward_cpu(inputs)
+    end
+
+    # Computes the output arrays from the input Numo::NArray.
+    #
+    # @param [Array<Numo::NArray>] inputs Numo::NArray objects.
+    # @return [Array<Numo::NArray>] Array of output arrays.
+    def forward_cpu(inputs)
+      raise NotImplementedError
+    end
+
+    # Lets specified input variable nodes keep data arrays.
+    #
+    # By calling this method from `forward`, the function node can specify which inputs are required for backprop.
+    # The input variables with retained arrays can be obtained by `get_retained_inputs` from `backward`.
+    #
+    # Note that **this method must not be called from the outside of forward method.**
+    # @param [Integer, Array] indexes Indexes of input variables that the function does not require for backprop.
+    def retain_inputs(indexes)
+      @input_indexes_to_retain = indexes
+    end
+
+    # Lets specified output variable nodes keep data arrays.
+    #
+    # By calling this method from `forward`, the function node can specify which outputs are required for backprop.
+    # If this method is not called, any output variables are not marked to keep the data array at the point of returning from `apply`.
+    # The output variables with retained arrays can be obtained by `get_retained_outputs` from `backward`.
+    # Note that **this method must not be called from the outside of forward method.**
+    # @param [Integer, Array] indexes Indexes of input variables that the function does not require for backprop.
+    def retain_outputs(indexes)
+      @output_indexes_to_retain = indexes
+    end
 
     private
 
