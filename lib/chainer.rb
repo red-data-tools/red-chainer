@@ -5,6 +5,7 @@ require "chainer/version"
 require 'chainer/cuda'
 require 'chainer/configuration'
 require 'chainer/function'
+require 'chainer/function_node'
 require 'chainer/optimizer'
 require 'chainer/gradient_method'
 require 'chainer/gradient_check'
