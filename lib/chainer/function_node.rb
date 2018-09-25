@@ -118,6 +118,59 @@ module Chainer
       @output_indexes_to_retain = indexes
     end
 
+    # Computes gradients w.r.t. specified inputs given output gradients.
+    #
+    # This method is used to compute one step of the backpropagation corresponding to the forward computation of this function node.
+    # Given the gradients w.r.t. output variables, this method computes the gradients w.r.t. specified input variables.
+    # Note that this method does not need to compute any input gradients not specified by `target_input_indexes`
+    # It enables the function node to return the input gradients with the full computational history,
+    #   in which case it supports *differentiable backpropagation* or *higher-order differentiation*.
+    #
+    # @param [Array<Integer>] target_indexes Indices of the input variables w.r.t. which the gradients are required.
+    #   It is guaranteed that this tuple contains at least one element.
+    # @param [Array<Chainer::Variable>] grad_outputs Gradients w.r.t. the output variables.
+    #   If the gradient w.r.t. an output variable is not given, the corresponding element is `None`.
+    # @return [Array<Chainer::Variable>] Array of Chainer::Variable that represent the gradients.
+    def backward(target_indexes, grad_outputs)
+      [nil] * target_indexes.size
+    end
+
+    # Computes gradients w.r.t. specified inputs and accumulates them.
+    #
+    # This method provides a way to fuse the backward computation and the gradient accumulations
+    #   in the case that the multiple functions are applied to the same variable.
+    # Users have to override either of this method or `backward`.
+    # It is often simpler to implement `backward` and is recommended if you do not need to provide efficient gradient accumulation.
+    #
+    # @param [Array<Integer>] target_indexes Indices of the input variables w.r.t. which the gradients are required.
+    #   It is guaranteed that this tuple contains at least one element.
+    # @param [Array<Chainer::Variable>] grad_outputs Gradients w.r.t. the output variables.
+    #   If the gradient w.r.t. an output variable is not given, the corresponding element is `None`.
+    # @param [Array<Chainer::Variable>] grad_inputs Gradients w.r.t. the input variables specified by `target_input_indexes`.
+    #   These values are computed by other computation paths.
+    #   If there is no gradient value existing for the variable, the corresponding element is ``None``.
+    # @return [Array<Chainer::Variable>] Array of variables that represent the gradients w.r.t. specified input variables.
+    def backward_accumulate(target_input_indexes, grad_outputs, grad_inputs)
+      gxs = backward(target_input_indexes, grad_outputs)
+
+      len_gxs = gxs.size
+      if len_gxs == @inputs.size
+        gxs = target_indexes.map { |i| gxs[i] }
+      elsif len_gxs != target_input_indexes.size
+        raise ArgumentError, "number of gradients returned by #{impl_name} (#{label}) is incorrect."
+      end
+
+      gxs.zip(grad_inputs).map do |gx, g_input|
+        if g_input.nil?
+          gx
+        elsif gx.nil?
+          g_input
+        else
+          gx + g_input
+        end
+      end
+    end
+
     private
 
     def impl_name
