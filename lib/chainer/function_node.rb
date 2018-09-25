@@ -171,6 +171,59 @@ module Chainer
       end
     end
 
+    # Returns a Array of retained input variables.
+    #
+    # This method is used to retrieve the input variables retained in `forward`.
+    #
+    # @return [Array] a Array of retained input variables.
+    def get_retained_inputs
+      @input_indexes_to_retain.map { |index| @inputs[index].get_variable }
+    end
+
+    # Returns a Array of retained output variables.
+    #
+    # This method is used to retrieve the input variables retained in `forward`.
+    #
+    # @return [Array] a Array of retained input variables.
+    def get_retained_outputs
+      ret = []
+      outputs = @outputs
+
+      new_outputs = outputs.dup
+      outputs_modified = false
+
+      @output_indexes_to_retain.zip(@retained_output_data) do |index, data|
+        output = outputs[indx].()
+        if output.nil?
+          output_var = Chainer::Variable.new(data)
+          output_var.creator_node = self
+          new_outputs[index] = WeakRef.new(output_var)
+          outputs_modified = true
+        else
+          output_var = output.get_variable
+        end
+
+        ret << output_var
+      end
+
+      if outputs_modified
+        @outputs = Array(new_outputs)
+      end
+
+      ret
+    end
+
+    # Purges in/out nodes and this function node itself from the graph.
+    def unchain
+      @outputs.each do |y|
+        y_ref = y.()
+        unless y_ref.nil?
+          y_ref.unchain
+        end
+      end
+      @inputs = nil
+    end
+
     private
 
     def impl_name
