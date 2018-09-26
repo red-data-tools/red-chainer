@@ -1,66 +1,63 @@
 module Chainer
   module Functions
     module Math
- 
-      class Neg < ::Chainer::Function
+      class Neg < ::Chainer::FunctionNode
         def forward(x)
-          retain_inputs([])
           [Utils::Array.force_array(-x[0])]
         end
 
-        def backward(x, gy)
+        def backward(indexes, gy)
           [Utils::Array.force_array(-gy[0])]
         end
       end
 
-      class Add < ::Chainer::Function
+      class Add < ::Chainer::FunctionNode
         def forward(x)
-          retain_inputs([])
           [Utils::Array.force_array(x[0] + x[1])]
         end
 
-        def backward(x, gy)
+        def backward(indexes, gy)
           [gy[0], gy[0]]
         end
       end
 
-      class AddConstant < ::Chainer::Function
+      class AddConstant < ::Chainer::FunctionNode
         def initialize(value)
           @value = value
         end
 
         def forward(x)
-          retain_inputs([])
           [Utils::Array.force_array(x[0] + @value)]
         end
 
-        def backward(x, gy)
+        def backward(indexes, gy)
           [gy[0]]
         end
       end
- 
-      class Sub < ::Chainer::Function
+
+      class Sub < ::Chainer::FunctionNode
         def forward(x)
-          retain_inputs([])
           [Utils::Array.force_array(x[0] - x[1])]
         end
 
-        def backward(x, gy)
+        def backward(indexes, gy)
           [gy[0], Utils::Array.force_array(-gy[0])]
         end
       end
 
-      class Mul < ::Chainer::Function
+      class Mul < ::Chainer::FunctionNode
         def forward(x)
+          etain_inputs([0, 1])
           [Utils::Array.force_array(x[0] * x[1])]
         end
 
-        def backward(x, gy)
-          [Utils::Array.force_array(gy[0] * x[1]), Utils::Array.force_array(gy[0] * x[0])]
+        def backward(indexes, gy)
+          xs = get_retained_inputs
+          indexes.map { |i| gy[0] * xs[1 - i] }
         end
       end
 
-      class MulConstant < ::Chainer::Function
+      class MulConstant < ::Chainer::FunctionNode
         def initialize(value)
           @value = value
         end
@@ -69,23 +66,23 @@ module Chainer
           [Utils::Array.force_array(@value * x[0])]
         end
 
-        def backward(x, gy)
-          [Utils::Array.force_array(@value * gy[0])]
+        def backward(indexes, gy)
+          [@value * gy[0]]
         end
       end
-      
-      class Div < ::Chainer::Function
+
+      class Div < ::Chainer::FunctionNode
         def forward(x)
           [Utils::Array.force_array(x[0] / x[1])]
         end
 
-        def backward(x, gy)
+        def backward(indexes, gy)
           gx0 = Utils::Array.force_array(gy[0] / x[1])
           [gx0, Utils::Array.force_array(-1 * gx0 * x[0] / x[1])]
         end
       end
-      
-      class PowVarVar < ::Chainer::Function
+
+      class PowVarVar < ::Chainer::FunctionNode
         def forward(x)
           @y = Utils::Array.force_array(x[0] ** x[1])
           [@y]
@@ -99,7 +96,7 @@ module Chainer
         end
       end
 
-      class PowVarConst < ::Chainer::Function
+      class PowVarConst < ::Chainer::FunctionNode
         def initialize(value)
           @value = value
         end
@@ -113,7 +110,7 @@ module Chainer
           gx = @value * (x[0] ** val_1) * gy[0]
           [Utils::Array.force_array(gx)]
         end
-      end 
+      end
     end
   end
 end

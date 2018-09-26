@@ -172,35 +172,35 @@ module Chainer
       end
     end
 
-    def -(other) 
+    def -(other)
       if other.instance_of?(Chainer::Variable)
-        Functions::Math::Sub.new.(*[self, other])
+        Functions::Math::Sub.new.apply(*[self, other])[0]
       else
-        Functions::Math::AddConstant.new(-other).(self)
+        Functions::Math::AddConstant.new(-other).apply([self])[0]
       end
     end
 
     def *(other)
       if other.instance_of?(Chainer::Variable)
-        Functions::Math::Mul.new.(*[self, other])
+        Functions::Math::Mul.new.apply(*[self, other])[0]
       else
-        Functions::Math::MulConstant.new(other).(self)
+        Functions::Math::MulConstant.new(other).apply([self])[0]
       end
     end
 
     def /(other)
       if other.instance_of?(Chainer::Variable)
-        Functions::Math::Div.new.(*[self, other])
+        Functions::Math::Div.new.apply(*[self, other])[0]
       else
-        Functions::Math::MulConstant.new(1 / other).(self)
+        Functions::Math::MulConstant.new(1 / other).apply([self])[0]
       end
     end
 
-    def **(other) 
+    def **(other)
       if other.instance_of?(Chainer::Variable)
-        Functions::Math::PowVarVar.new.(*[self, other])
+        Functions::Math::PowVarVar.new.apply(*[self, other])[0]
       else
-        Functions::Math::PowVarConst.new(other).(self)
+        Functions::Math::PowVarConst.new(other).apply([self])[0]
       end
     end
 
