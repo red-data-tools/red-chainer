@@ -12,6 +12,8 @@
 # The output variables are then returned.
 module Chainer
   class FunctionNode
+    attr_accessor :rank, :inputs, :outputs
+
     def initialize
       @rank = 0
       @inputs = nil
@@ -36,7 +38,7 @@ module Chainer
     # @param [Chainer::Variable, Numo::NArray] inputs If the element is an Numo::NArray,
     #   it is automatically wrapped with `Chainer::Variable`.
     # @return [Array<Chainer::Variable>] A tuple of output `Chainer::Variable` objectts.
-    def apply(*inputs)
+    def apply(inputs)
       input_vars = inputs.map { |x| x.is_a?(Chainer::Variable) ? x : Chainer::Variable.new(x, requires_grad: false) }
       in_data = input_vars.map(&:data)
       requires_grad = input_vars.map(&:requires_grad).any?

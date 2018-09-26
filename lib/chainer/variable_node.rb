@@ -1,23 +1,22 @@
 module Chainer
   class VariableNode
     attr_reader :dtype, :shape
-    attr_accessor :data, :name, :grad, :rank, :creator, :requires_grad, :variable
+    attr_accessor :name, :requires_grad, :variable, :creator_node, :rank
 
-    def initialize(variable: , name:, grad: nil)
+    def initialize(variable: , name:)
       @variable = WeakRef.new(variable)
-      @creator = nil
+      @creator_node = nil
       @data = nil
       @rank = 0
       @name = name
       @requires_grad = variable.requires_grad
 
       set_data_type(variable.data)
-
-      @grad = grad
     end
 
-    def creator=(func)
-      @creator = func
+    def creator_node=(func)
+      func = func.node if func.is_a?(Chainer::Function)
+      @creator_node = func
       unless func.nil?
         @rank = func.rank + 1
       end
@@ -28,9 +27,16 @@ module Chainer
       set_data_type(data)
     end
 
-    def grad=(g)
-      Utils::Variable.check_grad_type(nil, self, g)
-      @grad = g
+    # Gradient array of the corresponding variable.
+    def grad
+      var = get_variable
+      var.nil? ? nil : var.grad
+    end
+
+    # Gradient variable of the corresponding variable.<Paste>
+    def grad_var
+			var  = get_variable
+      var.nil? ? nil : var.grad_var
     end
 
     def label
@@ -41,8 +47,27 @@ module Chainer
       end
     end
 
+    # Returns the corresponding :class:`Variable` object.
+    #
+    # @return [Chainer::Variable] The variable object that refers this node.
+    def get_variable
+      var = @variable
+      return var unless var.nil?
+
+      var = Chainer::Variable.new(@data, name: @name, requires_grad: @requires_grad)
+      var.node = self
+      var
+    end
+
+    # Sets a `FunctionNode` object that created this node.
+    #
+    # @params [Chainer::FunctionNode] Function node that has this variable as an output.
+    def set_creator_node(creator_node)
+      @creator_node = creator_node
+    end
+
     def unchain
-      @creator = nil
+      @creator_node = nil
     end
 
     def retain_data

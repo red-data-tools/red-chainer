@@ -1,6 +1,6 @@
 module Chainer
   class Variable
-    attr_accessor :data, :grad, :requires_grad, :node
+    attr_accessor :data, :grad, :requires_grad, :node, :grad_var
 
     def initialize(data=nil, name: nil, grad: nil, requires_grad: true)
       unless data.nil? || data.is_a?(Numo::NArray)
@@ -10,7 +10,8 @@ module Chainer
       @data = [data]
       @grad = grad
       @requires_grad = requires_grad
-      @node = VariableNode.new(variable: self, name: name, grad: grad)
+      @node = VariableNode.new(variable: self, name: name)
+      @grad_var = grad.nil? ? nil : Chainer::Variable.new(grad)
     end
 
     def data
@@ -34,20 +35,21 @@ module Chainer
       @node.label
     end
 
-    def creator
-      @node.creator
+    def creator_node
+      @node.creator_node
     end
 
-    def creator=(func)
-      @node.creator = func
+    def creator_node=(func)
+      @node.creator_node = func
     end
 
     def grad
-      @node.grad
+      gv = @grad_var
+      gv.nil? ? nil : gv.data
     end
 
     def grad=(g)
-      @node.set_grad_with_check(g, nil, self)
+      @grad_var = g.nil? ? nil : Chainer::Variable.new(g)
     end
 
     def shape
@@ -74,8 +76,16 @@ module Chainer
       self.data.reshape(*shape)
     end
 
+    # Clears the gradient array.
     def cleargrad
-      @node.grad = nil
+      @grad_var = nil
+    end
+
+    # Notifies the variable that the given node is its creator.
+    #
+    # @param [Chainer::FunctionNode] Function node that has this variable as an output.
+    def set_creator_node(fnode)
+      @node.set_creator_node(fnode)
     end
 
     def backward(retain_grad: false)
