@@ -21,7 +21,7 @@ module Chainer
             @axis = [axis]
           elsif axis.is_a?(Array) && axis.all? { |e| e.is_a?(Integer) }
             raise ArgumentError, "duplicate value in axis: #{axis}" unless axis.uniq.size == axis.size
-            @axis = axisA
+            @axis = axis
           else
             raise TypeError, 'nil, Integer or Array of int are required'
           end
