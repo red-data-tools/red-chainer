@@ -12,12 +12,13 @@ module Chainer
           @class_weight = class_weight
 
           unless class_weight.nil?
+            xm = Chainer.get_array_module(@class_weight)
             if @class_weight.ndim != 1
               raise ArgumentError, 'class_weight.ndim should be 1'
-            elsif (@class_weight.class != Numo::DFloat) and (@class_weight.class != Numo::SFloat)
-              raise ArgumentError, "The dtype of class_weight should be 'Numo::DFloat' or 'Numo::SFloat'"
+            elsif (@class_weight.class != xm::DFloat) and (@class_weight.class != xm::SFloat)
+              raise ArgumentError, "The dtype of class_weight should be 'DFloat' or 'SFloat'"
             elsif @class_weight.kind_of?(Chainer::Variable)
-              raise ArgumentError, 'class_weight should be a Numo::NArray, not a chainer.Variable'
+              raise ArgumentError, 'class_weight should be a NArray, not a chainer.Variable'
             end
           end
 
@@ -34,7 +35,8 @@ module Chainer
           log_y = Activation._log_softmax(x)
 
           if @cache_score
-            @y = Numo::NMath.exp(log_y)
+            xm = Chainer.get_array_module(log_y)
+            @y = xm::NMath.exp(log_y)
           end
           if @class_weight
             shape = x.ndim.times.map { |e| e == 1 ? true : 1 }
@@ -79,7 +81,8 @@ module Chainer
             y = @y.dup
           else
             y = Activation._log_softmax(x)
-            y = Numo::NMath.exp(y)
+            xm = Chainer.get_array_module(y)
+            y = xm::NMath.exp(y)
           end
 
           if y.ndim == 2

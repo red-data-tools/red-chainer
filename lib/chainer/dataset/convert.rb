@@ -2,7 +2,7 @@ module Chainer
   module Dataset
     module Convert
       def self.to_device(device, x)
-        # TODO: support cuda
+        # TODO(sonots): Support Cumo::NArray
         x
       end
 
@@ -28,6 +28,7 @@ module Chainer
       end
 
       def self.concat_arrays(arrays, padding)
+        # TODO(sonots): Support Cumo::NArray
         unless arrays[0].kind_of?(Numo::NArray)
           # [1, 2, 3, 4] => Numo::Int32[1, 2, 3, 4]
           arrays = Numo::NArray.cast(arrays)
@@ -49,11 +50,12 @@ module Chainer
       end
 
       def self.concat_arrays_with_padding(arrays, padding)
-        if arrays[0].is_a? Numo::NArray
-          shape = Numo::Int32.cast(arrays[0].shape)
+        if Chainer.array?(arrays[0])
+          xm = Chainer.get_array_module(arrays[0])
+          shape = xm::Int32.cast(arrays[0].shape)
           arrays[1..-1].each do |array|
-            if Numo::Bit.[](shape != array.shape).any?
-              shape = Numo::Int32.maximum(shape, array.shape)
+            if xm::Bit.[](shape != array.shape).any?
+              shape = xm::Int32.maximum(shape, array.shape)
             end
           end
         else # Integer
@@ -61,7 +63,7 @@ module Chainer
         end
 
         shape = shape.insert(0, arrays.size).to_a
-        if arrays[0].is_a? Numo::NArray
+        if Chainer.array?(arrays[0])
           result = arrays[0].class.new(shape).fill(padding)
         else # Integer
           result = Numo::Int32.new(shape).fill(padding)
@@ -69,7 +71,7 @@ module Chainer
 
         arrays.size.times do |i|
           src = arrays[i]
-          if src.is_a? Numo::NArray
+          if Chainer.array?(src)
             result[i, 0...src.shape[0], 0...src.shape[1]] = src
           else # Integer
             result[i] = src

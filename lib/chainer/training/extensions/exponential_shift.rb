@@ -58,7 +58,7 @@ module Chainer
           @t = serializer.('t', @t)
           @last_value = serializer.('last_value', @last_value)
           if @last_value.is_a?(Numo::NArray)
-            @last_value = @last_value[0]
+            @last_value = @last_value[0] # convert to ruby obj
           end
         end
 

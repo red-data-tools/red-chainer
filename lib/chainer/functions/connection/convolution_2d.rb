@@ -33,9 +33,9 @@ module Chainer
         #  w_O &= (w_I + 2w_P - w_K + s_X - 1) / s_X + 1.
         # If the bias vector is given, then it is added to all spatial locations of the output of convolution.
         #
-        # @param [Chainer::Variable or Numo::NArray] x Input variable of shape :math:`(n, c_I, h_I, w_I)`.
-        # @param [Chainer::Variable or Numo::NArray] w Weight variable of shape :math:`(c_O, c_I, h_K, w_K)`.
-        # @param [Chainer::Variable or Numo::NArray] b Bias variable of length :math:`c_O`
+        # @param [Chainer::Variable or Numo::NArray or Cumo::NArray] x Input variable of shape :math:`(n, c_I, h_I, w_I)`.
+        # @param [Chainer::Variable or Numo::NArray or Cumo::NArray] w Weight variable of shape :math:`(c_O, c_I, h_K, w_K)`.
+        # @param [Chainer::Variable or Numo::NArray or Cumo::NArray] b Bias variable of length :math:`c_O`
         # @param [Int or 2-D Array] stride Stride of filter applications. `stride=s` and `stride=(s, s)` are equivalent.
         # @param [Int or 2-D Array] pad Spatial padding width for input arrays.
         # @param [Boolean] cover_all If `true`, all spatial locations are convoluted into some output pixels.

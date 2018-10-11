@@ -12,7 +12,7 @@ module Chainer
     def self.get_initializer(initializer)
       return HeNormal.new(scale: 1 / Numo::NMath.sqrt(2)) if initializer.nil?
       return Constant.new(initializer) if initializer.kind_of?(Numeric)
-      return Constant.new(initializer) if initializer.kind_of?(Numo::NArray)
+      return Constant.new(initializer) if Chainer.array?(initializer)
 
       unless initializer.respond_to?(:call)
         raise TypeError, "invalid type of initializer: #{initializer.class}"

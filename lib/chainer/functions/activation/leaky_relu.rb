@@ -13,7 +13,7 @@ module Chainer
         # 
         # where $a$ is a configurable slope value.
         # 
-        # @param [Chainer::Variable or Numo::NArray] x Input variable. A $(s_1, s_2, ..., s_N)$-shaped float array.
+        # @param [Chainer::Variable or Numo::NArray or Cumo::NArray] x Input variable. A $(s_1, s_2, ..., s_N)$-shaped float array.
         # @param [float] slope Slope value $a$.
         # @return [Chainer::Variable] Output variable. A $(s_1, s_2, ..., s_N)$-shaped float array.
         # @example

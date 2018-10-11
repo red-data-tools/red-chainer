@@ -9,7 +9,7 @@ module Chainer
         # f(x)=\\max(0, x).
         # $$
         #
-        # @param [Chainer::Variable or Numo::NArray] x Input variable. A $(s_1, s_2, ..., s_N)$-shaped float array.
+        # @param [Chainer::Variable or Numo::NArray or Cumo::NArray] x Input variable. A $(s_1, s_2, ..., s_N)$-shaped float array.
         # @return [Chainer::Variable] Output variable. A $(s_1, s_2, ..., s_N)$-shaped float array.
         # @example
         #   > x = Numo::SFloat[[-1, 0], [2, -3], [-2, 1]]

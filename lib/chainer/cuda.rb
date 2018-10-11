@@ -3,20 +3,15 @@ begin
   $chainer_cuda_available = true
 rescue LoadError => e
   $chainer_cuda_available = false
+  # A trick to make Cumo::NArray always work
+  module Cumo
+    class NArray; end
+    class NMath; end
+  end
 end
 
 module Chainer
   module CUDA
-    # A trick to make Chainer::CUDA::Cumo::NArray always work
-    if $chainer_cuda_available
-      Cumo = ::Cumo
-    else
-      module Cumo
-        class NArray
-        end
-      end
-    end
-
     # Returns whether CUDA is available.
     #
     # @return [Boolean]

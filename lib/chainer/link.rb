@@ -87,9 +87,10 @@ module Chainer
         if param.data.nil? && !data.nil?
           # Initialize the parameter here
           param.init(data.shape)
-          if param.data.is_a?(Numo::NArray)
+          if Chainer.array?(param.data)
             param.data.store(data)
           else
+            # TODO(sonots): cast to Cumo::NArray
             param.data.set(Numo::NArray.cast(data))
           end
         end

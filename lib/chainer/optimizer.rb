@@ -101,7 +101,7 @@ module Chainer
         @state = {}
         init_state(param)
       end
-      @state.select! { |_, v| v.kind_of?(Numo::NArray) }
+      @state.select! { |_, v| Chainer.array?(v) }
     end
   end
 

@@ -36,7 +36,8 @@ class Chainer::Functions::Activation::LogSoftmaxTest < Test::Unit::TestCase
     y = Chainer::Functions::Activation::LogSoftmax.log_softmax(x).dup
     assert_equal(@dtype, y.data.class)
 
-    log_z = Numo::NMath.log(Numo::NMath.exp(@x).sum(axis:1, keepdims:true))
+    xm = Chainer.get_array_module(@x)
+    log_z = xm::NMath.log(xm::NMath.exp(@x).sum(axis:1, keepdims:true))
     y_expect = @x - log_z
     assert_true(y.data.nearly_eq(y_expect).all?)
   end

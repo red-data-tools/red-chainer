@@ -67,12 +67,13 @@ class TestSoftmaxCrossEntropy < Test::Unit::TestCase
     count = 0
     x = Chainer::Utils::Array.rollaxis(@x, 1, start:@x.ndim).reshape(@t.size, @x.shape[1])
     t = @t.flatten.dup
+    xm = Chainer.get_array_module(x)
 
     (0...x.shape[0]).map{|i|[x[i, false], t[i]]}.each do |xi, ti|
       if ti == -1
         next
       end
-      log_z = Numo::NMath.log(Numo::NMath.exp(xi).sum())
+      log_z = xm::NMath.log(xm::NMath.exp(xi).sum())
       if class_weight.nil?
         loss_expect -= (xi - log_z)[ti]
       else
@@ -208,12 +209,13 @@ class TestElementwiseSoftmaxCrossEntropy < Test::Unit::TestCase
     x = Chainer::Utils::Array.rollaxis(@x, 1, start:@x.ndim).reshape(@t.size, @x.shape[1])
     t = @t.flatten.dup
     l = loss_value.flatten.dup
+    xm = Chainer.get_array_module(x)
 
     (0...x.shape[0]).map{|i|[x[i, false], t[i], l[i]]}.each do |xi, ti, li|
       if ti == -1
         next
       end
-      log_z = Numo::NMath.log(Numo::NMath.exp(xi).sum())
+      log_z = xm::NMath.log(xm::NMath.exp(xi).sum())
 
       if class_weight.nil?
         loss_expect = -(xi - log_z)[ti]

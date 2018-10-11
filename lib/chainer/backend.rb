@@ -6,9 +6,9 @@ module Chainer
   def get_array_module(*args)
     arrays = args.map {|v| v.kind_of?(Chainer::Variable) ? v.data : v }
     if CUDA.available?
-      return Cumo::NArray arrays.any? {|a| a.kind_of?(Cumo::NArray) }
+      return Cumo if arrays.any? {|a| a.kind_of?(Cumo::NArray) }
     end
-    return Numo::NArray
+    return Numo
   end
   module_function :get_array_module
 
