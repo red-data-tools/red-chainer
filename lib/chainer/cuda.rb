@@ -7,6 +7,16 @@ end
 
 module Chainer
   module CUDA
+    # A trick to make Chainer::CUDA::Cumo::NArray always work
+    if $chainer_cuda_available
+      Cumo = ::Cumo
+    else
+      module Cumo
+        class NArray
+        end
+      end
+    end
+
     # Returns whetherif CUDA is available.
     #
     # @return [Boolean]
