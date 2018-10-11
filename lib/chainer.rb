@@ -3,6 +3,7 @@ require "weakref"
 require "chainer/version"
 
 require 'chainer/cuda'
+require 'chainer/backend'
 require 'chainer/configuration'
 require 'chainer/function'
 require 'chainer/optimizer'
