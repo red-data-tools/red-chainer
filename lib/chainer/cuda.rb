@@ -17,7 +17,7 @@ module Chainer
       end
     end
 
-    # Returns whetherif CUDA is available.
+    # Returns whether CUDA is available.
     #
     # @return [Boolean]
     def available?
