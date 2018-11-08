@@ -18,24 +18,24 @@ module Chainer
         end
 
         # Average pooling over a set of 2d planes.
-        def forward_cpu(x)
+        def forward(x)
           retain_inputs([])
           @in_shape = x[0].shape
           @in_dtype = x[0].class
 
-          col = Chainer::Utils::Conv.im2col_cpu(x[0], @kh, @kw, @sy, @sx, @ph, @pw)
+          col = Chainer::Utils::Conv.im2col(x[0], @kh, @kw, @sy, @sx, @ph, @pw)
           y = col.mean(axis: [2, 3])
 
           [y]
         end
 
-        def backward_cpu(x, gy)
+        def backward(x, gy)
           h, w  = @in_shape[2..-1]
           shape = gy[0].shape
           shape.insert(2, 1, 1)
           gcol = gy[0].reshape(*shape).tile(1, 1, @kh, @kw, 1, 1)
 
-          gx = Chainer::Utils::Conv.col2im_cpu(gcol, @sy, @sx, @ph, @pw, h, w)
+          gx = Chainer::Utils::Conv.col2im(gcol, @sy, @sx, @ph, @pw, h, w)
           gx /= @kh * @kw
           [gx]
         end

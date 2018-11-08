@@ -70,7 +70,7 @@ class Chainer::Functions::Pooling::MaxPooling2DTest < Test::Unit::TestCase
     c = data[:case]
     pooling = Chainer::Functions::Pooling::MaxPooling2D.new(c[:ksize], stride: c[:stride], pad: c[:pad], cover_all: c[:cover_all])
     pooling.(c[:x])
-    gy = pooling.backward_cpu(c[:x], c[:gy])
+    gy = pooling.backward(c[:x], c[:gy])
     assert_equal(data[:expected], gy[0])
   end
 end

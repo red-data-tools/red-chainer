@@ -27,7 +27,7 @@ class Chainer::Functions::Activation::TanhTest < Test::Unit::TestCase
   end
 
   data(data)
-  def test_forward_cpu(data)
+  def test_forward(data)
     _setup(data)
     check_forward(@x.dup)
   end
@@ -37,7 +37,7 @@ class Chainer::Functions::Activation::TanhTest < Test::Unit::TestCase
   end
 
   data(data)
-  def test_backward_cpu(data)
+  def test_backward(data)
     _setup(data)
     check_backward(@x.dup, @gy.dup)
   end

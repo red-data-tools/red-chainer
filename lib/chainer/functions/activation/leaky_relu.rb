@@ -38,7 +38,7 @@ module Chainer
           @slope = slope
         end
 
-        def forward_cpu(x)
+        def forward(x)
           y = x[0].dup()
           y[x[0] < 0] *= @slope
           if @slope >= 0
@@ -48,7 +48,7 @@ module Chainer
           [y]
         end
 
-        def backward_cpu(x, gy)
+        def backward(x, gy)
           gx = gy[0].dup()
           if @slope >= 0
             y = @output_data

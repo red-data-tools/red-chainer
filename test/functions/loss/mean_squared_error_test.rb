@@ -22,7 +22,7 @@ class Chainer::Functions::Loss::MeanSquaredErrorTest < Test::Unit::TestCase
     assert_in_delta(loss_expect, loss_value, 0.00001)
   end
 
-  def test_forward_cpu()
+  def test_forward()
     _setup()
     check_forward(@x0, @x1)
   end
@@ -31,7 +31,7 @@ class Chainer::Functions::Loss::MeanSquaredErrorTest < Test::Unit::TestCase
     Chainer::check_backward(Chainer::Functions::Loss::MeanSquaredError.method(:mean_squared_error), [x0_data, x1_data], nil, eps: 0.01)
   end
 
-  def test_backward_cpu()
+  def test_backward()
     _setup()
     check_backward(@x0, @x1)
   end

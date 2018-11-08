@@ -27,7 +27,7 @@ class Chainer::Functions::Array::BroadcastToTest < Test::Unit::TestCase
           }.flatten(1).to_h
 
   data(data)
-  def test_forward_cpu(data)
+  def test_forward(data)
     in_data = data[:dtype].new(data[:in_shape]).rand
     x = Chainer::Variable.new(in_data)
     bx = Chainer::Functions::Array::BroadcastTo.broadcast_to(x, data[:out_shape])
@@ -36,7 +36,7 @@ class Chainer::Functions::Array::BroadcastToTest < Test::Unit::TestCase
   end
 
   data(data)
-  def test_backward_cpu(data)
+  def test_backward(data)
     in_data = data[:dtype].new(data[:in_shape]).rand
     grads = data[:dtype].new(data[:out_shape]).rand
     check_backward_options = {}

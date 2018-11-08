@@ -6,11 +6,11 @@ class Constant < Chainer::Function
   def initialize(outputs)
     @outputs = outputs
   end
-  def forward_cpu(inputs)
+  def forward(inputs)
     return @outputs
   end
 
-  def backward_cpu(inputs, grad_outputs)
+  def backward(inputs, grad_outputs)
     return inputs.map{|_| _.new_zeros()}.to_a
   end
 end
@@ -50,7 +50,7 @@ class Chainer::VariableTest < Test::Unit::TestCase
   end
 
   data(data)
-  def test_attributes_cpu(data)
+  def test_attributes(data)
     _setup(data)
     check_attributes(false)
   end
@@ -65,7 +65,7 @@ class Chainer::VariableTest < Test::Unit::TestCase
   end
 
   data(data)
-  def test_len_cpu(data)
+  def test_len(data)
     _setup(data)
     check_len(false)
   end
@@ -76,7 +76,7 @@ class Chainer::VariableTest < Test::Unit::TestCase
   end
 
   data(data)
-  def test_label_cpu(data)
+  def test_label(data)
     _setup(data)
     check_label(@label, false)
   end
@@ -105,7 +105,7 @@ class Chainer::VariableTest < Test::Unit::TestCase
   end
 
   data(data)
-  def test_backward_cpu(data)
+  def test_backward(data)
     _setup(data)
     ret = create_linear_chain(2, false)
     check_backward([ret[0]], [ret[1]], [ret[2]], false)

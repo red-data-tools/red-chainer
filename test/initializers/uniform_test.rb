@@ -14,7 +14,7 @@ class Chainer::Initializers::UniformTest < Test::Unit::TestCase
           }.flatten(1).to_h
 
   data(data)
-  def test_initializer_cpu(data)
+  def test_initializer(data)
     w = data[:dtype].new(data[:shape])
     initializer = Chainer::Initializers::Uniform.new(scale: 0.1)
     w = initializer.(w)

@@ -16,7 +16,7 @@ module Chainer
           self.new.(x0, x1)
         end
 
-        def forward_cpu(inputs)
+        def forward(inputs)
           x0, x1 = inputs
           @diff = x0 - x1
           diff = @diff.flatten.dup()

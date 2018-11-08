@@ -13,7 +13,7 @@ class Chainer::Functions::Array::ReshapeTest < Test::Unit::TestCase
          }
 
   data(data)
-  def test_forward_cpu(data)
+  def test_forward(data)
     shape = data[:out_shape]
     in_data = data[:dtype].new(data[:in_shape]).rand(-1, 1)
     x = Chainer::Variable.new(in_data)
@@ -23,7 +23,7 @@ class Chainer::Functions::Array::ReshapeTest < Test::Unit::TestCase
   end
 
   data(data)
-  def test_backward_cpu(data)
+  def test_backward(data)
     in_data = data[:dtype].new(data[:in_shape]).rand(-1, 1)
     x = Chainer::Variable.new(in_data)
     y = Chainer::Functions::Array::Reshape.reshape(x, data[:out_shape])

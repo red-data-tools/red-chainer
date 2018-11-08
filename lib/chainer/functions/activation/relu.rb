@@ -26,13 +26,13 @@ module Chainer
           self.new.(x)
         end
 
-        def forward_cpu(x)
+        def forward(x)
           retain_inputs([])
           retain_outputs([0])
           [Utils::Array.force_array(x[0].class.maximum(x[0], 0))]
         end
 
-        def backward_cpu(x, gy)
+        def backward(x, gy)
           y = @output_data[0]
           [Utils::Array.force_array(gy[0] * (y > 0))]
         end

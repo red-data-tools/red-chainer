@@ -23,7 +23,7 @@ class TestConcatExamples < Test::Unit::TestCase
     end
   end
 
-  def test_concat_arrays_cpu()
+  def test_concat_arrays()
     arrays = get_arrays_to_concat(Numo)
     check_concat_arrays(arrays)
   end
@@ -45,7 +45,7 @@ class TestConcatExamples < Test::Unit::TestCase
     end
   end
 
-  def test_concat_tuples_cpu()
+  def test_concat_tuples()
     tuples = get_tuple_arrays_to_concat(Numo)
     check_concat_tuples(tuples)
   end
@@ -68,7 +68,7 @@ class TestConcatExamplesWithPadding < Test::Unit::TestCase
     assert_true array[2, 0..-1, 3..-1].nearly_eq(0).all?
   end
 
-  def test_concat_arrays_padding_cpu()
+  def test_concat_arrays_padding()
     check_concat_arrays_padding(Numo)
   end
 
@@ -105,7 +105,7 @@ class TestConcatExamplesWithPadding < Test::Unit::TestCase
     assert_true arrays[1][2, 2..-1, 0..-1].nearly_eq(0).all?
   end
 
-  def test_concat_tuples_padding_cpu()
+  def test_concat_tuples_padding()
     check_concat_tuples_padding(Numo)
   end
 end
@@ -137,7 +137,7 @@ class TestConcatExamplesWithBuiltInTypes < Test::Unit::TestCase
   end
 
   data(data)
-  def test_concat_arrays_cpu(data)
+  def test_concat_arrays(data)
     @padding = data[:padding]
 
     [-1, nil].each do |device|

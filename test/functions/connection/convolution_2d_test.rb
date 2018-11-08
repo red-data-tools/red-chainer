@@ -65,8 +65,8 @@ class Chainer::Functions::Connection::Convolution2DTest < Test::Unit::TestCase
   def test_backward(data)
     l = Chainer::Functions::Connection::Convolution2DFunction.new(stride: 2, pad: 1, cover_all: true)
     inputs = [data[:case][:x], data[:case][:w], data[:case][:b]]
-    l.forward_cpu(inputs)
-    actual = l.backward_cpu(inputs, [data[:case][:gy]])
+    l.forward(inputs)
+    actual = l.backward(inputs, [data[:case][:gy]])
     assert_equal(data[:expected][:gx], actual[0])
     assert_equal(data[:expected][:gw], actual[1])
     assert_equal(data[:expected][:gb], actual[2])

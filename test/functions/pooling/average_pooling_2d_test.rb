@@ -108,7 +108,7 @@ class Chainer::Functions::Pooling::AveragePooling2DTest < Test::Unit::TestCase
     c = data[:case]
     pooling = Chainer::Functions::Pooling::AveragePooling2D.new(c[:ksize], stride: c[:stride], pad: c[:pad], cover_all: c[:cover_all])
     pooling.(c[:x])
-    gy = pooling.backward_cpu(c[:x], c[:gy])
+    gy = pooling.backward(c[:x], c[:gy])
     d = 7
     assert_equal(round(data[:expected], 7), round(gy[0], 7))
   end

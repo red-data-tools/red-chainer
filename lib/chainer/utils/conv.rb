@@ -10,7 +10,7 @@ module Chainer
         end
       end
 
-      def self.im2col_cpu(img, kh, kw, sy, sx, ph, pw, pval: 0, cover_all: false, dy: 1, dx: 1)
+      def self.im2col(img, kh, kw, sy, sx, ph, pw, pval: 0, cover_all: false, dy: 1, dx: 1)
         n, c, h, w = img.shape
 
         out_h = self.get_conv_outsize(h, kh, sy, ph, cover_all: cover_all, d: dy)
@@ -40,7 +40,7 @@ module Chainer
         col
       end
 
-      def self.col2im_cpu(col, sy, sx, ph, pw, h, w, dy: 1, dx: 1)
+      def self.col2im(col, sy, sx, ph, pw, h, w, dy: 1, dx: 1)
         n, c, kh, kw, out_h, out_w = col.shape
         img = col.class.zeros(n, c, h + 2 * ph + sy - 1, w + 2 * pw + sx - 1)
         kh.times do |j|

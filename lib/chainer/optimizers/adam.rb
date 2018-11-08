@@ -21,7 +21,7 @@ module Chainer
         @state[:v] = param.data.new_zeros
       end
 
-      def update_core_cpu(param)
+      def update_core(param)
         grad = param.grad
         return if grad.nil?
 

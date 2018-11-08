@@ -24,7 +24,7 @@ module Chainer
           self.new.(x)
         end
 
-        def forward_cpu(x)
+        def forward(x)
           xm = Chainer.get_array_module(x[0])
           y = Utils::Array.force_array(xm::NMath.tanh(x[0]))
           retain_inputs([])
@@ -32,7 +32,7 @@ module Chainer
           return [y]
         end
 
-        def backward_cpu(x, gy)
+        def backward(x, gy)
           y = @output_data[0]
           one = y.class.cast(1)
           [Utils::Array.force_array(gy[0] * (one - y * y))]

@@ -30,7 +30,7 @@ module Chainer
           @reduce = reduce
         end
 
-        def forward_cpu(inputs)
+        def forward(inputs)
           x, t = inputs
           log_y = Activation._log_softmax(x)
 
@@ -73,7 +73,7 @@ module Chainer
           end
         end
 
-        def backward_cpu(inputs, grad_outputs)
+        def backward(inputs, grad_outputs)
           x, t = inputs
           gloss = grad_outputs[0]
 

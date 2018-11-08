@@ -51,7 +51,7 @@ class NumericalGradientTest < Test::Unit::TestCase
     end
   end
 
-  def test_numerical_grad_cpu()
+  def test_numerical_grad()
     _setup()
     check_numerical_grad(method(:f), method(:df), @xs, @gys, @eps)
   end
@@ -72,7 +72,7 @@ class NumericalGradientReferenceTest < Test::Unit::TestCase
     Chainer::Testing.assert_allclose(1, gx)
   end
 
-  def test_reference_cpu()
+  def test_reference()
     _setup()
     check_reference(@x)
   end
@@ -85,7 +85,7 @@ class NumericalGradientInvalidEps < NumericalGradientTest
     }
   end
 
-  def test_numerical_grad_cpu()
+  def test_numerical_grad()
     _setup()
     check_invalid_eps(@xs, @gys, 0)
     check_invalid_eps(@xs, @gys, -(1.0))
@@ -150,7 +150,7 @@ class NumericalGradientEpsTest < Test::Unit::TestCase
     assert_equal(0.0, gx)
   end
 
-  def test_differenct_eps_cpu()
+  def test_differenct_eps()
     _setup()
     check_different_eps(@x, @y)
   end

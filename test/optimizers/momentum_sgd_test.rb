@@ -18,7 +18,7 @@ class Chainer::Optimizers::MomentumSGDTest < Test::Unit::TestCase
     opt = sgd.create_update_rule
     opt.instance_variable_set(:@state, {})
     opt.init_state(var)
-    opt.update_core_cpu(var)
+    opt.update_core(var)
     assert_equal(data[:expected], var.data)
   end
 end

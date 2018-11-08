@@ -94,7 +94,7 @@ class TestSoftmaxCrossEntropy < Test::Unit::TestCase
   end
 
   data(data)
-  def test_forward_cpu(data)
+  def test_forward(data)
     _setup(data)
     check_forward(@x, @t, @class_weight)
   end
@@ -105,7 +105,7 @@ class TestSoftmaxCrossEntropy < Test::Unit::TestCase
   end
 
   data(data)
-  def test_backward_cpu(data)
+  def test_backward(data)
     _setup(data)
     check_backward(@x, @t, @class_weight)
   end
@@ -227,7 +227,7 @@ class TestElementwiseSoftmaxCrossEntropy < Test::Unit::TestCase
   end
 
   data(data)
-  def test_forward_cpu(data)
+  def test_forward(data)
     _setup(data)
     check_forward(@x, @t, @class_weight)
   end
@@ -238,7 +238,7 @@ class TestElementwiseSoftmaxCrossEntropy < Test::Unit::TestCase
   end
 
   data(data)
-  def test_backward_cpu(data)
+  def test_backward(data)
     _setup(data)
     check_backward(@x, @t, @g, @class_weight)
   end
@@ -269,7 +269,7 @@ class TestSoftmaxCrossEntropyInvalidReduce < Test::Unit::TestCase
   end
 
   data(data)
-  def test_invalid_reduce_cpu(data)
+  def test_invalid_reduce(data)
     _setup(data)
     check_invalid_reduce(@x, @t)
   end
@@ -317,7 +317,7 @@ class TestNonDefaultIgnoreLabel < Test::Unit::TestCase
   end
 
   data(data)
-  def test_forward_cpu(data)
+  def test_forward(data)
     _setup(data)
     check_forward(Numo::NArray)
   end
@@ -336,7 +336,7 @@ class TestNonDefaultIgnoreLabel < Test::Unit::TestCase
   end
 
   data(data)
-  def test_backward_cpu(data)
+  def test_backward(data)
     _setup(data)
     check_backward(Numo::NArray)
   end
