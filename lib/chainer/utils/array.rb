@@ -4,8 +4,8 @@ module Chainer
       def self.force_array(x, dtype=nil)
         if x.is_a? Integer or x.is_a? Float
           if dtype.nil?
-            # TODO(sonots): Cumo::NArray
-            Numo::NArray.cast(x)
+            xm = Chainer.get_default_device.xm
+            xm::NArray.cast(x)
           else
             dtype.cast(x.dup)
           end

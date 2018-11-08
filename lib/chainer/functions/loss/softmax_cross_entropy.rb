@@ -31,11 +31,11 @@ module Chainer
         end
 
         def forward(inputs)
+          xm = Chainer.get_array_module(*inputs)
           x, t = inputs
           log_y = Activation._log_softmax(x)
 
           if @cache_score
-            xm = Chainer.get_array_module(log_y)
             @y = xm::NMath.exp(log_y)
           end
           if @class_weight
@@ -64,8 +64,8 @@ module Chainer
               count = t.ne(@ignore_label).count
             else
               count = x.shape[0]
+              @coeff = 1.0 / [count, 1].max
             end
-            @coeff = 1.0 / [count, 1].max
             y = log_p.sum(keepdims: true) * (-@coeff)
             [y.class.cast(y[0])]
           else
@@ -76,12 +76,12 @@ module Chainer
         def backward(inputs, grad_outputs)
           x, t = inputs
           gloss = grad_outputs[0]
+          xm = Chainer.get_array_module(x, t, gloss)
 
           if self.instance_variable_defined?(:'@y')
             y = @y.dup
           else
             y = Activation._log_softmax(x)
-            xm = Chainer.get_array_module(y)
             y = xm::NMath.exp(y)
           end
 
@@ -107,8 +107,8 @@ module Chainer
 
             n_unit = t.size / t.shape[0]
             gx = y.reshape(y.shape[0], y.shape[1], true)
-            fst_index = Numo::Int32.new(t.size).seq(0) / n_unit
-            trd_index = Numo::Int32.new(t.size).seq(0) % n_unit
+            fst_index = xm::Int32.new(t.size).seq(0) / n_unit
+            trd_index = xm::Int32.new(t.size).seq(0) % n_unit
             fst_index.to_a.zip(t.class.maximum(t.flatten.dup, 0).to_a, trd_index.to_a).each{|v| gx[*v] -= 1}
             if @class_weight
               shape = x.ndim.times.map{|d| d == 1 ? true : 1}

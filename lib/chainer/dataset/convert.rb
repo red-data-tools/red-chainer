@@ -2,7 +2,7 @@ module Chainer
   module Dataset
     module Convert
       def self.to_device(device, x)
-        # TODO(sonots): Implement after Cumo supports Numo/Cumo conversion
+        # TODO(sonots): Implement after Cumo supports transferring between devices
         x
       end
 
@@ -28,10 +28,11 @@ module Chainer
       end
 
       def self.concat_arrays(arrays, padding)
-        # TODO(sonots): Support Cumo::NArray
-        unless arrays[0].kind_of?(Numo::NArray)
+        # TODO(sonots): pass xm from outside
+        xm = Chainer.get_default_device.xm
+        unless arrays[0].kind_of?(xm::NArray)
           # [1, 2, 3, 4] => Numo::Int32[1, 2, 3, 4]
-          arrays = Numo::NArray.cast(arrays)
+          arrays = xm::NArray.cast(arrays)
           if padding
             return concat_arrays_with_padding(arrays, padding)
           end
@@ -50,6 +51,8 @@ module Chainer
       end
 
       def self.concat_arrays_with_padding(arrays, padding)
+        # TODO(sonots): pass xm from outside
+        xm = Chainer.get_default_device.xm
         if Chainer.array?(arrays[0])
           xm = Chainer.get_array_module(arrays[0])
           shape = xm::Int32.cast(arrays[0].shape)
@@ -66,7 +69,7 @@ module Chainer
         if Chainer.array?(arrays[0])
           result = arrays[0].class.new(shape).fill(padding)
         else # Integer
-          result = Numo::Int32.new(shape).fill(padding)
+          result = xm::Int32.new(shape).fill(padding)
         end
 
         arrays.size.times do |i|

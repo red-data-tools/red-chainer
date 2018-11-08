@@ -80,6 +80,8 @@ module Chainer
     end
 
     def serialize(serializer)
+      # TODO(sonots): pass xm from outside
+      xm = Chainer.get_default_device.xm
       d = self.instance_variables.each_with_object({}) { |sym, h| h[sym] = self.instance_variable_get(sym) }
       @params.each do |name|
         param = d[name]
@@ -90,8 +92,7 @@ module Chainer
           if Chainer.array?(param.data)
             param.data.store(data)
           else
-            # TODO(sonots): cast to Cumo::NArray
-            param.data.set(Numo::NArray.cast(data))
+            param.data.set(xm::NArray.cast(data))
           end
         end
       end

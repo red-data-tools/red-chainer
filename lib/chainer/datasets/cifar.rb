@@ -11,7 +11,7 @@ module Chainer
         get_cifar(100, with_label, ndim, scale)
       end
 
-      def self.get_cifar(n_classes, with_label, ndim, scale)
+      def self.get_cifar(n_classes, with_label, ndim, scale, xm: Chainer.get_default_device.xm)
         train_table = ::Datasets::CIFAR.new(n_classes: n_classes, type: :train).to_table
         test_table = ::Datasets::CIFAR.new(n_classes: n_classes, type: :test).to_table
 
@@ -26,12 +26,12 @@ module Chainer
         end
 
         [
-          preprocess_cifar(Numo::UInt8[*train_data], Numo::UInt8[*train_labels], with_label, ndim, scale),
-          preprocess_cifar(Numo::UInt8[*test_data], Numo::UInt8[*test_labels], with_label, ndim, scale)
+          preprocess_cifar(xm::UInt8[*train_data], xm::UInt8[*train_labels], with_label, ndim, scale),
+          preprocess_cifar(xm::UInt8[*test_data], xm::UInt8[*test_labels], with_label, ndim, scale)
         ]
       end
 
-      def self.preprocess_cifar(images, labels, withlabel, ndim, scale)
+      def self.preprocess_cifar(images, labels, withlabel, ndim, scale, xm: Chainer.get_default_device.xm)
         if ndim == 1
           images = images.reshape(images.shape[0], 3072)
         elsif ndim == 3
@@ -39,11 +39,11 @@ module Chainer
         else
           raise 'invalid ndim for CIFAR dataset'
         end
-        images = images.cast_to(Numo::SFloat)
+        images = images.cast_to(xm::SFloat)
         images *= scale / 255.0
 
         if withlabel
-          labels = labels.cast_to(Numo::Int32)
+          labels = labels.cast_to(xm::Int32)
           TupleDataset.new(images, labels)
         else
           images

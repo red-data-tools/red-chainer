@@ -1,6 +1,6 @@
 module Chainer
   module Serializers
-    class MarshalSerializer < Chainer::Serializer      
+    class MarshalSerializer < Chainer::Serializer
       attr_accessor :target, :path
 
       # @param [string] file_path Target file path
@@ -13,9 +13,10 @@ module Chainer
         end
       end
 
-      def initialize(target: nil, path: "")
+      def initialize(target: nil, path: "", xm: Chainer.get_default_device.xm)
         @target = target.nil? ? {} : target
         @path = path
+        @xm = xm
       end
 
       def [](key)
@@ -25,13 +26,13 @@ module Chainer
       def call(key, value)
         ret = value
         if value.is_a?(TrueClass)
-          arr = Numo::Bit[1]
+          arr = @xm::Bit[1]
         elsif value.is_a?(FalseClass)
-          arr = Numo::Bit[0]
+          arr = @xm::Bit[0]
         elsif value.instance_of?(String) || value.nil?
           arr = value
         else
-          arr = Numo::NArray.cast(value)
+          arr = @xm::NArray.cast(value)
         end
         @target[File.join(@path, key)] = arr
         ret
@@ -72,7 +73,7 @@ module Chainer
           return dataset
         elsif value.instance_of?(String)
           return dataset
-        elsif value.is_a?(Numo::NArray)
+        elsif Chainer.array?(value)
           value.store(dataset)
           return value
         elsif value.is_a?(TrueClass) || value.is_a?(FalseClass)

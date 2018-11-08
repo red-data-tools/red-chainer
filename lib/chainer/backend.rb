@@ -99,7 +99,7 @@ module Chainer
   #
   # @return [Device] device object.
   def get_default_device
-    @device
+    @device ||= CpuDevice.new
   end
   module_function :get_default_device
 
