@@ -3,10 +3,11 @@ begin
   $chainer_cuda_available = true
 rescue LoadError => e
   $chainer_cuda_available = false
-  # A trick to make Cumo::NArray always work
+  # A trick to make Cumo::NArray always exists
   module Cumo
     class NArray; end
     class NMath; end
+    class Bit; end
   end
 end
 
