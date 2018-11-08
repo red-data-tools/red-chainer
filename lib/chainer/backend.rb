@@ -24,4 +24,26 @@ module Chainer
     false
   end
   module_function :array?
+
+  # Sets default device
+  #
+  # @param [int] device GPU ID. Negative value indicates CPU.
+  # @todo Create a Device class and accepts its object
+  def set_default_device(device)
+    @device = device
+    if device > 0
+      Chainer::CUDA.check_available
+      Cumo::CUDA::Runtime.cudaSetDevice(device)
+    end
+  end
+  module_function :set_default_device
+
+  # Gets default device
+  #
+  # @return [int] GPU ID. Negative value indicates CPU.
+  # @todo Create a Device class and returns its object
+  def get_default_device
+    @device
+  end
+  module_function :get_default_device
 end

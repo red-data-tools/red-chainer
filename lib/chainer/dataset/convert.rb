@@ -2,7 +2,7 @@ module Chainer
   module Dataset
     module Convert
       def self.to_device(device, x)
-        # TODO(sonots): Support Cumo::NArray
+        # TODO(sonots): Implement after Cumo supports Numo/Cumo conversion
         x
       end
 

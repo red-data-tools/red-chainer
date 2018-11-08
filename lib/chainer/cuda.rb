@@ -26,7 +26,7 @@ module Chainer
     # When CUDA is correctly set up, nothing happens.
     # Otherwise it raises ``RuntimeError``.
     def check_available
-      raise 'CUDA environment is not correctly set up' unless available?
+      raise 'CUDA is not available' unless available?
     end
     module_function :check_available
   end
