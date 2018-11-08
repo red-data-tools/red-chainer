@@ -25,25 +25,82 @@ module Chainer
   end
   module_function :array?
 
+  class Device
+    def xm
+      raise 'Not implemented'
+    end
+  end
+
+  class CpuDevice < Device
+    def id
+      -1
+    end
+
+    def xm
+      Numo
+    end
+
+    def ==(other)
+      return false unless other.is_a?(CpuDevice)
+      true
+    end
+  end
+  
+  class GpuDevice < Device
+    attr_reader :id
+
+    def initialize(id)
+      Chainer::CUDA.check_available
+      if id < 0
+        raise 'GPU Device ID must not be negative'
+      end
+      @id = id
+    end
+
+    def xm
+      Cumo
+    end
+
+    def ==(other)
+      return false unless other.is_a?(GpuDevice)
+      id == other.id
+    end
+  end
+
+  # Gets device
+  #
+  # @param [Object] device_spec Device specifier. Integer or Device object.
+  #     Negative integer indicates CPU. 0 or positive integer indicates GPU.
+  # @return [Device] device object
+  def get_device(device_spec)
+    return device_spec if device_spec.kind_of?(Device)
+    if device_spec.kind_of?(Integer)
+      return CpuDevice.new if device_spec < 0
+      return GpuDevice.new(device_spec)
+    end
+    raise "Invalid device_spec: #{device_spec}"
+  end
+  module_function :get_device
+
   # Sets default device
   #
-  # @param [int] device GPU ID. Negative value indicates CPU.
-  # @todo Create a Device class and accepts its object
-  def set_default_device(device)
-    @device = device
-    if device > 0
+  # @param [Object] device_spec
+  # @see Chainer.set_device
+  def set_default_device(device_spec)
+    @device = Chainer.get_device(device_spec)
+    if @device.id > 0
       Chainer::CUDA.check_available
-      Cumo::CUDA::Runtime.cudaSetDevice(device)
+      Cumo::CUDA::Runtime.cudaSetDevice(@device.id)
     end
   end
   module_function :set_default_device
 
   # Gets default device
   #
-  # @return [int] GPU ID. Negative value indicates CPU.
-  # @todo Create a Device class and returns its object
+  # @return [Device] device object.
   def get_default_device
     @device
   end
   module_function :get_default_device
+
 end
