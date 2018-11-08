@@ -55,11 +55,19 @@ module Chainer
     end
 
     def update_core(param)
-      # TODO: support GPU
-      update_core_cpu(param)
+      xm = Chainer.get_array_module(param)
+      if xm == Cumo
+        update_core_gpu(param)
+      else
+        update_core_cpu(param)
+      end
     end
 
     def update_core_cpu
+      raise NotImplementedError
+    end
+
+    def update_core_gpu
       raise NotImplementedError
     end
 
