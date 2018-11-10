@@ -15,18 +15,25 @@ module Chainer
   module CUDA
     # Returns whether CUDA is available.
     #
+    # @param [Integer or nil] id If a non negative integer is given, check availability of GPU ID.
     # @return [Boolean]
-    def available?
-      $chainer_cuda_available
+    def available?(id = nil)
+      return false unless $chainer_cuda_available
+      if id
+        raise 'id must be non negative' if id < 0
+        @device_count ||= Cumo::CUDA::Runtime.cudaGetDeviceCount
+        return @device_count > id
+      end
+      true
     end
     module_function :available?
 
     # Checks if CUDA is available.
     #
-    # When CUDA is correctly set up, nothing happens.
-    # Otherwise it raises ``RuntimeError``.
-    def check_available
-      raise 'CUDA is not available' unless available?
+    # @param [Integer or nil] id If a non negative integer is given, check availability of GPU ID.
+    # @raise [RuntimeError] if not available
+    def check_available(id = nil)
+      raise 'CUDA is not available' unless available?(id)
     end
     module_function :check_available
   end

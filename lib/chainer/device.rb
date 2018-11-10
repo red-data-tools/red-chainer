@@ -23,7 +23,7 @@ module Chainer
     attr_reader :id
 
     # @param [Integer] id GPU Device ID. If not given, CUDA current device id is used.
-    def initialize(id: nil)
+    def initialize(id = nil)
       Chainer::CUDA.check_available
       id ||= Cumo::CUDA::Runtime.cudaGetDevice
       if id < 0
@@ -57,7 +57,7 @@ module Chainer
     return device_spec if device_spec.kind_of?(Device)
     if device_spec.kind_of?(Integer)
       return CpuDevice.new if device_spec < 0
-      return GpuDevice.new(id: device_spec)
+      return GpuDevice.new(device_spec)
     end
     raise "Invalid device_spec: #{device_spec}"
   end
