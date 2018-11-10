@@ -47,21 +47,19 @@ module Chainer
             log_yd = log_yd.reshape(log_yd.shape[0], true)
           rescue ArgumentError
           end
-          ravel_arr = t.dup.flatten.dup
-          ravel_arr[ravel_arr<0] = 0
-          arange_arr = t.class.new(t.size).seq
 
-          # https://github.com/chainer/chainer/blob/v2.0.2/chainer/functions/loss/softmax_cross_entropy.py#L79
-          log_p = []
-          ravel_arr.each_with_index do |r, i|
-            log_p << log_yd[r, i]
+          if @ignore_label
+            t_valid= t.ne(@ignore_label)
+
+            log_p = log_yd[t.class.maximum(t.flatten, 0), t.class.new(t.size).seq].diagonal
+            log_p *= t_valid.flatten
+          else
+            log_p = log_yd[t.class.maximum(t.flatten, 0), t.class.new(t.size).seq].diagonal
           end
-          log_p = log_yd.class.[](*log_p)
-          log_p[t.flatten.dup.eq(@ignore_label)] = 0
 
           if @reduce == 'mean'
-            if @normalize
-              count = t.ne(@ignore_label).count
+            if @normalize and t_valid
+              @coeff = 1.0 / log_p.class.maximum(Chainer::Utils::Array.force_array(t_valid.count), 1)
             else
               count = x.shape[0]
               @coeff = 1.0 / [count, 1].max
@@ -74,9 +72,9 @@ module Chainer
         end
 
         def backward(inputs, grad_outputs)
+          xm = Chainer.get_array_module(*(inputs + grad_outputs))
           x, t = inputs
           gloss = grad_outputs[0]
-          xm = Chainer.get_array_module(x, t, gloss)
 
           if self.instance_variable_defined?(:'@y')
             y = @y.dup
@@ -97,8 +95,10 @@ module Chainer
             end
 
             bit = t.flatten.dup
-            bit[t.ne(@ignore_label)] = 1
-            bit[bit.ne(1)] = 0
+            if @ignore_label
+              bit[t.ne(@ignore_label)] = 1
+              bit[bit.ne(1)] = 0
+            end
             gx *= bit.reshape(t.shape[0], 1)
           else
             # in the case where y.ndim is higher than 2,
