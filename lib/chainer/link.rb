@@ -80,7 +80,7 @@ module Chainer
     end
 
     def serialize(serializer)
-      # TODO(sonots): pass xm from outside
+      # TODO(sonots): pass device from outside
       xm = Chainer.get_default_device.xm
       d = self.instance_variables.each_with_object({}) { |sym, h| h[sym] = self.instance_variable_get(sym) }
       @params.each do |name|

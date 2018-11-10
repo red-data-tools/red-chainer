@@ -28,7 +28,7 @@ module Chainer
       end
 
       def self.concat_arrays(arrays, padding)
-        # TODO(sonots): pass xm from outside
+        # TODO(sonots): pass device from outside
         xm = Chainer.get_default_device.xm
         unless arrays[0].kind_of?(xm::NArray)
           # [1, 2, 3, 4] => Numo::Int32[1, 2, 3, 4]
@@ -51,7 +51,7 @@ module Chainer
       end
 
       def self.concat_arrays_with_padding(arrays, padding)
-        # TODO(sonots): pass xm from outside
+        # TODO(sonots): pass device from outside
         xm = Chainer.get_default_device.xm
         if Chainer.array?(arrays[0])
           xm = Chainer.get_array_module(arrays[0])

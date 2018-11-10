@@ -49,7 +49,8 @@ puts "# Minibatch-size: #{args[:batchsize]}"
 puts "# epoch: #{args[:epoch]}"
 puts
 
-Chainer.set_default_device(args[:gpu])
+device = Chainer.get_device(args[:gpu])
+Chainer.set_default_device(device)
 model = Chainer::Links::Model::Classifier.new(MLP.new(args[:unit], 10))
 
 optimizer = Chainer::Optimizers::Adam.new
@@ -59,7 +60,7 @@ train, test = Chainer::Datasets::MNIST.get_mnist
 train_iter = Chainer::Iterators::SerialIterator.new(train, args[:batchsize])
 test_iter = Chainer::Iterators::SerialIterator.new(test, args[:batchsize], repeat: false, shuffle: false)
 
-updater = Chainer::Training::StandardUpdater.new(train_iter, optimizer, device: args[:gpu])
+updater = Chainer::Training::StandardUpdater.new(train_iter, optimizer, device: device)
 trainer = Chainer::Training::Trainer.new(updater, stop_trigger: [args[:epoch], 'epoch'], out: args[:out])
 
 trainer.extend(Chainer::Training::Extensions::Evaluator.new(test_iter, model, device: args[:gpu]))

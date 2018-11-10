@@ -41,6 +41,7 @@ module Chainer
       id == other.id
     end
 
+    # Sets CUDA current device with owned GPU Device ID
     def use
       Cumo::CUDA::Runtime.cudaSetDevice(@id)
     end
@@ -48,14 +49,15 @@ module Chainer
 
   # Gets device
   #
-  # @param [Object] device_spec Device specifier. Integer or Device object.
+  # @param [Integer or Chainer::Device] device_spec Device specifier.
   #     Negative integer indicates CPU. 0 or positive integer indicates GPU.
-  # @return [Device] device object
+  #     If a device object is given, itself is returned.
+  # @return [Chainer::Device] device object
   def get_device(device_spec)
     return device_spec if device_spec.kind_of?(Device)
     if device_spec.kind_of?(Integer)
       return CpuDevice.new if device_spec < 0
-      return GpuDevice.new(device_spec)
+      return GpuDevice.new(id: device_spec)
     end
     raise "Invalid device_spec: #{device_spec}"
   end
@@ -66,16 +68,19 @@ module Chainer
   # @param [Object] device_spec
   # @see Chainer.set_device
   def set_default_device(device_spec)
-    @device = Chainer.get_device(device_spec)
-    @device.use
+    @default_device = Chainer.get_device(device_spec)
+    @default_device.use
   end
   module_function :set_default_device
 
   # Gets default device
   #
-  # @return [Device] device object.
+  # @return [Chainer::Device] the default device.
   def get_default_device
-    @device ||= CpuDevice.new
+    @default_device ||= CpuDevice.new
   end
   module_function :get_default_device
+
+  # TODO(sonots): Add get_device_from_array after Cumo provides an API
+  # to return GPU device ID from Cumo::NArray.
 end

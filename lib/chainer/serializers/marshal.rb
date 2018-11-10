@@ -13,10 +13,11 @@ module Chainer
         end
       end
 
-      def initialize(target: nil, path: "", xm: Chainer.get_default_device.xm)
+      def initialize(target: nil, path: "", device: Chainer.get_default_device)
         @target = target.nil? ? {} : target
         @path = path
-        @xm = xm
+        @device = device
+        @xm = device.xm
       end
 
       def [](key)

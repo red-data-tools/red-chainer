@@ -3,12 +3,13 @@ module Chainer
     class SerialIterator < Chainer::Dataset::Iterator 
       attr_reader :epoch, :is_new_epoch
 
-      def initialize(dataset, batch_size, repeat: true, shuffle: true, xm: Chainer.get_default_device.xm)
+      def initialize(dataset, batch_size, repeat: true, shuffle: true, device: Chainer.get_default_device)
         @dataset = dataset
         @batch_size = batch_size
         @repeat = repeat
         @shuffle = shuffle
-        @xm = xm
+        @device = device
+        @xm = device.xm
 
         reset
       end

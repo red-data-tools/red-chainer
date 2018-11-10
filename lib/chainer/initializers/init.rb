@@ -1,7 +1,7 @@
 module Chainer
   module Initializers
-    def self.generate_array(initializer, shape, xm: Chainer.get_default_device.xm)
-      klass = xm::SFloat
+    def self.generate_array(initializer, shape, device: Chainer.get_default_device)
+      klass = device.xm::SFloat
       if initializer.respond_to?(:dtype) && initializer.dtype
         klass = initializer.dtype
       end
@@ -9,8 +9,8 @@ module Chainer
       initializer.(array)
     end
 
-    def self.get_initializer(initializer, xm: Chainer.get_default_device.xm)
-      return HeNormal.new(scale: 1 / xm::NMath.sqrt(2)) if initializer.nil?
+    def self.get_initializer(initializer, device: Chainer.get_default_device)
+      return HeNormal.new(scale: 1 / device.xm::NMath.sqrt(2)) if initializer.nil?
       return Constant.new(initializer) if initializer.kind_of?(Numeric)
       return Constant.new(initializer) if Chainer.array?(initializer)
 
