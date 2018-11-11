@@ -53,7 +53,7 @@ module Chainer
       def self.concat_arrays_with_padding(arrays, padding)
         # TODO(sonots): pass device from outside
         xm = Chainer.get_default_device.xm
-        if Chainer.array?(arrays[0])
+        if Chainer.array?(arrays[0]) and arrays[0].ndim > 0
           xm = Chainer.get_array_module(arrays[0])
           shape = xm::Int32.cast(arrays[0].shape)
           arrays[1..-1].each do |array|
@@ -66,7 +66,7 @@ module Chainer
         end
 
         shape = shape.insert(0, arrays.size).to_a
-        if Chainer.array?(arrays[0])
+        if Chainer.array?(arrays[0]) and arrays[0].ndim > 0
           result = arrays[0].class.new(shape).fill(padding)
         else # Integer
           result = xm::Int32.new(shape).fill(padding)
@@ -74,7 +74,7 @@ module Chainer
 
         arrays.size.times do |i|
           src = arrays[i]
-          if Chainer.array?(src)
+          if Chainer.array?(src) and src.ndim > 0
             result[i, 0...src.shape[0], 0...src.shape[1]] = src
           else # Integer
             result[i] = src
