@@ -72,7 +72,7 @@ module Chainer
     end
 
     def backward(inputs, grad_outputs)
-      xm = Chainer.get_module(*(inputs + grad_outputs))
+      xm = Chainer.get_array_module(*(inputs + grad_outputs))
       if xm == Cumo
         backward_gpu(inputs, grad_outputs)
       else
