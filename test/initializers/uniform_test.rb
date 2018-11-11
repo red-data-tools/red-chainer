@@ -5,7 +5,7 @@ require 'chainer/initializers/uniform'
 class Chainer::Initializers::UniformTest < Test::Unit::TestCase
 
   shapes = [[2, 3], [2, 3, 4]]
-  dtypes = [ Numo::SFloat, Numo::DFloat ]
+  dtypes = [ xm::SFloat, xm::DFloat ]
 
   data =  shapes.map.with_index {|shape, i|
             dtypes.map do |dtype|

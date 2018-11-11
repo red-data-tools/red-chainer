@@ -2,11 +2,11 @@ class Chainer::Functions::Pooling::AveragePooling2DTest < Test::Unit::TestCase
   data(
     test1: {
       case: {
-        x: Numo::SFloat.new(1, 3, 4, 6).seq,
+        x: xm::SFloat.new(1, 3, 4, 6).seq,
         ksize: 2,
         options: {}
       },
-      expected: Numo::SFloat[[[[ 3.5,  5.5,  7.5],
+      expected: xm::SFloat[[[[ 3.5,  5.5,  7.5],
                                [15.5, 17.5, 19.5]],
                               [[27.5, 29.5, 31.5],
                                [39.5, 41.5, 43.5]],
@@ -15,11 +15,11 @@ class Chainer::Functions::Pooling::AveragePooling2DTest < Test::Unit::TestCase
     },
     test2: {
       case: {
-        x: Numo::SFloat.new(1, 3, 4, 4).seq,
+        x: xm::SFloat.new(1, 3, 4, 4).seq,
         ksize: 2,
         options: { stride: 2 }
       },
-      expected: Numo::SFloat[[[[ 2.5,  4.5],
+      expected: xm::SFloat[[[[ 2.5,  4.5],
                                [10.5, 12.5]],
                               [[18.5, 20.5],
                                [26.5, 28.5]],
@@ -28,11 +28,11 @@ class Chainer::Functions::Pooling::AveragePooling2DTest < Test::Unit::TestCase
     },
     test3: {
       case: {
-        x: Numo::SFloat.new(1, 3, 4, 4).seq,
+        x: xm::SFloat.new(1, 3, 4, 4).seq,
         ksize: 4,
         options: { stride: 2, pad: 1 }
       },
-      expected: Numo::SFloat[[[[ 2.8125,  3.375 ],
+      expected: xm::SFloat[[[[ 2.8125,  3.375 ],
                                [ 5.0625,  5.625 ]],
                               [[11.8125, 12.375 ],
                                [14.0625, 14.625 ]],
@@ -49,14 +49,14 @@ class Chainer::Functions::Pooling::AveragePooling2DTest < Test::Unit::TestCase
   data({
     test1: {
       case: {
-        x: Numo::SFloat.new(2, 3, 2, 2).seq,
-        gy: [Numo::SFloat.new(2, 3, 1, 1).seq],
+        x: xm::SFloat.new(2, 3, 2, 2).seq,
+        gy: [xm::SFloat.new(2, 3, 1, 1).seq],
         ksize: 2,
         stride: 2,
         pad: 0,
         cover_all: false
       },
-      expected: Numo::SFloat[[[[0.0 , 0.0  ],
+      expected: xm::SFloat[[[[0.0 , 0.0  ],
                                [0.0 , 0.0  ]],
                               [[0.25, 0.25],
                                [0.25, 0.25]],
@@ -71,14 +71,14 @@ class Chainer::Functions::Pooling::AveragePooling2DTest < Test::Unit::TestCase
     },
     test2: {
       case: {
-        x: Numo::SFloat.new(2, 2, 4, 4).seq,
-        gy: [Numo::SFloat.new(2, 3 ,1, 1).seq],
+        x: xm::SFloat.new(2, 2, 4, 4).seq,
+        gy: [xm::SFloat.new(2, 3 ,1, 1).seq],
         ksize: 6,
         stride: 8,
         pad: 1,
         cover_all: false
       },
-      expected: Numo::SFloat[[[[0.0      , 0.0      , 0.0      , 0.0     ],
+      expected: xm::SFloat[[[[0.0      , 0.0      , 0.0      , 0.0     ],
                                [0.0      , 0.0      , 0.0      , 0.0     ],
                                [0.0      , 0.0      , 0.0      , 0.0     ],
                                [0.0      , 0.0      , 0.0      , 0.0     ]],

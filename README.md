@@ -40,6 +40,24 @@ $ bundle exec ruby examples/mnist/mnist.rb
 $ ruby examples/mnist/mnist.rb
 ```
 
+## Development
+
+### Run tests
+
+```
+$ bundle exec ruby test/run_test.rb
+```
+
+### Run tests with Cumo
+
+On GPU machine, add `gem 'cumo'` on Gemfile and do `bundle install`.
+
+Run tests with `RED_CHAINER_GPU` environment variable whose value indicates GPU device ID such as:
+
+```
+$ bundle exec env RED_CHAINER_GPU=0 ruby test/run_test.rb
+```
+
 ## License
 
 The MIT license. See [LICENSE.txt](./LICENSE.txt) for details.

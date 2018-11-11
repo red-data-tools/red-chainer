@@ -3,9 +3,11 @@
 require 'chainer/functions/array/reshape'
 
 class Chainer::Functions::Array::ReshapeTest < Test::Unit::TestCase
+  xm = Chainer.get_default_device.xm
+
   in_shape = [4, 3, 2]
   out_shape = [2, 2, 6]
-  dtypes = [ Numo::SFloat, Numo::DFloat ]
+  dtypes = [ xm::SFloat, xm::DFloat ]
 
   data = dtypes.reduce({}) {|hash, dtype|
     hash[dtype.to_s] = {in_shape: in_shape, out_shape: out_shape, dtype: dtype}

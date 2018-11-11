@@ -18,6 +18,10 @@ class TestDevice < Test::Unit::TestCase
   end
 
   class TestGpuDevice < Test::Unit::TestCase
+    def setup
+      require_gpu
+    end
+
     def test_xm
       assert Chainer::GpuDevice.new.xm == Cumo
     end
@@ -35,16 +39,22 @@ class TestDevice < Test::Unit::TestCase
       begin
         Chainer::GpuDevice.new(0).use
         assert Cumo::CUDA::Runtime.cudaGetDevice == 0
-
-        if Chainer::CUDA.available?(1)
-          Chainer::GpuDevice.new(1).use
-          assert Cumo::CUDA::Runtime.cudaGetDevice == 1
-        end
       ensure
         Cumo::CUDA::Runtime.cudaSetDevice(orig_device_id)
       end
     end
-  end if Chainer::CUDA.available?
+
+    def test_use_1
+      require_gpu(1)
+      orig_device_id = Cumo::CUDA::Runtime.cudaGetDevice
+      begin
+        Chainer::GpuDevice.new(1).use
+        assert Cumo::CUDA::Runtime.cudaGetDevice == 1
+      ensure
+        Cumo::CUDA::Runtime.cudaSetDevice(orig_device_id)
+      end
+    end
+  end
 
   class TestGetDevice < Test::Unit::TestCase
     def test_device
@@ -57,8 +67,9 @@ class TestDevice < Test::Unit::TestCase
     end
 
     def test_non_negative_integer
+      require_gpu
       assert Chainer.get_device(0) == Chainer::GpuDevice.new(0)
-    end if Chainer::CUDA.available?
+    end
   end
 
   def test_set_get_default_device
