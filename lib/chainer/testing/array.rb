@@ -22,7 +22,7 @@ module Chainer
       end
 
       actual.each_with_index{|actual_val, *i|
-        if (expect[*i].to_f - actual_val.to_f).abs > atol + rtol * expect[*i].abs
+        if (expect[*i].to_f - actual_val.to_f).abs > atol + rtol * expect[*i].to_f.abs
           raise "assert_allclose Error\n  expect: #{expect.inspect}\n  actual : #{actual.inspect}\n    (#{i})=> #{(expect - actual).abs.max()} > #{atol + rtol * expect[*i].abs}"
         end
       }

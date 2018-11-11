@@ -32,7 +32,7 @@ module Chainer
 
     tmp.each do |x, gx|
       x.each_with_index{|xx, *i|
-        orig = x[*i]   # hold original value
+        orig = x[*i].to_f   # hold original value
         x[*i] = orig + eps
         ys1 = _copy_arrays(f.call(x))
         x[*i] = orig - eps
