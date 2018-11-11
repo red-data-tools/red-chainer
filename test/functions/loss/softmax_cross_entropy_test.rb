@@ -69,7 +69,7 @@ class TestSoftmaxCrossEntropy < Test::Unit::TestCase
     t = @t.flatten.dup
     xm = Chainer.get_array_module(x)
 
-    (0...x.shape[0]).map{|i|[x[i, false], t[i]]}.each do |xi, ti|
+    (0...x.shape[0]).map{|i|[x[i, false], t[i].to_i]}.each do |xi, ti|
       if ti == -1
         next
       end
@@ -211,7 +211,7 @@ class TestElementwiseSoftmaxCrossEntropy < Test::Unit::TestCase
     l = loss_value.flatten.dup
     xm = Chainer.get_array_module(x)
 
-    (0...x.shape[0]).map{|i|[x[i, false], t[i], l[i]]}.each do |xi, ti, li|
+    (0...x.shape[0]).map{|i|[x[i, false], t[i].to_i, l[i]]}.each do |xi, ti, li|
       if ti == -1
         next
       end

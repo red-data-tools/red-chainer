@@ -90,7 +90,7 @@ module Chainer
             if @class_weight
               shape = x.ndim.times.map { |d| d == 1 ? true : 1 }
               c = Chainer::Utils::Array.broadcast_to(@class_weight.reshape(*shape), x.shape)
-              c = c.class.cast(t.class.new(t.shape[0]).seq.to_a.zip(t.class.maximum(t, 0).to_a).map{|v| c[*v]})
+              c = c[t.class.new(t.shape[0]).seq, t.class.maximum(t, 0)].diagonal.dup
               gx *= Chainer::Utils::Array.broadcast_to(c.expand_dims(1), gx.shape)
             end
 
@@ -114,7 +114,7 @@ module Chainer
               shape = x.ndim.times.map{|d| d == 1 ? true : 1}
               c = Chainer::Utils::Array.broadcast_to(@class_weight.reshape(*shape), x.shape)
               c = c.reshape(*gx.shape)
-              c = c.class.cast(fst_index.to_a.zip(t.class.maximum(t.flatten.dup, 0).to_a, trd_index.to_a).map{|v| c[*v]})
+              c = c[fst_index, t.class.maximum(t.flatten.dup, 0), trd_index].diagonal.diagonal.dup
               c = c.reshape(y.shape[0], 1, true)
               gx *= Chainer::Utils::Array.broadcast_to(c, gx.shape)
             end
