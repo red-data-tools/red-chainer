@@ -23,7 +23,7 @@ class Chainer::Functions::Activation::LogSoftmaxTest < Test::Unit::TestCase
       value = -1000
       @x = @dtype.cast([[value, 1]])
     else
-      @dtype.srand(1) # To avoid false of "nearly_eq().all?", Use fixed seed value.
+      @dtype.srand(1) # To avoid false of "assert_allclose", Use fixed seed value.
       @x = @dtype.new(@shape).rand(2) - 1
     end
     @gy = @dtype.new(@x.shape).rand(2) - 1
@@ -39,7 +39,7 @@ class Chainer::Functions::Activation::LogSoftmaxTest < Test::Unit::TestCase
     xm = Chainer.get_array_module(@x)
     log_z = xm::NMath.log(xm::NMath.exp(@x).sum(axis:1, keepdims:true))
     y_expect = @x - log_z
-    assert_true(y.data.nearly_eq(y_expect).all?)
+    Chainer::Testing.assert_allclose(y.data, y_expect)
   end
 
   data(data)
