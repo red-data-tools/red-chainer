@@ -51,7 +51,9 @@ puts
 
 device = Chainer.get_device(args[:gpu])
 Chainer.set_default_device(device)
-model = Chainer::Links::Model::Classifier.new(MLP.new(args[:unit], 10))
+
+lossfun = -> (x, t) { Chainer::Functions::Loss::SoftmaxCrossEntropy.new(ignore_label: nil).(x, t) }
+model = Chainer::Links::Model::Classifier.new(MLP.new(args[:unit], 10), lossfun)
 
 optimizer = Chainer::Optimizers::Adam.new
 optimizer.setup(model)
