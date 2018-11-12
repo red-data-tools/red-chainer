@@ -42,7 +42,7 @@ module Chainer
 
           indexes = @indexes.flatten
           xm = Chainer.get_array_module(x, gy)
-          indexes += xm::Int64.new((indexes.size * kh * kw) / (kh * kw)).seq(0, kh * kw)
+          indexes += indexes.class.new((indexes.size * kh * kw) / (kh * kw)).seq(0, kh * kw)
          
           gcol[indexes] = gy[0].flatten.dup
           gcol = gcol.reshape(n, c, out_h, out_w, kh, kw)

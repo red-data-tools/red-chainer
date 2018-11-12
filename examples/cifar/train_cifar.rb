@@ -9,6 +9,7 @@ args = {
   batchsize: 64,
   learnrate: 0.05,
   epoch: 300,
+  gpu: -1,
   out: 'result',
   resume: nil,
   model: 'vgg',
@@ -21,10 +22,20 @@ opt.on('-b', '--batchsize VALUE', "Number of images in each mini-batch (default:
 opt.on('-f', '--frequency VALUE', "Frequency of taking a snapshot (default: #{args[:frequency]})") { |v| args[:frequency] = v.to_i }
 opt.on('-l', '--learnrate VALUE', "Learning rate for SGD (default: #{args[:learnrate]})") { |v| args[:learnrate] = v.to_f } 
 opt.on('-e', '--epoch VALUE', "Number of sweeps over the dataset to train (default: #{args[:epoch]})") { |v| args[:epoch] = v.to_i }
+opt.on('-g', '--gpu VALUE', "GPU ID (negative value indicates CPU) (default: #{args[:gpu]})") { |v| args[:gpu] = v.to_i }
 opt.on('-o', '--out VALUE', "Directory to output the result (default: #{args[:out]})") { |v| args[:out] = v }
 opt.on('-r', '--resume VALUE', "Resume the training from snapshot") { |v| args[:resume] = v }
 opt.on('-m', '--model VALUE', "Use model") { |v| args[:model] = v }
 opt.parse!(ARGV)
+
+puts "GPU: #{args[:gpu]}"
+puts "# unit: #{args[:unit]}"
+puts "# Minibatch-size: #{args[:batchsize]}"
+puts "# epoch: #{args[:epoch]}"
+puts
+
+device = Chainer.get_device(args[:gpu])
+Chainer.set_default_device(device)
 
 # Set up a neural network to train.
 # Classifier reports softmax cross entropy loss and accuracy at every
@@ -57,10 +68,10 @@ optimizer.setup(model)
 train_iter = Chainer::Iterators::SerialIterator.new(train, args[:batchsize])
 test_iter = Chainer::Iterators::SerialIterator.new(test, args[:batchsize], repeat: false, shuffle: false)
 
-updater = Chainer::Training::StandardUpdater.new(train_iter, optimizer, device: -1)
+updater = Chainer::Training::StandardUpdater.new(train_iter, optimizer, device: device)
 trainer = Chainer::Training::Trainer.new(updater, stop_trigger: [args[:epoch], 'epoch'], out: args[:out])
 
-trainer.extend(Chainer::Training::Extensions::Evaluator.new(test_iter, model, device: -1))
+trainer.extend(Chainer::Training::Extensions::Evaluator.new(test_iter, model, device: device))
 
 trainer.extend(Chainer::Training::Extensions::ExponentialShift.new('lr', 0.5), trigger: [25, 'epoch'])
 
