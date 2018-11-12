@@ -25,6 +25,10 @@ class IrisChain < Chainer::Chain
   end
 end
 
+device = Chainer.get_device(Integer(ENV['RED_CHAINER_GPU'] || -1))
+Chainer.set_default_device(device)
+xm = device.xm
+
 model = IrisChain.new(6,3)
 
 optimizer = Chainer::Optimizers::Adam.new
@@ -46,7 +50,7 @@ y = y_class.map{|s|
 }
 
 # y_onehot => One-hot [[1.0, 0.0, 0.0], [1.0, 0.0, 0.0],,, [0.0, 1.0, 0.0], ,, [0.0, 0.0, 1.0]]
-y_onehot = Numo::SFloat.eye(class_name.size)[y,false]
+y_onehot = xm::SFloat.eye(class_name.size)[y, false]
 
 puts "Iris Datasets"
 puts "No. [sepal_length, sepal_width, petal_length, petal_width] one-hot #=> class"
@@ -57,9 +61,9 @@ x.each_with_index{|r, i|
 # [7.0, 3.2, 4.7, 1.4, "Iris-versicolor"] => 50 data
 # [6.3, 3.3, 6.0, 2.5, "Iris-virginica"]  => 50 data
 
-x = Numo::SFloat.cast(x)
-y = Numo::SFloat.cast(y)
-y_onehot = Numo::SFloat.cast(y_onehot)
+x = xm::SFloat.cast(x)
+y = xm::SFloat.cast(y)
+y_onehot = xm::SFloat.cast(y_onehot)
 
 x_train = x[(1..-1).step(2), true]        #=> 75 data (Iris-setosa : 25, Iris-versicolor : 25, Iris-virginica : 25)
 y_train = y_onehot[(1..-1).step(2), true] #=> 75 data (Iris-setosa : 25, Iris-versicolor : 25, Iris-virginica : 25)
