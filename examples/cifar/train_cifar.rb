@@ -9,7 +9,7 @@ args = {
   batchsize: 64,
   learnrate: 0.05,
   epoch: 300,
-  gpu: -1,
+  gpu: Integer(ENV['RED_CHAINER_GPU'] || -1),
   out: 'result',
   resume: nil,
   model: 'vgg',

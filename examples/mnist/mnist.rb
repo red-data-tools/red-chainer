@@ -27,7 +27,7 @@ args = {
   batchsize: 100,
   frequency: -1,
   epoch: 20,
-  gpu: -1,
+  gpu: Integer(ENV['RED_CHAINER_GPU'] || -1),
   resume: nil,
   unit: 1000,
   out: 'result'
