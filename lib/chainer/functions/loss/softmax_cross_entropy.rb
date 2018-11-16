@@ -85,6 +85,7 @@ module Chainer
 
           if y.ndim == 2
             gx = y
+            # TODO(sonots): Avoid to_a especially in Cumo to improve performance
             t.class.new(t.shape[0]).seq(0).to_a.zip(t.class.maximum(t, 0).to_a).each{|v| gx[*v] -= 1}
 
             if @class_weight
@@ -109,6 +110,7 @@ module Chainer
             gx = y.reshape(y.shape[0], y.shape[1], true)
             fst_index = xm::Int32.new(t.size).seq(0) / n_unit
             trd_index = xm::Int32.new(t.size).seq(0) % n_unit
+            # TODO(sonots): Avoid to_a especially in Cumo to improve performance
             fst_index.to_a.zip(t.class.maximum(t.flatten.dup, 0).to_a, trd_index.to_a).each{|v| gx[*v] -= 1}
             if @class_weight
               shape = x.ndim.times.map{|d| d == 1 ? true : 1}
