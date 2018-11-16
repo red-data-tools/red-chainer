@@ -12,13 +12,13 @@ module Chainer
 
         def forward(inputs)
           y, t = inputs
+          xm = Chainer.get_array_module(*inputs)
           if @ignore_label
             mask = t.eq(@ignore_label)
             ignore_cnt = mask.count
 
-            # this work
-            pred = y.max_index(axis: 1).to_a.map.with_index { |val, idx| val - y.shape[1] * idx}
-            pred = y.class[*pred].reshape(*t.shape)
+            pred = y.max_index(axis: 1) - xm::Int32.new(y.shape[0]).seq(0, y.shape[1])
+            pred = pred.reshape(*t.shape)
             pred[mask] = @ignore_label
             count = pred.eq(t).count - ignore_cnt
 
@@ -30,8 +30,8 @@ module Chainer
               [y.class.cast(count.to_f / total)]
             end
           else
-            pred = y.max_index(axis: 1).to_a.map.with_index { |val, idx| val - y.shape[1] * idx}
-            pred = y.class[*pred].reshape(*t.shape)
+            pred = y.max_index(axis: 1) - xm::Int32.new(y.shape[0]).seq(0, y.shape[1])
+            pred = pred.reshape(*t.shape)
 
             [y.class.cast(y.class[pred.eq(t)].mean)]
           end
