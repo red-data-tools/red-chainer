@@ -15,7 +15,7 @@ class Chainer::Training::Extensions::ExponentialShiftTest < Test::Unit::TestCase
     model = Chainer::Links::Model::Classifier.new(1)
     optimizer = Chainer::Optimizers::MomentumSGD.new
     optimizer.setup(model)
-    train_iter = Chainer::Iterators::SerialIterator.new(Numo::DFloat[1, 2, 3], 1)
+    train_iter = Chainer::Iterators::SerialIterator.new(xm::DFloat[1, 2, 3], 1)
     updater = Chainer::Training::StandardUpdater.new(train_iter, optimizer)
     trainer = Chainer::Training::Trainer.new(updater)
     extension = Chainer::Training::Extensions::ExponentialShift.new("lr", data[:case][:rate], **data[:case][:options])

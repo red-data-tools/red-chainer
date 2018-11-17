@@ -18,7 +18,7 @@ class Chainer::Functions::Array::BroadcastToTest < Test::Unit::TestCase
     }
   ]
 
-  dtypes = [ Numo::SFloat, Numo::DFloat ]
+  dtypes = [ xm::SFloat, xm::DFloat ]
 
   data =  shapes.map.with_index {|shape, i|
             dtypes.map do |dtype|
@@ -27,7 +27,7 @@ class Chainer::Functions::Array::BroadcastToTest < Test::Unit::TestCase
           }.flatten(1).to_h
 
   data(data)
-  def test_forward_cpu(data)
+  def test_forward(data)
     in_data = data[:dtype].new(data[:in_shape]).rand
     x = Chainer::Variable.new(in_data)
     bx = Chainer::Functions::Array::BroadcastTo.broadcast_to(x, data[:out_shape])
@@ -36,12 +36,12 @@ class Chainer::Functions::Array::BroadcastToTest < Test::Unit::TestCase
   end
 
   data(data)
-  def test_backward_cpu(data)
+  def test_backward(data)
     in_data = data[:dtype].new(data[:in_shape]).rand
     grads = data[:dtype].new(data[:out_shape]).rand
     check_backward_options = {}
-    if data[:dtype] == Numo::SFloat
-        check_backward_options = { eps: 2 ** -5, atol: 1e-3, rtol: 1e-2 }
+    if data[:dtype] == xm::SFloat
+      check_backward_options = { eps: 2 ** -5, atol: 1e-3, rtol: 1e-2 }
     end
 
     func = Chainer::Functions::Array::BroadcastTo.new(data[:out_shape])

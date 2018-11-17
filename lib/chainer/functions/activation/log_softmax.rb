@@ -2,11 +2,12 @@ module Chainer
   module Functions
     module Activation
       def self.logsumexp(x)
+        xm = Chainer.get_array_module(x)
         m = x.max(axis: 1, keepdims: true)
         y = x - m
-        y = Numo::NMath.exp(y)
+        y = xm::NMath.exp(y)
         s = y.sum(axis: 1, keepdims: true)
-        s = Numo::NMath.log(s)
+        s = xm::NMath.log(s)
         m + s
       end
 
@@ -36,7 +37,7 @@ module Chainer
         #   because +softmax(x)+ may returns +0+.
         #   +log_softmax+ method is more stable.
         #
-        # @param [Chainer::Variable or Numo::NArray] x Input variable. A $n$-dimensional ($n \\geq 2$) float array.
+        # @param [Chainer::Variable or Numo::NArray or Cumo::NArray] x Input variable. A $n$-dimensional ($n \\geq 2$) float array.
         # @return [Chainer::Variable] Output variable. A $n$-dimensional ($n \\geq 2$) float array, which is the same shape with x.
         #
         # @see Chainer::Functions::Softmax
@@ -70,7 +71,8 @@ module Chainer
 
         def backward(x, gy)
           y = @output_data[0]
-          gx = gy[0] - Numo::NMath.exp(y) * gy[0].sum(axis: 1, keepdims: true)
+          xm = Chainer.get_array_module(y)
+          gx = gy[0] - xm::NMath.exp(y) * gy[0].sum(axis: 1, keepdims: true)
           [gx]
         end
       end

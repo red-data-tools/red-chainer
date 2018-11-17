@@ -3,9 +3,11 @@
 require 'chainer/functions/array/reshape'
 
 class Chainer::Functions::Array::ReshapeTest < Test::Unit::TestCase
+  xm = Chainer::Device.default.xm
+
   in_shape = [4, 3, 2]
   out_shape = [2, 2, 6]
-  dtypes = [ Numo::SFloat, Numo::DFloat ]
+  dtypes = [ xm::SFloat, xm::DFloat ]
 
   data = dtypes.reduce({}) {|hash, dtype|
     hash[dtype.to_s] = {in_shape: in_shape, out_shape: out_shape, dtype: dtype}
@@ -13,7 +15,7 @@ class Chainer::Functions::Array::ReshapeTest < Test::Unit::TestCase
          }
 
   data(data)
-  def test_forward_cpu(data)
+  def test_forward(data)
     shape = data[:out_shape]
     in_data = data[:dtype].new(data[:in_shape]).rand(-1, 1)
     x = Chainer::Variable.new(in_data)
@@ -23,7 +25,7 @@ class Chainer::Functions::Array::ReshapeTest < Test::Unit::TestCase
   end
 
   data(data)
-  def test_backward_cpu(data)
+  def test_backward(data)
     in_data = data[:dtype].new(data[:in_shape]).rand(-1, 1)
     x = Chainer::Variable.new(in_data)
     y = Chainer::Functions::Array::Reshape.reshape(x, data[:out_shape])

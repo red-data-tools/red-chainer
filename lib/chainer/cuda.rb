@@ -1,18 +1,40 @@
-module Chainer
-  # Gets an appropriate one from +Numo::NArray+ or +Cumo::NArray+.
-  #
-  # This is almost equivalent to +Chainer::get_array_module+. The differences
-  # are that this function can be used even if CUDA is not available and that
-  # it will return their data arrays' array module for
-  # +Chainer::Variable+ arguments.
-  #
-  # @param [Array<Chainer::Variable> or Array<Numo::NArray> or Array<Cumo::NArray>] args Values to determine whether Numo or Cumo should be used.
-  # @return [Numo::NArray] +Cumo::NArray+ or +Numo::NArray+ is returned based on the types of
-  #   the arguments.
-  # @todo CUDA is not supported, yet.
-  #
-  def get_array_module(*args)
-    return Numo::NArray
+begin
+  require 'cumo'
+  $chainer_cuda_available = true
+rescue LoadError => e
+  $chainer_cuda_available = false
+  # A trick to make Cumo::NArray always exists
+  module Cumo
+    class NArray; end
+    class NMath; end
+    class Bit; end
   end
-  module_function :get_array_module
+end
+
+module Chainer
+  module CUDA
+    # Returns whether CUDA is available.
+    #
+    # @param [Integer or nil] id If a non negative integer is given, check availability of GPU ID.
+    # @return [Boolean]
+    def available?(id = nil)
+      return false unless $chainer_cuda_available
+      if id
+        raise 'id must be non negative' if id < 0
+        @device_count ||= Cumo::CUDA::Runtime.cudaGetDeviceCount
+        return @device_count > id
+      end
+      true
+    end
+    module_function :available?
+
+    # Checks if CUDA is available.
+    #
+    # @param [Integer or nil] id If a non negative integer is given, check availability of GPU ID.
+    # @raise [RuntimeError] if not available
+    def check_available(id = nil)
+      raise 'CUDA is not available' unless available?(id)
+    end
+    module_function :check_available
+  end
 end

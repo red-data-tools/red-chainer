@@ -55,11 +55,19 @@ module Chainer
     end
 
     def update_core(param)
-      # TODO: support GPU
-      update_core_cpu(param)
+      xm = Chainer.get_array_module(param)
+      if xm == Cumo
+        update_core_gpu(param)
+      else
+        update_core_cpu(param)
+      end
     end
 
     def update_core_cpu
+      raise NotImplementedError
+    end
+
+    def update_core_gpu
       raise NotImplementedError
     end
 
@@ -81,7 +89,9 @@ module Chainer
           # try to initialize the state to retrieve state entries
           @state = {}
           self_copy = self.dup
-          arr = Numo::SFloat.new(1)
+          # TODO(sonots): pass device from outside
+          xm = Chainer::Device.default.xm
+          arr = xm::SFloat.new(1)
           self_copy.init_state(Chainer::Variable.new(arr, grad: arr))
           @state.keys.each do |key|
             @state[key] = serializer.(key.to_s, nil)
@@ -101,7 +111,7 @@ module Chainer
         @state = {}
         init_state(param)
       end
-      @state.select! { |_, v| v.kind_of?(Numo::NArray) }
+      @state.select! { |_, v| Chainer.array?(v) }
     end
   end
 

@@ -4,10 +4,10 @@ require 'chainer/functions/activation/relu'
 
 class Chainer::Functions::Activation::ReLUTest < Test::Unit::TestCase
   data = {
-    'test1' => {shape: [3, 2], dtype: Numo::SFloat},
-    'test2' => {shape: [], dtype: Numo::SFloat},
-    'test3' => {shape: [3, 2], dtype: Numo::DFloat},
-    'test4' => {shape: [], dtype: Numo::DFloat}}
+    'test1' => {shape: [3, 2], dtype: xm::SFloat},
+    'test2' => {shape: [], dtype: xm::SFloat},
+    'test3' => {shape: [3, 2], dtype: xm::DFloat},
+    'test4' => {shape: [], dtype: xm::DFloat}}
 
   def _setup(data)
     # Avoid unstability of numerical grad
@@ -45,7 +45,7 @@ class Chainer::Functions::Activation::ReLUTest < Test::Unit::TestCase
   end
 
   data(data)
-  def test_forward_cpu(data)
+  def test_forward(data)
     _setup(data)
     check_forward(@x.dup)
   end
@@ -55,7 +55,7 @@ class Chainer::Functions::Activation::ReLUTest < Test::Unit::TestCase
   end
 
   data(data)
-  def test_backward_cpu(data)
+  def test_backward(data)
     _setup(data)
     check_backward(@x.dup, @gy.dup)
   end

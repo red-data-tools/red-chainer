@@ -55,16 +55,37 @@ module Chainer
     end
 
     def forward(inputs)
-      # TODO: GPU branch processing
-      forward_cpu(inputs)
+      xm = Chainer.get_array_module(*inputs)
+      if xm == Cumo
+        forward_gpu(inputs)
+      else
+        forward_cpu(inputs)
+      end
     end
 
     def forward_cpu(inputs)
       raise NotImplementedError
     end
 
+    def forward_gpu(inputs)
+      raise NotImplementedError
+    end
+
     def backward(inputs, grad_outputs)
-      backward_cpu(inputs, grad_outputs)
+      xm = Chainer.get_array_module(*(inputs + grad_outputs))
+      if xm == Cumo
+        backward_gpu(inputs, grad_outputs)
+      else
+        backward_cpu(inputs, grad_outputs)
+      end
+    end
+
+    def backward_cpu(inputs, grad_outputs)
+      return [nil] * inputs.size
+    end
+
+    def backward_gpu(inputs, grad_outputs)
+      return [nil] * inputs.size
     end
 
     def retain_inputs(indexes)

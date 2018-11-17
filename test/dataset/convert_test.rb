@@ -23,8 +23,8 @@ class TestConcatExamples < Test::Unit::TestCase
     end
   end
 
-  def test_concat_arrays_cpu()
-    arrays = get_arrays_to_concat(Numo)
+  def test_concat_arrays()
+    arrays = get_arrays_to_concat(xm)
     check_concat_arrays(arrays)
   end
 
@@ -45,8 +45,8 @@ class TestConcatExamples < Test::Unit::TestCase
     end
   end
 
-  def test_concat_tuples_cpu()
-    tuples = get_tuple_arrays_to_concat(Numo)
+  def test_concat_tuples()
+    tuples = get_tuple_arrays_to_concat(xm)
     check_concat_tuples(tuples)
   end
 end
@@ -68,8 +68,8 @@ class TestConcatExamplesWithPadding < Test::Unit::TestCase
     assert_true array[2, 0..-1, 3..-1].nearly_eq(0).all?
   end
 
-  def test_concat_arrays_padding_cpu()
-    check_concat_arrays_padding(Numo)
+  def test_concat_arrays_padding()
+    check_concat_arrays_padding(xm)
   end
 
   def check_concat_tuples_padding(xumo)
@@ -105,8 +105,8 @@ class TestConcatExamplesWithPadding < Test::Unit::TestCase
     assert_true arrays[1][2, 2..-1, 0..-1].nearly_eq(0).all?
   end
 
-  def test_concat_tuples_padding_cpu()
-    check_concat_tuples_padding(Numo)
+  def test_concat_tuples_padding()
+    check_concat_tuples_padding(xm)
   end
 end
 
@@ -119,30 +119,48 @@ class TestConcatExamplesWithBuiltInTypes < Test::Unit::TestCase
   @@float_arrays = [1.0, 2.0, 3.0]
 
   def check_device(array, device)
-    if device && device >= 0
-      # T.B.I (GPU Check)
+    if device.nil?
+      xm = Chainer::Device.default.xm
+      assert_true array.is_a?(xm::NArray)
+    elsif device >= 0
+      assert_true array.is_a?(Cumo::NArray)
     else
       assert_true array.is_a?(Numo::NArray)
     end
   end
 
-  def check_concat_arrays(arrays, device:, expected_type:)
+  def check_concat_arrays(arrays, device: nil)
     array = Chainer::Dataset::Convert.method(:concat_examples).call(arrays, device: device, padding: @padding)
     assert_equal([arrays.size], array.shape)
     check_device(array, device)
 
     array.to_a.zip(arrays.to_a).each do |x, y|
-      assert_true Numo::NArray.cast(y).nearly_eq(Numo::NArray.cast(x)).all?
+      assert_true xm::NArray.cast(y).nearly_eq(xm::NArray.cast(x)).all?
     end
+  end
+
+  data(data)
+  def test_concat_arrays(data)
+    @padding = data[:padding]
+
+    check_concat_arrays(@@int_arrays)
+    check_concat_arrays(@@float_arrays)
   end
 
   data(data)
   def test_concat_arrays_cpu(data)
     @padding = data[:padding]
 
-    [-1, nil].each do |device|
-      check_concat_arrays(@@int_arrays, device: device, expected_type: Numo::Int64)
-      check_concat_arrays(@@float_arrays, device: device, expected_type: Numo::DFloat)
-    end
+    check_concat_arrays(@@int_arrays, device: -1)
+    check_concat_arrays(@@float_arrays, device: -1)
+  end
+
+  data(data)
+  def test_concat_arrays_gpu(data)
+    require_gpu
+    @padding = data[:padding]
+
+    check_concat_arrays(@@int_arrays, device: 0)
+    check_concat_arrays(@@float_arrays, device: 0)
   end
 end

@@ -9,7 +9,7 @@ module Chainer
         # f(x)=\\tanh(x).
         # $$
         #
-        # @param [Chainer::Variable or Numo::NArray] x Input variable. A $(s_1, s_2, ..., s_N)$-shaped float array.
+        # @param [Chainer::Variable or Numo::NArray or Cumo::NArray] x Input variable. A $(s_1, s_2, ..., s_N)$-shaped float array.
         # @return [Chainer::Variable] Output variable. A $(s_1, s_2, ..., s_N)$-shaped float array.
         # @example
         #   > x = Numo::SFloat.new(3).seq(-1, 2)
@@ -24,14 +24,15 @@ module Chainer
           self.new.(x)
         end
 
-        def forward_cpu(x)
-          y = Utils::Array.force_array(Numo::NMath.tanh(x[0]))
+        def forward(x)
+          xm = Chainer.get_array_module(x[0])
+          y = Utils::Array.force_array(xm::NMath.tanh(x[0]))
           retain_inputs([])
           retain_outputs([0])
           return [y]
         end
 
-        def backward_cpu(x, gy)
+        def backward(x, gy)
           y = @output_data[0]
           one = y.class.cast(1)
           [Utils::Array.force_array(gy[0] * (one - y * y))]

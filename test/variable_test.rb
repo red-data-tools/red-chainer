@@ -6,11 +6,11 @@ class Constant < Chainer::Function
   def initialize(outputs)
     @outputs = outputs
   end
-  def forward_cpu(inputs)
+  def forward(inputs)
     return @outputs
   end
 
-  def backward_cpu(inputs, grad_outputs)
+  def backward(inputs, grad_outputs)
     return inputs.map{|_| _.new_zeros()}.to_a
   end
 end
@@ -21,22 +21,22 @@ end
 
 class Chainer::VariableTest < Test::Unit::TestCase
   data = {
-    'test1' => {x_shape: [10], c_shape: [2, 5], label: '(2, 5), Numo::SFloat'},
-    'test2' => {x_shape: [], c_shape: [1], label: '(1), Numo::SFloat'}}
+    'test1' => {x_shape: [10], c_shape: [2, 5], label: "(2, 5), #{xm}::SFloat"},
+    'test2' => {x_shape: [], c_shape: [1], label: "(1), #{xm}::SFloat"}}
 
   def _setup(data)
     @x_shape = data[:x_shape]
     @label = data[:label]
     @c_shape = data[:c_shape]
-    @x = Numo::SFloat.new(@x_shape).rand(2) - 1
-    @a = Numo::SFloat.new(@x_shape).rand(9.9) + 0.1
+    @x = xm::SFloat.new(@x_shape).rand(2) - 1
+    @a = xm::SFloat.new(@x_shape).rand(9.9) + 0.1
 
     if @x_shape.size != 0
-        @size = Numo::NArray.cast(@x_shape).prod().to_i
+        @size = xm::NArray.cast(@x_shape).prod().to_i
     else
         @size = 1
     end
-    @c = Numo::DFloat.new(@size).seq(0).reshape(*@c_shape).cast_to(Numo::SFloat)
+    @c = xm::DFloat.new(@size).seq(0).reshape(*@c_shape).cast_to(xm::SFloat)
   end
 
   def check_attributes(gpu)
@@ -50,7 +50,7 @@ class Chainer::VariableTest < Test::Unit::TestCase
   end
 
   data(data)
-  def test_attributes_cpu(data)
+  def test_attributes(data)
     _setup(data)
     check_attributes(false)
   end
@@ -65,7 +65,7 @@ class Chainer::VariableTest < Test::Unit::TestCase
   end
 
   data(data)
-  def test_len_cpu(data)
+  def test_len(data)
     _setup(data)
     check_len(false)
   end
@@ -76,7 +76,7 @@ class Chainer::VariableTest < Test::Unit::TestCase
   end
 
   data(data)
-  def test_label_cpu(data)
+  def test_label(data)
     _setup(data)
     check_label(@label, false)
   end
@@ -105,35 +105,35 @@ class Chainer::VariableTest < Test::Unit::TestCase
   end
 
   data(data)
-  def test_backward_cpu(data)
+  def test_backward(data)
     _setup(data)
     ret = create_linear_chain(2, false)
     check_backward([ret[0]], [ret[1]], [ret[2]], false)
   end
 
   def test_grad_type_check_pass()
-    a = Chainer::Variable.new(Numo::SFloat.new([3]))
-    a.grad = Numo::SFloat.new([3])
+    a = Chainer::Variable.new(xm::SFloat.new([3]))
+    a.grad = xm::SFloat.new([3])
   end
 
   def test_grad_type_check_type()
-    a = Chainer::Variable.new(Numo::SFloat.new([]))
+    a = Chainer::Variable.new(xm::SFloat.new([]))
     #assert_raise(TypeError) { ## No Error
-      a.grad = Numo::SFloat.new()
+      a.grad = xm::SFloat.new()
     #}
   end
 
   def test_grad_type_check_dtype()
-    a = Chainer::Variable.new(Numo::SFloat.new([3]))
+    a = Chainer::Variable.new(xm::SFloat.new([3]))
     assert_raise(TypeError) {
-      a.grad = Numo::DFloat.new([3])
+      a.grad = xm::DFloat.new([3])
     }
   end
 
   def test_grad_type_check_shape()
-    a = Chainer::Variable.new(Numo::SFloat.new([3]))
+    a = Chainer::Variable.new(xm::SFloat.new([3]))
     assert_raise(TypeError) {
-      a.grad = Numo::SFloat.new([2])
+      a.grad = xm::SFloat.new([2])
     }
   end
 end

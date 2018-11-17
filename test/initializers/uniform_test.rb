@@ -5,7 +5,7 @@ require 'chainer/initializers/uniform'
 class Chainer::Initializers::UniformTest < Test::Unit::TestCase
 
   shapes = [[2, 3], [2, 3, 4]]
-  dtypes = [ Numo::SFloat, Numo::DFloat ]
+  dtypes = [ xm::SFloat, xm::DFloat ]
 
   data =  shapes.map.with_index {|shape, i|
             dtypes.map do |dtype|
@@ -14,7 +14,7 @@ class Chainer::Initializers::UniformTest < Test::Unit::TestCase
           }.flatten(1).to_h
 
   data(data)
-  def test_initializer_cpu(data)
+  def test_initializer(data)
     w = data[:dtype].new(data[:shape])
     initializer = Chainer::Initializers::Uniform.new(scale: 0.1)
     w = initializer.(w)

@@ -8,15 +8,15 @@ module Chainer
         # This function computes mean squared error between two variables. The mean
         # is taken over the minibatch. Note that the error is not scaled by 1/2.
         #
-        # @param [Chainer::Variable or Numo::NArray] x0 Input variable.
-        # @param [Chainer::Variable or Numo::NArray] x1 Input variable.
+        # @param [Chainer::Variable or Numo::NArray or Cumo::NArray] x0 Input variable.
+        # @param [Chainer::Variable or Numo::NArray or Cumo::NArray] x1 Input variable.
         # @return [Chainer::Variable] A variable holding an array representing the mean squared error of two inputs.
         #
         def self.mean_squared_error(x0, x1)
           self.new.(x0, x1)
         end
 
-        def forward_cpu(inputs)
+        def forward(inputs)
           x0, x1 = inputs
           @diff = x0 - x1
           diff = @diff.flatten.dup()

@@ -14,8 +14,8 @@ module Chainer
         # @param [integer or 2-d int array] stride Stride of filter applications.
         # @param [integer or 2-d int array] pad Spatial padding width for input arrays.
         # @param [boolean] nobias If `true`, then this link does not use the bias term.
-        # @param [Numo::NArray] initialW Initial weight value. If `nil`, the default initializer is used.
-        # @param [Numo::NArray] initial_bias Initial bias value. If `nil`, the bias is set to 0.
+        # @param [Numo::NArray or Cumo::NArray] initial_w Initial weight value. If `nil`, the default initializer is used.
+        # @param [Numo::NArray or Cumo::NArray] initial_bias Initial bias value. If `nil`, the bias is set to 0.
         #
         # Example
         # There are several ways to make a Convolution2D link.
