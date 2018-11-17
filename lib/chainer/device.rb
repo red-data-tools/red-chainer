@@ -1,5 +1,44 @@
 module Chainer
-  class Device
+  module Device
+    # Creates device
+    #
+    # @param [Integer or Chainer::AbstractDevice] device_spec Device specifier.
+    #     Negative integer indicates CPU. 0 or positive integer indicates GPU.
+    #     If a device object is given, itself is returned.
+    # @return [Chainer::AbstractDevice] device object
+    def create(device_spec)
+      return device_spec if device_spec.kind_of?(AbstractDevice)
+      if device_spec.kind_of?(Integer)
+        return CpuDevice.new if device_spec < 0
+        return GpuDevice.new(device_spec)
+      end
+      raise "Invalid device_spec: #{device_spec}"
+    end
+    module_function :create
+
+    # Chainges default device
+    #
+    # @param [Object] device_spec
+    # @see Chainer::Device.create
+    def change_default(device_spec)
+      @default = create(device_spec)
+      @default.use
+    end
+    module_function :change_default
+
+    # Gets default device
+    #
+    # @return [Chainer::AbstractDevice] the default device.
+    def default
+      @default ||= CpuDevice.new
+    end
+    module_function :default
+
+    # TODO(sonots): Add get_device_from_array after Cumo provides an API
+    # to return GPU device ID from Cumo::NArray.
+  end
+
+  class AbstractDevice
     def xm
       raise NotImplementedError
     end
@@ -8,7 +47,7 @@ module Chainer
     end
   end
 
-  class CpuDevice < Device
+  class CpuDevice < AbstractDevice
     def xm
       Numo
     end
@@ -19,7 +58,7 @@ module Chainer
     end
   end
   
-  class GpuDevice < Device
+  class GpuDevice < AbstractDevice
     attr_reader :id
 
     # @param [Integer] id GPU Device ID. If not given, CUDA current device id is used.
@@ -46,41 +85,4 @@ module Chainer
       Cumo::CUDA::Runtime.cudaSetDevice(@id)
     end
   end
-
-  # Gets device
-  #
-  # @param [Integer or Chainer::Device] device_spec Device specifier.
-  #     Negative integer indicates CPU. 0 or positive integer indicates GPU.
-  #     If a device object is given, itself is returned.
-  # @return [Chainer::Device] device object
-  def get_device(device_spec)
-    return device_spec if device_spec.kind_of?(Device)
-    if device_spec.kind_of?(Integer)
-      return CpuDevice.new if device_spec < 0
-      return GpuDevice.new(device_spec)
-    end
-    raise "Invalid device_spec: #{device_spec}"
-  end
-  module_function :get_device
-
-  # Sets default device
-  #
-  # @param [Object] device_spec
-  # @see Chainer.set_device
-  def set_default_device(device_spec)
-    @default_device = Chainer.get_device(device_spec)
-    @default_device.use
-  end
-  module_function :set_default_device
-
-  # Gets default device
-  #
-  # @return [Chainer::Device] the default device.
-  def get_default_device
-    @default_device ||= CpuDevice.new
-  end
-  module_function :get_default_device
-
-  # TODO(sonots): Add get_device_from_array after Cumo provides an API
-  # to return GPU device ID from Cumo::NArray.
 end

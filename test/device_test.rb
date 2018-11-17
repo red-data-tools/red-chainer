@@ -56,30 +56,32 @@ class TestDevice < Test::Unit::TestCase
     end
   end
 
-  class TestGetDevice < Test::Unit::TestCase
+  class TestCreateDevice < Test::Unit::TestCase
     def test_device
       device = Chainer::CpuDevice.new
-      assert Chainer.get_device(device) === device
+      assert Chainer::Device.create(device) === device
     end
 
     def test_negative_integer
-      assert Chainer.get_device(-1) == Chainer::CpuDevice.new
+      assert Chainer::Device.create(-1) == Chainer::CpuDevice.new
     end
 
     def test_non_negative_integer
       require_gpu
-      assert Chainer.get_device(0) == Chainer::GpuDevice.new(0)
+      assert Chainer::Device.create(0) == Chainer::GpuDevice.new(0)
     end
   end
 
-  def test_set_get_default_device
-    orig_default_device = Chainer.get_default_device
+  def test_change_get_default
+    orig_default = Chainer::Device.default
     begin
       device = Chainer::CpuDevice.new
-      Chainer.set_default_device(device)
-      assert Chainer.get_default_device === device
+      Chainer::Device.change_default(device)
+      # Chainer::Device.set_default(device)
+      # Chainer::Device.default = device
+      assert Chainer::Device.default === device
     ensure
-      Chainer.set_default_device(orig_default_device)
+      Chainer::Device.change_default(orig_default)
     end
   end
 end
