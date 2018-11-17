@@ -8,6 +8,7 @@ module Chainer
 
       def self.concat_examples(batch, device: nil, padding: nil)
         raise "batch is empty" if batch.size == 0
+        device = device ? Chainer.get_device(device) : Chainer.get_default_device # takes care of int and nil
         first_elem = batch[0]
 
         if first_elem.kind_of?(Array)
@@ -17,30 +18,29 @@ module Chainer
           end
 
           first_elem.size.times do |i|
-            x = concat_arrays(batch.map { |b| b[i] }, padding[i])
+            x = _concat_arrays(batch.map { |b| b[i] }, padding[i], device)
             result.push(to_device(device, x))
           end
 
           return result
         else
-          return to_device(device, concat_arrays(batch, padding))
+          return _concat_arrays(batch, padding, device)
         end
       end
 
-      def self.concat_arrays(arrays, padding)
-        # TODO(sonots): pass device from outside
-        xm = Chainer.get_default_device.xm
+      def self._concat_arrays(arrays, padding, device)
+        xm = device.xm
         unless arrays[0].kind_of?(xm::NArray)
           # [1, 2, 3, 4] => Numo::Int32[1, 2, 3, 4]
           arrays = xm::NArray.cast(arrays)
           if padding
-            return concat_arrays_with_padding(arrays, padding)
+            return _concat_arrays_with_padding(arrays, padding, device)
           end
           return arrays
         end
 
         if padding
-          return concat_arrays_with_padding(arrays, padding)
+          return _concat_arrays_with_padding(arrays, padding, device)
         end
 
         # [Numo::SFloat[1, 2], Numo::SFloat[3, 4]]
@@ -50,9 +50,8 @@ module Chainer
         a[0].concatenate(*a[1..-1])
       end
 
-      def self.concat_arrays_with_padding(arrays, padding)
-        # TODO(sonots): pass device from outside
-        xm = Chainer.get_default_device.xm
+      def self._concat_arrays_with_padding(arrays, padding, device)
+        xm = device.xm
         if Chainer.array?(arrays[0]) and arrays[0].ndim > 0
           xm = Chainer.get_array_module(arrays[0])
           shape = xm::Int32.cast(arrays[0].shape)
