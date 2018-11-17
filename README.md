@@ -31,6 +31,9 @@ $ gem install red-chainer
 ```
 
 ## Usage
+
+### Run MNIST example
+
 MNIST sample program is [here](./examples/mnist/mnist.rb)
 
 ```bash
@@ -38,6 +41,16 @@ MNIST sample program is [here](./examples/mnist/mnist.rb)
 $ bundle exec ruby examples/mnist/mnist.rb
 # when install yourself
 $ ruby examples/mnist/mnist.rb
+```
+
+### Run MNIST example with GPU
+
+On GPU machine, add `gem 'cumo'` on Gemfile and do `bundle install`.
+
+Run the example with `--gpu` option whose value indicates GPU device ID such as:
+
+```
+$ bundle exec ruby examples/mnist/mnist.rb --gpu 0
 ```
 
 ## Development
