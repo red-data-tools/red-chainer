@@ -72,4 +72,4 @@ The MIT license. See [LICENSE.txt](./LICENSE.txt) for details.
 |  [connection](https://github.com/red-data-tools/red-chainer/tree/master/lib/chainer/functions/connection)  |  12  | 2 | Linear, Convolution2D |
 |  [pooling](https://github.com/red-data-tools/red-chainer/tree/master/lib/chainer/functions/pooling)  |  14  | 3 | Pooling2D, MaxPooling2D, AveragePooling2D |
 |  [example](https://github.com/red-data-tools/red-chainer/tree/master/examples)  |  31  | 3 | MNIST, Iris, CIFAR |
-|  GPU  | use cupy  | ToDo | want to support [Cumo](https://github.com/sonots/cumo) |
+|  GPU  | use CuPy  | use [Cumo](https://github.com/sonots/cumo) ||
