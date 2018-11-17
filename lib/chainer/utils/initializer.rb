@@ -1,7 +1,7 @@
 module Chainer
   module Utils
     module Initializer
-      def self.get_fans(shape, device: Chainer.get_default_device)
+      def self.get_fans(shape, device: Chainer::Device.default)
         raise 'shape must be of length >= 2: shape={}' if shape.size < 2
         slice_arr = shape.slice(2, shape.size)
         receptive_field_size = slice_arr.empty? ? 1 : device.xm::Int32[slice_arr].prod

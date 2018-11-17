@@ -90,7 +90,7 @@ module Chainer
           @state = {}
           self_copy = self.dup
           # TODO(sonots): pass device from outside
-          xm = Chainer.get_default_device.xm
+          xm = Chainer::Device.default.xm
           arr = xm::SFloat.new(1)
           self_copy.init_state(Chainer::Variable.new(arr, grad: arr))
           @state.keys.each do |key|

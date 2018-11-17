@@ -3,7 +3,7 @@ module Chainer
     class SerialIterator < Chainer::Dataset::Iterator 
       attr_reader :epoch, :is_new_epoch
 
-      def initialize(dataset, batch_size, repeat: true, shuffle: true, device: Chainer.get_default_device)
+      def initialize(dataset, batch_size, repeat: true, shuffle: true, device: Chainer::Device.default)
         @dataset = dataset
         @batch_size = batch_size
         @repeat = repeat

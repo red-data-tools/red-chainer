@@ -13,7 +13,7 @@ module Chainer
         end
       end
 
-      def initialize(target: nil, path: "", device: Chainer.get_default_device)
+      def initialize(target: nil, path: "", device: Chainer::Device.default)
         @target = target.nil? ? {} : target
         @path = path
         @device = device

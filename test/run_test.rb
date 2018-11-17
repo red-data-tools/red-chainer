@@ -12,10 +12,10 @@ def require_gpu(id = nil)
 end
 
 def xm
-  Chainer.get_default_device.xm
+  Chainer::Device.default.xm
 end
 
-device = Chainer.get_device(Integer(ENV['RED_CHAINER_GPU'] || -1))
-Chainer.set_default_device(device)
+device = Chainer::Device.create(Integer(ENV['RED_CHAINER_GPU'] || -1))
+Chainer::Device.change_default(device)
 
 exit Test::Unit::AutoRunner.run(true, test_dir)

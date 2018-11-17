@@ -4,7 +4,7 @@ module Chainer
   module Datasets
     module MNIST
       def self.get_mnist(withlabel: true, ndim: 1, scale: 1.0, dtype: nil, label_dtype: nil)
-        xm = Chainer.get_default_device.xm
+        xm = Chainer::Device.default.xm
         dtype ||= xm::SFloat
         label_dtype ||= xm::Int32
 
@@ -40,7 +40,7 @@ module Chainer
       def self.retrieve_mnist(type:)
         train_table = ::Datasets::MNIST.new(type: type).to_table
 
-        xm = Chainer.get_default_device.xm
+        xm = Chainer::Device.default.xm
         { x: xm::UInt8[*train_table[:pixels]], y: xm::UInt8[*train_table[:label]] }
       end
     end

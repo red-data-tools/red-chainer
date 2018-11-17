@@ -3,7 +3,7 @@
 require 'chainer/functions/array/reshape'
 
 class Chainer::Functions::Array::ReshapeTest < Test::Unit::TestCase
-  xm = Chainer.get_default_device.xm
+  xm = Chainer::Device.default.xm
 
   in_shape = [4, 3, 2]
   out_shape = [2, 2, 6]

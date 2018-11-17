@@ -8,7 +8,7 @@ module Chainer
 
       def self.concat_examples(batch, device: nil, padding: nil)
         raise "batch is empty" if batch.size == 0
-        device = device ? Chainer.get_device(device) : Chainer.get_default_device # takes care of int and nil
+        device = device ? Chainer::Device.create(device) : Chainer::Device.default # takes care of int and nil
         first_elem = batch[0]
 
         if first_elem.kind_of?(Array)

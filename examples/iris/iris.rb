@@ -25,8 +25,8 @@ class IrisChain < Chainer::Chain
   end
 end
 
-device = Chainer.get_device(Integer(ENV['RED_CHAINER_GPU'] || -1))
-Chainer.set_default_device(device)
+device = Chainer::Device.create(Integer(ENV['RED_CHAINER_GPU'] || -1))
+Chainer::Device.change_default(device)
 xm = device.xm
 
 model = IrisChain.new(6,3)

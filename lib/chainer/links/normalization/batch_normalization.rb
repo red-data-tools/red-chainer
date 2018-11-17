@@ -25,7 +25,7 @@ module Chainer
         # @param [boolean] use_beta If `true`, use shifting parameter. Otherwise, use unit(0) which makes no effect.
         def initialize(size, decay: 0.9, eps: 2e-5, dtype: nil, use_gamma: true, use_beta: true, initial_gamma: nil, initial_beta: nil)
           super()
-          dtype ||= Chainer.get_default_device.xm::SFloat
+          dtype ||= Chainer::Device.default.xm::SFloat
           @avg_mean = dtype.zeros(size)
           register_persistent('avg_mean')
           @avg_var = dtype.zeros(size)

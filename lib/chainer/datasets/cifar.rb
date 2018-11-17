@@ -11,7 +11,7 @@ module Chainer
         get_cifar(100, with_label, ndim, scale)
       end
 
-      def self.get_cifar(n_classes, with_label, ndim, scale, device: Chainer.get_default_device)
+      def self.get_cifar(n_classes, with_label, ndim, scale, device: Chainer::Device.default)
         train_table = ::Datasets::CIFAR.new(n_classes: n_classes, type: :train).to_table
         test_table = ::Datasets::CIFAR.new(n_classes: n_classes, type: :test).to_table
 
@@ -32,7 +32,7 @@ module Chainer
         ]
       end
 
-      def self.preprocess_cifar(images, labels, withlabel, ndim, scale, device: Chainer.get_default_device)
+      def self.preprocess_cifar(images, labels, withlabel, ndim, scale, device: Chainer::Device.default)
         if ndim == 1
           images = images.reshape(images.shape[0], 3072)
         elsif ndim == 3

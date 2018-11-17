@@ -34,8 +34,8 @@ puts "# Minibatch-size: #{args[:batchsize]}"
 puts "# epoch: #{args[:epoch]}"
 puts
 
-device = Chainer.get_device(args[:gpu])
-Chainer.set_default_device(device)
+device = Chainer::Device.create(args[:gpu])
+Chainer::Device.change_default(device)
 
 # Set up a neural network to train.
 # Classifier reports softmax cross entropy loss and accuracy at every

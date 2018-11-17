@@ -49,8 +49,8 @@ puts "# Minibatch-size: #{args[:batchsize]}"
 puts "# epoch: #{args[:epoch]}"
 puts
 
-device = Chainer.get_device(args[:gpu])
-Chainer.set_default_device(device)
+device = Chainer::Device.create(args[:gpu])
+Chainer::Device.change_default(device)
 
 lossfun = -> (x, t) { Chainer::Functions::Loss::SoftmaxCrossEntropy.new(ignore_label: nil).(x, t) }
 model = Chainer::Links::Model::Classifier.new(MLP.new(args[:unit], 10), lossfun)

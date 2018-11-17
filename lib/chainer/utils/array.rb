@@ -4,7 +4,7 @@ module Chainer
       def self.force_array(x, dtype=nil)
         if x.is_a? Integer or x.is_a? Float
           if dtype.nil?
-            xm = Chainer.get_default_device.xm
+            xm = Chainer::Device.default.xm
             xm::NArray.cast(x)
           else
             dtype.cast(x.dup)
