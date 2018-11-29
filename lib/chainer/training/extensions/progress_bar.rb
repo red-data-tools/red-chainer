@@ -1,4 +1,5 @@
 require 'erb'
+require 'time'
 
 module Chainer
   module Training
