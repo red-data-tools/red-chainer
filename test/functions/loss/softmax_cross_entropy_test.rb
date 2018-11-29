@@ -341,3 +341,34 @@ class TestNonDefaultIgnoreLabel < Test::Unit::TestCase
     check_backward(xm::NArray)
   end
 end
+
+class TestNilIgnoreLabel < Test::Unit::TestCase
+  def setup
+    @reduce       = 'no'
+    @class_weight = nil
+    @ignore_label = nil
+    @x = xm::SFloat.ones([2, 3]) * 10
+    @t = xm::Int32.new([2]).fill(-1)
+    @gy = xm::SFloat.ones([2])
+  end
+
+  def check_forward
+    loss = Chainer::Functions::Loss::SoftmaxCrossEntropy.softmax_cross_entropy(@x, @t, reduce: @reduce, class_weight: @class_weight, ignore_label: @ignore_label)
+
+    expect = xm::SFloat[1.09861, 1.09861]
+    Chainer::Testing.assert_allclose(expect, loss.data)
+  end
+
+  def test_forward
+    check_forward
+  end
+
+  def check_backward
+    f = Chainer::Functions::Loss::SoftmaxCrossEntropy.new(reduce: @reduce, class_weight: @class_weight, ignore_label: @ignore_label)
+    Chainer::check_backward(f, [@x, @t], @gy, rtol: 1e-3)
+  end
+
+  def test_backward
+    check_backward
+  end
+end

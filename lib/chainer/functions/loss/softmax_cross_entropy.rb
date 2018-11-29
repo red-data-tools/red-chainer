@@ -48,13 +48,10 @@ module Chainer
           rescue ArgumentError
           end
 
+          log_p = log_yd[t.class.maximum(t.flatten, 0), t.class.new(t.size).seq].diagonal
           if @ignore_label
             t_valid= t.ne(@ignore_label)
-
-            log_p = log_yd[t.class.maximum(t.flatten, 0), t.class.new(t.size).seq].diagonal
             log_p *= t_valid.flatten
-          else
-            log_p = log_yd[t.class.maximum(t.flatten, 0), t.class.new(t.size).seq].diagonal
           end
 
           if @reduce == 'mean'
@@ -95,12 +92,9 @@ module Chainer
               gx *= Chainer::Utils::Array.broadcast_to(c.expand_dims(1), gx.shape)
             end
 
-            bit = t.flatten.dup
             if @ignore_label
-              bit[t.ne(@ignore_label)] = 1
-              bit[bit.ne(1)] = 0
+              gx *= (t.ne @ignore_label).reshape(t.shape[0], 1)
             end
-            gx *= bit.reshape(t.shape[0], 1)
           else
             # in the case where y.ndim is higher than 2,
             # we think that a current implementation is inefficient
@@ -120,7 +114,9 @@ module Chainer
               c = c.reshape(y.shape[0], 1, true)
               gx *= Chainer::Utils::Array.broadcast_to(c, gx.shape)
             end
-            gx *= (t.ne @ignore_label).reshape(t.shape[0], 1, true)
+            if @ignore_label
+              gx *= (t.ne @ignore_label).reshape(t.shape[0], 1, true)
+            end
             gx = gx.reshape(*y.shape)
           end
 
