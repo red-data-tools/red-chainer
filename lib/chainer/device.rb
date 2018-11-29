@@ -16,7 +16,7 @@ module Chainer
     end
     module_function :create
 
-    # Chainges default device
+    # Changes default device
     #
     # @param [Object] device_spec
     # @see Chainer::Device.create
@@ -34,7 +34,7 @@ module Chainer
     end
     module_function :default
 
-    # TODO(sonots): Add get_device_from_array after Cumo provides an API
+    # TODO(sonots): Add Device.from_array after Cumo provides an API
     # to return GPU device ID from Cumo::NArray.
   end
 
