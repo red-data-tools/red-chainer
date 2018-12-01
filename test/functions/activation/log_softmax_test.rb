@@ -6,8 +6,7 @@ require 'chainer/functions/activation/log_softmax'
 
 class Chainer::Functions::Activation::LogSoftmaxTest < Test::Unit::TestCase
   data = {
-    # Not Support test1 case. See xm::NArray issue #78.
-    #'test1' => {shape: nil, dtype: xm::SFloat},
+    'test1' => {shape: nil, dtype: xm::SFloat},
     'test2' => {shape: [2, 3], dtype: xm::SFloat},
     'test3' => {shape: [2, 2, 3], dtype: xm::SFloat},
     'test4' => {shape: [2, 2, 2, 3], dtype: xm::SFloat},
