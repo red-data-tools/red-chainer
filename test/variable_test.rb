@@ -20,11 +20,10 @@ def constant(xs, value)
 end
 
 class Chainer::VariableTest < Test::Unit::TestCase
-  data = {
-    'test1' => {x_shape: [10], c_shape: [2, 5], label: "(2, 5), #{xm}::SFloat"},
-    'test2' => {x_shape: [], c_shape: [1], label: "(1), #{xm}::SFloat"}}
+  data({'test1' => {x_shape: [10], c_shape: [2, 5], label: "(2, 5), #{xm}::SFloat"},
+        'test2' => {x_shape: [],   c_shape: [1],    label: "(1), #{xm}::SFloat"}},   keep: true)
 
-  def _setup(data)
+  def setup()
     @x_shape = data[:x_shape]
     @label = data[:label]
     @c_shape = data[:c_shape]
@@ -49,9 +48,7 @@ class Chainer::VariableTest < Test::Unit::TestCase
     assert(x.node.requires_grad)
   end
 
-  data(data)
   def test_attributes(data)
-    _setup(data)
     check_attributes(false)
   end
 
@@ -64,9 +61,7 @@ class Chainer::VariableTest < Test::Unit::TestCase
     end
   end
 
-  data(data)
   def test_len(data)
-    _setup(data)
     check_len(false)
   end
 
@@ -75,9 +70,7 @@ class Chainer::VariableTest < Test::Unit::TestCase
     assert_equal(expected, c.label)
   end
 
-  data(data)
   def test_label(data)
-    _setup(data)
     check_label(@label, false)
   end
 
@@ -104,9 +97,7 @@ class Chainer::VariableTest < Test::Unit::TestCase
     return ret
   end
 
-  data(data)
   def test_backward(data)
-    _setup(data)
     ret = create_linear_chain(2, false)
     check_backward([ret[0]], [ret[1]], [ret[2]], false)
   end

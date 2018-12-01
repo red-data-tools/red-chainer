@@ -17,7 +17,7 @@ class NumericalGradientTest < Test::Unit::TestCase
     return [[2 * xs[0]]]
   end
 
-  def _setup()
+  def setup()
     @xs = [_uniform(2, 1)]
     @gys = [_uniform(2, 1)]
   end
@@ -52,13 +52,12 @@ class NumericalGradientTest < Test::Unit::TestCase
   end
 
   def test_numerical_grad()
-    _setup()
     check_numerical_grad(method(:f), method(:df), @xs, @gys, @eps)
   end
 end
 
 class NumericalGradientReferenceTest < Test::Unit::TestCase
-  def _setup()
+  def setup()
     @x = _uniform(2, 3)
   end
 
@@ -73,7 +72,6 @@ class NumericalGradientReferenceTest < Test::Unit::TestCase
   end
 
   def test_reference()
-    _setup()
     check_reference(@x)
   end
 end
@@ -86,21 +84,19 @@ class NumericalGradientInvalidEps < NumericalGradientTest
   end
 
   def test_numerical_grad()
-    _setup()
     check_invalid_eps(@xs, @gys, 0)
     check_invalid_eps(@xs, @gys, -(1.0))
   end
 end
 
 class NumericalGradientInvalidType < Test::Unit::TestCase
-  def _setup()
+  def setup()
     @x = xm::NArray.cast(0)
     @y = xm::NArray.cast(0)
     @f = lambda{}
   end
 
   def test_invalid_inputs()
-    _setup()
     y = @y
     assert_raise(ArgumentError) {
       Chainer::numerical_grad(@f, [@x, y], [])
@@ -108,7 +104,6 @@ class NumericalGradientInvalidType < Test::Unit::TestCase
   end
 
   def test_invalid_outputs()
-    _setup()
     y = @y
     assert_raise(NoMethodError) {
       Chainer::numerical_grad(@f, [], [@x, y])
@@ -116,7 +111,6 @@ class NumericalGradientInvalidType < Test::Unit::TestCase
   end
 
   def test_invalid_mixed()
-    _setup()
     y = @y
     assert_raise(ArgumentError) {
       Chainer::numerical_grad(@f, [@x], [y])
@@ -125,7 +119,7 @@ class NumericalGradientInvalidType < Test::Unit::TestCase
 end
 
 class NumericalGradientEpsTest < Test::Unit::TestCase
-  def _setup()
+  def setup()
     @x = xm::SFloat.cast(0.0)
     @y = xm::SFloat.cast(1.0)
   end
@@ -151,7 +145,6 @@ class NumericalGradientEpsTest < Test::Unit::TestCase
   end
 
   def test_differenct_eps()
-    _setup()
     check_different_eps(@x, @y)
   end
 end
