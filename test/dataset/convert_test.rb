@@ -111,9 +111,7 @@ class TestConcatExamplesWithPadding < Test::Unit::TestCase
 end
 
 class TestConcatExamplesWithBuiltInTypes < Test::Unit::TestCase
-  data = {
-    'test1' => {padding: nil},
-    'test2' => {padding: 0}}
+  data(:padding, [nil, 0], keep: true)
 
   @@int_arrays = [1, 2, 3]
   @@float_arrays = [1.0, 2.0, 3.0]
@@ -139,24 +137,21 @@ class TestConcatExamplesWithBuiltInTypes < Test::Unit::TestCase
     end
   end
 
-  data(data)
-  def test_concat_arrays(data)
+  def test_concat_arrays()
     @padding = data[:padding]
 
     check_concat_arrays(@@int_arrays)
     check_concat_arrays(@@float_arrays)
   end
 
-  data(data)
-  def test_concat_arrays_cpu(data)
+  def test_concat_arrays_cpu()
     @padding = data[:padding]
 
     check_concat_arrays(@@int_arrays, device: -1)
     check_concat_arrays(@@float_arrays, device: -1)
   end
 
-  data(data)
-  def test_concat_arrays_gpu(data)
+  def test_concat_arrays_gpu()
     require_gpu
     @padding = data[:padding]
 

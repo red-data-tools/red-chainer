@@ -3,13 +3,11 @@
 require 'chainer/functions/activation/leaky_relu'
 
 class Chainer::Functions::Activation::LeakyReLUTest < Test::Unit::TestCase
-  data = {
-    'test1' => {shape: [3, 2], dtype: xm::SFloat},
-    'test2' => {shape: [], dtype: xm::SFloat},
-    'test3' => {shape: [3, 2], dtype: xm::DFloat},
-    'test4' => {shape: [], dtype: xm::DFloat}}
 
-  def _setup(data)
+  data(:shape, [[3, 2], []],             keep: true)
+  data(:dtype, [xm::SFloat, xm::DFloat], keep: true)
+
+  def setup()
     # Avoid unstability of numerical grad
     @shape = data[:shape]
     @dtype = data[:dtype]
@@ -46,9 +44,7 @@ class Chainer::Functions::Activation::LeakyReLUTest < Test::Unit::TestCase
     assert_true(y.data.nearly_eq(expected).all?)
   end
 
-  data(data)
-  def test_forward(data)
-    _setup(data)
+  def test_forward()
     check_forward(@x.dup)
   end
 
@@ -56,9 +52,7 @@ class Chainer::Functions::Activation::LeakyReLUTest < Test::Unit::TestCase
     Chainer::check_backward(Chainer::Functions::Activation::LeakyReLU.new(slope: @slope), x_data, y_grad, dtype: @check_backward_options_dtype)
   end
 
-  data(data)
-  def test_backward(data)
-    _setup(data)
+  def test_backward()
     check_backward(@x.dup, @gy.dup)
   end
 end

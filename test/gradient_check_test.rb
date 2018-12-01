@@ -166,13 +166,8 @@ class Ident < Chainer::Function
 end
 
 class TestCheckBackward < Test::Unit::TestCase
-  data = {
-    'test1' => {dtype: nil},
-    'test2' => {dtype: xm::SFloat},
-    'test3' => {dtype: xm::DFloat}}
-
-  data(data)
-  def test_multiple_output(data)
+  data(:dtype, [nil, xm::SFloat, xm::DFloat], keep: true)
+  def test_multiple_output()
     @dtype = data[:dtype]
     x1 = xm::DFloat[1]
     x2 = xm::DFloat[1]
