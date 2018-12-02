@@ -218,9 +218,9 @@ class TestElementwiseSoftmaxCrossEntropy < Test::Unit::TestCase
 end
 
 class TestSoftmaxCrossEntropyInvalidReduce < Test::Unit::TestCase
-  data(:use_cudnn,   ['always', 'auto', 'never'], group: :reduce, keep: true)
-  data(:normalize,   [true, false],               group: :reduce, keep: true)
-  data(:cache_score, [true, false],               group: :reduce, keep: true)
+  data(:use_cudnn,   ['always', 'auto', 'never'], keep: true)
+  data(:normalize,   [true, false],               keep: true)
+  data(:cache_score, [true, false],               keep: true)
 
   def setup
     @use_cudnn    = data[:use_cudnn]
@@ -243,8 +243,8 @@ class TestSoftmaxCrossEntropyInvalidReduce < Test::Unit::TestCase
 end
 
 class TestNonDefaultIgnoreLabel < Test::Unit::TestCase
-  data(:reduce,       ['mean', 'no'],              group: :reduce, keep: true)
-  data(:class_weight, [nil, xm::SFloat.ones([3])], group: :reduce, keep: true)
+  data(:reduce,       ['mean', 'no'],              keep: true)
+  data(:class_weight, [nil, xm::SFloat.ones([3])], keep: true)
 
   def setup
     @reduce       = data[:reduce]
