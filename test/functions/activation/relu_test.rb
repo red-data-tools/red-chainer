@@ -12,7 +12,7 @@ class Chainer::Functions::Activation::ReLUTest < Test::Unit::TestCase
     @shape = data[:shape]
     @dtype = data[:dtype]
 
-    @dtype.srand(1) # To avoid false of "nearly_eq().all?", Use fixed seed value.
+    @dtype.srand(1) # To avoid false of "nearly_eq.all?", Use fixed seed value.
     @x = @dtype.new(@shape).rand(2) - 1
     @shape.map do |x|
       if (-0.1 < x) and (x < 0.1)

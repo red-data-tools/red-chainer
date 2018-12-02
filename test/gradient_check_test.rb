@@ -17,7 +17,7 @@ class NumericalGradientTest < Test::Unit::TestCase
     return [[2 * xs[0]]]
   end
 
-  def setup()
+  def setup
     @xs = [_uniform(2, 1)]
     @gys = [_uniform(2, 1)]
   end
@@ -51,13 +51,13 @@ class NumericalGradientTest < Test::Unit::TestCase
     end
   end
 
-  def test_numerical_grad()
+  def test_numerical_grad
     check_numerical_grad(method(:f), method(:df), @xs, @gys, @eps)
   end
 end
 
 class NumericalGradientReferenceTest < Test::Unit::TestCase
-  def setup()
+  def setup
     @x = _uniform(2, 3)
   end
 
@@ -71,7 +71,7 @@ class NumericalGradientReferenceTest < Test::Unit::TestCase
     Chainer::Testing.assert_allclose(1, gx)
   end
 
-  def test_reference()
+  def test_reference
     check_reference(@x)
   end
 end
@@ -83,34 +83,34 @@ class NumericalGradientInvalidEps < NumericalGradientTest
     }
   end
 
-  def test_numerical_grad()
+  def test_numerical_grad
     check_invalid_eps(@xs, @gys, 0)
     check_invalid_eps(@xs, @gys, -(1.0))
   end
 end
 
 class NumericalGradientInvalidType < Test::Unit::TestCase
-  def setup()
+  def setup
     @x = xm::NArray.cast(0)
     @y = xm::NArray.cast(0)
     @f = lambda{}
   end
 
-  def test_invalid_inputs()
+  def test_invalid_inputs
     y = @y
     assert_raise(ArgumentError) {
       Chainer::numerical_grad(@f, [@x, y], [])
     }
   end
 
-  def test_invalid_outputs()
+  def test_invalid_outputs
     y = @y
     assert_raise(NoMethodError) {
       Chainer::numerical_grad(@f, [], [@x, y])
     }
   end
 
-  def test_invalid_mixed()
+  def test_invalid_mixed
     y = @y
     assert_raise(ArgumentError) {
       Chainer::numerical_grad(@f, [@x], [y])
@@ -119,7 +119,7 @@ class NumericalGradientInvalidType < Test::Unit::TestCase
 end
 
 class NumericalGradientEpsTest < Test::Unit::TestCase
-  def setup()
+  def setup
     @x = xm::SFloat.cast(0.0)
     @y = xm::SFloat.cast(1.0)
   end
@@ -127,7 +127,7 @@ class NumericalGradientEpsTest < Test::Unit::TestCase
   def check_different_eps(x, y)
     f = lambda do |x|
       if (-1 < x).all? and (x < 1).all?
-        return [x.dup()]
+        return [x.dup]
       else
         if (-2 < x).all? and (x < 2).all?
           return [2 * x]
@@ -144,7 +144,7 @@ class NumericalGradientEpsTest < Test::Unit::TestCase
     assert_equal(0.0, gx)
   end
 
-  def test_differenct_eps()
+  def test_differenct_eps
     check_different_eps(@x, @y)
   end
 end
@@ -160,37 +160,37 @@ end
 
 class TestCheckBackward < Test::Unit::TestCase
   data(:dtype, [nil, xm::SFloat, xm::DFloat], keep: true)
-  def test_multiple_output()
+  def test_multiple_output
     @dtype = data[:dtype]
     x1 = xm::DFloat[1]
     x2 = xm::DFloat[1]
     g1 = xm::DFloat[1]
     g2 = xm::DFloat[1]
     f = lambda do |x, y|
-      s,t = Ident.new().(x, y)
-      u = Ident.new().(t)
+      s,t = Ident.new.(x, y)
+      u = Ident.new.(t)
       return [s, u]
     end
     Chainer::check_backward(f, [x1, x2], [g1, g2], dtype: @dtype)
   end
 
-  def test_no_grads_for_not_float()
+  def test_no_grads_for_not_float
     x1 = xm::DFloat.cast([1])
     x2 = xm::Int32.cast([0, 1])
     g1 = xm::DFloat.cast([1])
     f = lambda do |x, y|
-      s = Ident.new().(x)
+      s = Ident.new.(x)
       return [s]
     end
     Chainer::check_backward(f, [x1, x2], g1)
   end
 
-  def test_no_grads_option()
+  def test_no_grads_option
     x1 = xm::DFloat.cast([1])
     x2 = xm::DFloat.cast([1])
     g1 = xm::DFloat.cast([1])
     f = lambda do |x, y|
-      s = Ident.new().(x)
+      s = Ident.new.(x)
       return [s]
     end
 

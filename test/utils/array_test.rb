@@ -7,11 +7,11 @@ class Chainer::Utils::ArrayTest < Test::Unit::TestCase
 
     data(:dtype, [nil, xm::SFloat, xm::DFloat], keep: true)
 
-    def setup()
+    def setup
       @dtype = data[:dtype]
     end
 
-    def test_scalar()
+    def test_scalar
       x = Chainer::Utils::Array.force_array(xm::SFloat.cast(1), dtype=@dtype)
       assert_true(x.is_a? xm::NArray)
       if @dtype.nil?
@@ -21,7 +21,7 @@ class Chainer::Utils::ArrayTest < Test::Unit::TestCase
       end
     end
 
-    def test_0dim_array()
+    def test_0dim_array
       x = Chainer::Utils::Array.force_array(xm::SFloat.cast(1), dtype=@dtype)
       assert_true(x.is_a? xm::NArray)
       if @dtype.nil?
@@ -31,7 +31,7 @@ class Chainer::Utils::ArrayTest < Test::Unit::TestCase
       end
     end
 
-    def test_array()
+    def test_array
       x = Chainer::Utils::Array.force_array(xm::SFloat.cast([1]), dtype=@dtype)
       assert_true(x.is_a? xm::NArray)
       if @dtype.nil?

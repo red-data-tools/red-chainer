@@ -7,12 +7,12 @@ class Chainer::Functions::Activation::LeakyReLUTest < Test::Unit::TestCase
   data(:shape, [[3, 2], []],             keep: true)
   data(:dtype, [xm::SFloat, xm::DFloat], keep: true)
 
-  def setup()
+  def setup
     # Avoid unstability of numerical grad
     @shape = data[:shape]
     @dtype = data[:dtype]
 
-    @dtype.srand(1) # To avoid false of "nearly_eq().all?", Use fixed seed value.
+    @dtype.srand(1) # To avoid false of "nearly_eq.all?", Use fixed seed value.
     @x = @dtype.new(@shape).rand(2) - 1
     @shape.map do |x|
       if (-0.05 < x) and (x < 0.05)
@@ -44,7 +44,7 @@ class Chainer::Functions::Activation::LeakyReLUTest < Test::Unit::TestCase
     assert_true(y.data.nearly_eq(expected).all?)
   end
 
-  def test_forward()
+  def test_forward
     check_forward(@x.dup)
   end
 
@@ -52,7 +52,7 @@ class Chainer::Functions::Activation::LeakyReLUTest < Test::Unit::TestCase
     Chainer::check_backward(Chainer::Functions::Activation::LeakyReLU.new(slope: @slope), x_data, y_grad, dtype: @check_backward_options_dtype)
   end
 
-  def test_backward()
+  def test_backward
     check_backward(@x.dup, @gy.dup)
   end
 end

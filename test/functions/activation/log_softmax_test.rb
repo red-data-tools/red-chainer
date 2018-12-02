@@ -9,7 +9,7 @@ class Chainer::Functions::Activation::LogSoftmaxTest < Test::Unit::TestCase
   data(:shape, [nil, [2, 3], [2, 2, 3], [2, 2, 2, 3]], keep: true)
   data(:dtype, [xm::SFloat, xm::DFloat],               keep: true)
 
-  def setup()
+  def setup
     @shape = data[:shape]
     @dtype = data[:dtype]
     if @shape.nil?
@@ -35,7 +35,7 @@ class Chainer::Functions::Activation::LogSoftmaxTest < Test::Unit::TestCase
     Chainer::Testing.assert_allclose(y.data, y_expect)
   end
 
-  def test_forward()
+  def test_forward
     check_forward(@x.dup)
   end
 
@@ -43,7 +43,7 @@ class Chainer::Functions::Activation::LogSoftmaxTest < Test::Unit::TestCase
     Chainer::check_backward(Chainer::Functions::Activation::LogSoftmax.method(:log_softmax), x_data, gy_data, @check_backward_options)
   end
 
-  def test_backward()
+  def test_backward
     check_backward(@x.dup, @gy.dup)
   end
 end
