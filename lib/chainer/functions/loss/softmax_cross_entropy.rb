@@ -82,9 +82,7 @@ module Chainer
 
           if y.ndim == 2
             gx = y
-            # TODO(sonots): Avoid to_a especially in Cumo to improve performance
-            t.class.new(t.shape[0]).seq(0).to_a.zip(t.class.maximum(t, 0).to_a).each{|v| gx[*v] -= 1}
-
+            gx.at(t.class.new(t.shape[0]).seq, t.class.maximum(t, 0)).inplace - 1
             if @class_weight
               shape = x.ndim.times.map { |d| d == 1 ? true : 1 }
               c = Chainer::Utils::Array.broadcast_to(@class_weight.reshape(*shape), x.shape)
@@ -104,8 +102,7 @@ module Chainer
             gx = y.reshape(y.shape[0], y.shape[1], true)
             fst_index = xm::Int32.new(t.size).seq(0) / n_unit
             trd_index = xm::Int32.new(t.size).seq(0) % n_unit
-            # TODO(sonots): Avoid to_a especially in Cumo to improve performance
-            fst_index.to_a.zip(t.class.maximum(t.flatten.dup, 0).to_a, trd_index.to_a).each{|v| gx[*v] -= 1}
+            gx.at(fst_index, t.class.maximum(t.flatten.dup, 0), trd_index).inplace - 1
             if @class_weight
               shape = x.ndim.times.map{|d| d == 1 ? true : 1}
               c = Chainer::Utils::Array.broadcast_to(@class_weight.reshape(*shape), x.shape)
