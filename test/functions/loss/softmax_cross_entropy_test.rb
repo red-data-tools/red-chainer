@@ -3,29 +3,21 @@
 require 'chainer/functions/loss/softmax_cross_entropy'
 
 class TestSoftmaxCrossEntropy < Test::Unit::TestCase
-  shape        = [nil, [2, 3], [2, 3, 2], [2, 3, 2, 2]]
-  cache_score  = [true, false]
-  normalize    = [true, false]
-  ignore_index = [nil, false, [0], [0, 1], [0, 1, 0]]
-  dtype        = [xm::SFloat]
-  weight_apply = [false, true]
+  data(:shape,        [nil, [2, 3], [2, 3, 2], [2, 3, 2, 2]], group: :sfloat, keep: true)
+  data(:cache_score,  [true, false],                          group: :sfloat, keep: true)
+  data(:normalize,    [true, false],                          group: :sfloat, keep: true)
+  data(:ignore_index, [nil, false, [0], [0, 1], [0, 1, 0]],   group: :sfloat, keep: true)
+  data(:dtype,        [xm::SFloat],                           group: :sfloat, keep: true)
+  data(:weight_apply, [false, true],                          group: :sfloat, keep: true)
 
-  value1 = shape.product(cache_score, normalize, ignore_index, dtype, weight_apply).collect {|v|
-    {shape: v[0], cache_score: v[1], normalize: v[2], ignore_index: v[3], dtype: v[4], weight_apply: v[5]} }
+  data(:shape,        [nil, [2, 3], [2, 3, 2], [2, 3, 2, 2]], group: :general, keep: true)
+  data(:cache_score,  [false],                                group: :general, keep: true)
+  data(:normalize,    [true],                                 group: :general, keep: true)
+  data(:ignore_index, [[0, 1]],                               group: :general, keep: true)
+  data(:dtype,        [xm::SFloat, xm::DFloat],               group: :general, keep: true)
+  data(:weight_apply, [false, true],                          group: :general, keep: true)
 
-  shape        = [nil, [2, 3], [2, 3, 2], [2, 3, 2, 2]]
-  cache_score  = [false]
-  normalize    = [true]
-  ignore_index = [[0, 1]]
-  dtype        = [xm::SFloat, xm::DFloat]
-  weight_apply = [false, true]
-
-  value2 = shape.product(cache_score, normalize, ignore_index, dtype, weight_apply).collect {|v|
-    {shape: v[0], cache_score: v[1], normalize: v[2], ignore_index: v[3], dtype: v[4], weight_apply: v[5]} }
-  value = value1 + value2
-  data = (1..value.size).to_a.zip(value).to_h
-
-  def _setup(data)
+  def setup
     @shape        = data[:shape]
     @cache_score  = data[:cache_score]
     @normalize    = data[:normalize]
@@ -73,7 +65,7 @@ class TestSoftmaxCrossEntropy < Test::Unit::TestCase
       if ti == -1
         next
       end
-      log_z = xm::NMath.log(xm::NMath.exp(xi).sum())
+      log_z = xm::NMath.log(xm::NMath.exp(xi).sum)
       if class_weight.nil?
         loss_expect -= (xi - log_z)[ti]
       else
@@ -93,9 +85,7 @@ class TestSoftmaxCrossEntropy < Test::Unit::TestCase
     Chainer::Testing.assert_allclose(loss_expect, loss_value)
   end
 
-  data(data)
-  def test_forward(data)
-    _setup(data)
+  def test_forward
     check_forward(@x, @t, @class_weight)
   end
 
@@ -104,37 +94,32 @@ class TestSoftmaxCrossEntropy < Test::Unit::TestCase
     Chainer::check_backward(func, [x_data, t_data], nil, eps: 0.02, dtype: @check_backward_options_dtype)
   end
 
-  data(data)
-  def test_backward(data)
-    _setup(data)
+  def test_backward
     check_backward(@x, @t, @class_weight)
   end
 end
 
 class TestClassWeightAssertion < Test::Unit::TestCase
-  def _setup()
+  def setup
     @x = xm::NArray[[0, 1], [2, 3]]
     @t = xm::NArray[0, 1]
   end
 
-  def test_ndim_assertion()
-    _setup()
+  def test_ndim_assertion
     wrong_ndim_class_weight = xm::NArray.cast([[0, 0]])
     assert_raise(ArgumentError) {
       Chainer::Functions::Loss::SoftmaxCrossEntropy.softmax_cross_entropy(@x, @t, class_weight: wrong_ndim_class_weight)
     }
   end
 
-  def test_dtype_assertion()
-    _setup()
+  def test_dtype_assertion
     wrong_dtype_class_weight = xm::Int32.cast([0, 0])
     assert_raise(ArgumentError) {
       Chainer::Functions::Loss::SoftmaxCrossEntropy.softmax_cross_entropy(@x, @t, class_weight: wrong_dtype_class_weight)
     }
   end
 
-  def test_variable_assertion()
-    _setup()
+  def test_variable_assertion
     wrong_inst_class_weight = Chainer::Variable.new(xm::NArray.cast([0, 0]))
     assert_raise(ArgumentError) {
       Chainer::Functions::Loss::SoftmaxCrossEntropy.softmax_cross_entropy(@x, @t, class_weight: wrong_inst_class_weight)
@@ -143,29 +128,21 @@ class TestClassWeightAssertion < Test::Unit::TestCase
 end
 
 class TestElementwiseSoftmaxCrossEntropy < Test::Unit::TestCase
-  shape        = [nil, [2, 3], [2, 3, 2], [2, 3, 2, 2]]
-  cache_score  = [true, false]
-  normalize    = [true, false]
-  ignore_index = [nil, false, [0], [0, 1], [0, 1, 0]]
-  dtype        = [xm::SFloat]
-  weight_apply = [false, true]
+  data(:shape,        [nil, [2, 3], [2, 3, 2], [2, 3, 2, 2]], group: :sfloat, keep: true)
+  data(:cache_score,  [true, false],                          group: :sfloat, keep: true)
+  data(:normalize,    [true, false],                          group: :sfloat, keep: true)
+  data(:ignore_index, [nil, false, [0], [0, 1], [0, 1, 0]],   group: :sfloat, keep: true)
+  data(:dtype,        [xm::SFloat],                           group: :sfloat, keep: true)
+  data(:weight_apply, [false, true],                          group: :sfloat, keep: true)
 
-  value1 = shape.product(cache_score, normalize, ignore_index, dtype, weight_apply).collect {|v|
-    {shape: v[0], cache_score: v[1], normalize: v[2], ignore_index: v[3], dtype: v[4], weight_apply: v[5]} }
+  data(:shape,        [nil, [2, 3], [2, 3, 2], [2, 3, 2, 2]], group: :general, keep: true)
+  data(:cache_score,  [false],                                group: :general, keep: true)
+  data(:normalize,    [true],                                 group: :general, keep: true)
+  data(:ignore_index, [[0, 1]],                               group: :general, keep: true)
+  data(:dtype,        [xm::SFloat, xm::DFloat],               group: :general, keep: true)
+  data(:weight_apply, [false, true],                          group: :general, keep: true)
 
-  shape        = [nil, [2, 3], [2, 3, 2], [2, 3, 2, 2]]
-  cache_score  = [false]
-  normalize    = [true]
-  ignore_index = [[0, 1]]
-  dtype        = [xm::SFloat, xm::DFloat]
-  weight_apply = [false, true]
-
-  value2 = shape.product(cache_score, normalize, ignore_index, dtype, weight_apply).collect {|v|
-    {shape: v[0], cache_score: v[1], normalize: v[2], ignore_index: v[3], dtype: v[4], weight_apply: v[5]} }
-  value = value1 + value2
-  data = (1..value.size).to_a.zip(value).to_h
-
-  def _setup(data)
+  def setup
     @shape        = data[:shape]
     @cache_score  = data[:cache_score]
     @normalize    = data[:normalize]
@@ -215,7 +192,7 @@ class TestElementwiseSoftmaxCrossEntropy < Test::Unit::TestCase
       if ti == -1
         next
       end
-      log_z = xm::NMath.log(xm::NMath.exp(xi).sum())
+      log_z = xm::NMath.log(xm::NMath.exp(xi).sum)
 
       if class_weight.nil?
         loss_expect = -(xi - log_z)[ti]
@@ -226,9 +203,7 @@ class TestElementwiseSoftmaxCrossEntropy < Test::Unit::TestCase
     end
   end
 
-  data(data)
-  def test_forward(data)
-    _setup(data)
+  def test_forward
     check_forward(@x, @t, @class_weight)
   end
 
@@ -237,23 +212,17 @@ class TestElementwiseSoftmaxCrossEntropy < Test::Unit::TestCase
     Chainer::check_backward(func, [x_data, t_data], g_data, eps: 0.02,  dtype: @check_backward_options_dtype)
   end
 
-  data(data)
-  def test_backward(data)
-    _setup(data)
+  def test_backward
     check_backward(@x, @t, @g, @class_weight)
   end
 end
 
 class TestSoftmaxCrossEntropyInvalidReduce < Test::Unit::TestCase
-  use_cudnn    = ['always', 'auto', 'never'],
-  normalize    = [true, false]
-  cache_score  = [true, false]
+  data(:use_cudnn,   ['always', 'auto', 'never'], keep: true)
+  data(:normalize,   [true, false],               keep: true)
+  data(:cache_score, [true, false],               keep: true)
 
-  data = use_cudnn.product(normalize, cache_score).collect {|v|
-    {use_cudnn: v[0], normalize: v[1], cache_score: v[2]}}
-  data = (1..data.size).to_a.zip(data).to_h
-
-  def _setup(data)
+  def setup
     @use_cudnn    = data[:use_cudnn]
     @normalize    = data[:normalize]
     @cache_score  = data[:cache_score]
@@ -268,22 +237,16 @@ class TestSoftmaxCrossEntropyInvalidReduce < Test::Unit::TestCase
     }
   end
 
-  data(data)
-  def test_invalid_reduce(data)
-    _setup(data)
+  def test_invalid_reduce
     check_invalid_reduce(@x, @t)
   end
 end
 
 class TestNonDefaultIgnoreLabel < Test::Unit::TestCase
-  reduce       = ['mean', 'no']
-  class_weight = [nil, xm::SFloat.ones([3])]
+  data(:reduce,       ['mean', 'no'],              keep: true)
+  data(:class_weight, [nil, xm::SFloat.ones([3])], keep: true)
 
-  data = reduce.product(class_weight).collect {|v|
-    {reduce: v[0], class_weight: v[1]}}
-  data = (1..data.size).to_a.zip(data).to_h
-
-  def _setup(data)
+  def setup
     @reduce       = data[:reduce]
     @class_weight = data[:class_weight]
 
@@ -316,9 +279,7 @@ class TestNonDefaultIgnoreLabel < Test::Unit::TestCase
     Chainer::Testing.assert_allclose(expect, loss.data)
   end
 
-  data(data)
-  def test_forward(data)
-    _setup(data)
+  def test_forward
     check_forward(xm::NArray)
   end
 
@@ -335,9 +296,7 @@ class TestNonDefaultIgnoreLabel < Test::Unit::TestCase
     Chainer::check_backward(f, [x, t], gy)
   end
 
-  data(data)
-  def test_backward(data)
-    _setup(data)
+  def test_backward
     check_backward(xm::NArray)
   end
 end

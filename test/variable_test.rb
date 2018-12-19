@@ -11,7 +11,7 @@ class Constant < Chainer::Function
   end
 
   def backward(inputs, grad_outputs)
-    return inputs.map{|_| _.new_zeros()}.to_a
+    return inputs.map{|_| _.new_zeros}.to_a
   end
 end
 
@@ -20,11 +20,10 @@ def constant(xs, value)
 end
 
 class Chainer::VariableTest < Test::Unit::TestCase
-  data = {
-    'test1' => {x_shape: [10], c_shape: [2, 5], label: "(2, 5), #{xm}::SFloat"},
-    'test2' => {x_shape: [], c_shape: [1], label: "(1), #{xm}::SFloat"}}
+  data({'test1' => {x_shape: [10], c_shape: [2, 5], label: "(2, 5), #{xm}::SFloat"},
+        'test2' => {x_shape: [],   c_shape: [1],    label: "(1), #{xm}::SFloat"}},   keep: true)
 
-  def _setup(data)
+  def setup
     @x_shape = data[:x_shape]
     @label = data[:label]
     @c_shape = data[:c_shape]
@@ -32,7 +31,7 @@ class Chainer::VariableTest < Test::Unit::TestCase
     @a = xm::SFloat.new(@x_shape).rand(9.9) + 0.1
 
     if @x_shape.size != 0
-        @size = xm::NArray.cast(@x_shape).prod().to_i
+        @size = xm::NArray.cast(@x_shape).prod.to_i
     else
         @size = 1
     end
@@ -49,9 +48,7 @@ class Chainer::VariableTest < Test::Unit::TestCase
     assert(x.node.requires_grad)
   end
 
-  data(data)
   def test_attributes(data)
-    _setup(data)
     check_attributes(false)
   end
 
@@ -64,9 +61,7 @@ class Chainer::VariableTest < Test::Unit::TestCase
     end
   end
 
-  data(data)
   def test_len(data)
-    _setup(data)
     check_len(false)
   end
 
@@ -75,9 +70,7 @@ class Chainer::VariableTest < Test::Unit::TestCase
     assert_equal(expected, c.label)
   end
 
-  data(data)
   def test_label(data)
-    _setup(data)
     check_label(@label, false)
   end
 
@@ -100,37 +93,35 @@ class Chainer::VariableTest < Test::Unit::TestCase
     length.times{|i|
       ret.push(constant([ret[i]], [@a]))
     }
-    ret[-1].grad = ret[-1].data.new_zeros()
+    ret[-1].grad = ret[-1].data.new_zeros
     return ret
   end
 
-  data(data)
   def test_backward(data)
-    _setup(data)
     ret = create_linear_chain(2, false)
     check_backward([ret[0]], [ret[1]], [ret[2]], false)
   end
 
-  def test_grad_type_check_pass()
+  def test_grad_type_check_pass
     a = Chainer::Variable.new(xm::SFloat.new([3]))
     a.grad = xm::SFloat.new([3])
   end
 
-  def test_grad_type_check_type()
+  def test_grad_type_check_type
     a = Chainer::Variable.new(xm::SFloat.new([]))
     #assert_raise(TypeError) { ## No Error
-      a.grad = xm::SFloat.new()
+      a.grad = xm::SFloat.new
     #}
   end
 
-  def test_grad_type_check_dtype()
+  def test_grad_type_check_dtype
     a = Chainer::Variable.new(xm::SFloat.new([3]))
     assert_raise(TypeError) {
       a.grad = xm::DFloat.new([3])
     }
   end
 
-  def test_grad_type_check_shape()
+  def test_grad_type_check_shape
     a = Chainer::Variable.new(xm::SFloat.new([3]))
     assert_raise(TypeError) {
       a.grad = xm::SFloat.new([2])

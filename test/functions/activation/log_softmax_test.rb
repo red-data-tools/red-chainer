@@ -5,18 +5,11 @@ require 'chainer'
 require 'chainer/functions/activation/log_softmax'
 
 class Chainer::Functions::Activation::LogSoftmaxTest < Test::Unit::TestCase
-  data = {
-    # Not Support test1 case. See xm::NArray issue #78.
-    #'test1' => {shape: nil, dtype: xm::SFloat},
-    'test2' => {shape: [2, 3], dtype: xm::SFloat},
-    'test3' => {shape: [2, 2, 3], dtype: xm::SFloat},
-    'test4' => {shape: [2, 2, 2, 3], dtype: xm::SFloat},
-    'test5' => {shape: nil, dtype: xm::DFloat},
-    'test6' => {shape: [2, 3], dtype: xm::DFloat},
-    'test7' => {shape: [2, 2, 3], dtype: xm::DFloat},
-    'test8' => {shape: [2, 2, 2, 3], dtype: xm::DFloat}}
 
-  def _setup(data)
+  data(:shape, [nil, [2, 3], [2, 2, 3], [2, 2, 2, 3]], keep: true)
+  data(:dtype, [xm::SFloat, xm::DFloat],               keep: true)
+
+  def setup
     @shape = data[:shape]
     @dtype = data[:dtype]
     if @shape.nil?
@@ -42,9 +35,7 @@ class Chainer::Functions::Activation::LogSoftmaxTest < Test::Unit::TestCase
     Chainer::Testing.assert_allclose(y.data, y_expect)
   end
 
-  data(data)
-  def test_forward(data)
-    _setup(data)
+  def test_forward
     check_forward(@x.dup)
   end
 
@@ -52,9 +43,7 @@ class Chainer::Functions::Activation::LogSoftmaxTest < Test::Unit::TestCase
     Chainer::check_backward(Chainer::Functions::Activation::LogSoftmax.method(:log_softmax), x_data, gy_data, @check_backward_options)
   end
 
-  data(data)
-  def test_backward(data)
-    _setup(data)
+  def test_backward
     check_backward(@x.dup, @gy.dup)
   end
 end

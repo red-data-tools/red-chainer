@@ -3,16 +3,14 @@
 require 'chainer/functions/activation/tanh'
 
 class Chainer::Functions::Activation::TanhTest < Test::Unit::TestCase
-  data = {
-    'test1' => {shape: [3, 2], dtype: xm::SFloat},
-    'test2' => {shape: [], dtype: xm::SFloat},
-    'test3' => {shape: [3, 2], dtype: xm::DFloat},
-    'test4' => {shape: [], dtype: xm::DFloat}}
 
-  def _setup(data)
+  data(:shape, [[3, 2], []],             keep: true)
+  data(:dtype, [xm::SFloat, xm::DFloat], keep: true)
+
+  def setup
     @shape = data[:shape]
     @dtype = data[:dtype]
-    @dtype.srand(1) # To avoid false of "nearly_eq().all?", Use fixed seed value.
+    @dtype.srand(1) # To avoid false of "nearly_eq.all?", Use fixed seed value.
     @x = @dtype.new(@shape).rand(1) - 0.5
     @gy = @dtype.new(@shape).rand(0.2) - 0.1
     @check_backward_options = {}
@@ -26,9 +24,7 @@ class Chainer::Functions::Activation::TanhTest < Test::Unit::TestCase
     assert_true(y.data.nearly_eq(y_expect.data).all?)
   end
 
-  data(data)
-  def test_forward(data)
-    _setup(data)
+  def test_forward
     check_forward(@x.dup)
   end
 
@@ -36,9 +32,7 @@ class Chainer::Functions::Activation::TanhTest < Test::Unit::TestCase
     Chainer::check_backward(Chainer::Functions::Activation::Tanh.method(:tanh), x_data, gy_data, @check_backward_options)
   end
 
-  data(data)
-  def test_backward(data)
-    _setup(data)
+  def test_backward
     check_backward(@x.dup, @gy.dup)
   end
 end

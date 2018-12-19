@@ -4,18 +4,14 @@ require 'chainer/utils/array'
 
 class Chainer::Utils::ArrayTest < Test::Unit::TestCase
   sub_test_case "force_array" do
-    data = {
-      'test1' => {dtype: nil},
-      'test2' => {dtype: xm::SFloat},
-      'test3' => {dtype: xm::DFloat}}
 
-    def _setup(data)
+    data(:dtype, [nil, xm::SFloat, xm::DFloat], keep: true)
+
+    def setup
       @dtype = data[:dtype]
     end
 
-    data(data)
-    def test_scalar(data)
-      _setup(data)
+    def test_scalar
       x = Chainer::Utils::Array.force_array(xm::SFloat.cast(1), dtype=@dtype)
       assert_true(x.is_a? xm::NArray)
       if @dtype.nil?
@@ -25,9 +21,7 @@ class Chainer::Utils::ArrayTest < Test::Unit::TestCase
       end
     end
 
-    data(data)
-    def test_0dim_array(data)
-      _setup(data)
+    def test_0dim_array
       x = Chainer::Utils::Array.force_array(xm::SFloat.cast(1), dtype=@dtype)
       assert_true(x.is_a? xm::NArray)
       if @dtype.nil?
@@ -37,9 +31,7 @@ class Chainer::Utils::ArrayTest < Test::Unit::TestCase
       end
     end
 
-    data(data)
-    def test_array(data)
-      _setup(data)
+    def test_array
       x = Chainer::Utils::Array.force_array(xm::SFloat.cast([1]), dtype=@dtype)
       assert_true(x.is_a? xm::NArray)
       if @dtype.nil?

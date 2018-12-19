@@ -5,7 +5,7 @@ require 'chainer/testing/array'
 
 class TestConcatExamples < Test::Unit::TestCase
   def get_arrays_to_concat(xumo)
-    return 5.times.map{|_| xumo::DFloat.new(2, 3).rand()}
+    return 5.times.map{|_| xumo::DFloat.new(2, 3).rand}
   end
 
   def check_device(array, device)
@@ -23,13 +23,13 @@ class TestConcatExamples < Test::Unit::TestCase
     end
   end
 
-  def test_concat_arrays()
+  def test_concat_arrays
     arrays = get_arrays_to_concat(xm)
     check_concat_arrays(arrays)
   end
 
   def get_tuple_arrays_to_concat(xumo)
-    return 5.times.map{|_| [xumo::DFloat.new(2, 3).rand(), xumo::DFloat.new(3, 4).rand()]}
+    return 5.times.map{|_| [xumo::DFloat.new(2, 3).rand, xumo::DFloat.new(3, 4).rand]}
   end
 
   def check_concat_tuples(tuples, device: nil)
@@ -45,7 +45,7 @@ class TestConcatExamples < Test::Unit::TestCase
     end
   end
 
-  def test_concat_tuples()
+  def test_concat_tuples
     tuples = get_tuple_arrays_to_concat(xm)
     check_concat_tuples(tuples)
   end
@@ -53,7 +53,7 @@ end
 
 class TestConcatExamplesWithPadding < Test::Unit::TestCase
   def check_concat_arrays_padding(xumo)
-    arrays = [xumo::DFloat.new(3, 4).rand(), xumo::DFloat.new(2, 5).rand(), xumo::DFloat.new(4, 3).rand()]
+    arrays = [xumo::DFloat.new(3, 4).rand, xumo::DFloat.new(2, 5).rand, xumo::DFloat.new(4, 3).rand]
     array = Chainer::Dataset::Convert.method(:concat_examples).call(arrays, padding: 0)
 
     assert_equal([3, 4, 5], array.shape)
@@ -68,14 +68,14 @@ class TestConcatExamplesWithPadding < Test::Unit::TestCase
     assert_true array[2, 0..-1, 3..-1].nearly_eq(0).all?
   end
 
-  def test_concat_arrays_padding()
+  def test_concat_arrays_padding
     check_concat_arrays_padding(xm)
   end
 
   def check_concat_tuples_padding(xumo)
-    tuples = [[xumo::DFloat.new(3, 4).rand(), xumo::DFloat.new(2, 5).rand()],
-              [xumo::DFloat.new(4, 4).rand(), xumo::DFloat.new(3, 4).rand()],
-              [xumo::DFloat.new(2, 5).rand(), xumo::DFloat.new(2, 6).rand()]]
+    tuples = [[xumo::DFloat.new(3, 4).rand, xumo::DFloat.new(2, 5).rand],
+              [xumo::DFloat.new(4, 4).rand, xumo::DFloat.new(3, 4).rand],
+              [xumo::DFloat.new(2, 5).rand, xumo::DFloat.new(2, 6).rand]]
     arrays = Chainer::Dataset::Convert.method(:concat_examples).call(tuples, padding: 0)
 
     assert_equal(2, arrays.size)
@@ -105,15 +105,13 @@ class TestConcatExamplesWithPadding < Test::Unit::TestCase
     assert_true arrays[1][2, 2..-1, 0..-1].nearly_eq(0).all?
   end
 
-  def test_concat_tuples_padding()
+  def test_concat_tuples_padding
     check_concat_tuples_padding(xm)
   end
 end
 
 class TestConcatExamplesWithBuiltInTypes < Test::Unit::TestCase
-  data = {
-    'test1' => {padding: nil},
-    'test2' => {padding: 0}}
+  data(:padding, [nil, 0], keep: true)
 
   @@int_arrays = [1, 2, 3]
   @@float_arrays = [1.0, 2.0, 3.0]
@@ -139,24 +137,21 @@ class TestConcatExamplesWithBuiltInTypes < Test::Unit::TestCase
     end
   end
 
-  data(data)
-  def test_concat_arrays(data)
+  def test_concat_arrays
     @padding = data[:padding]
 
     check_concat_arrays(@@int_arrays)
     check_concat_arrays(@@float_arrays)
   end
 
-  data(data)
-  def test_concat_arrays_cpu(data)
+  def test_concat_arrays_cpu
     @padding = data[:padding]
 
     check_concat_arrays(@@int_arrays, device: -1)
     check_concat_arrays(@@float_arrays, device: -1)
   end
 
-  data(data)
-  def test_concat_arrays_gpu(data)
+  def test_concat_arrays_gpu
     require_gpu
     @padding = data[:padding]
 
