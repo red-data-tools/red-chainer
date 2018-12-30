@@ -13,18 +13,18 @@ class Chainer::Links::Connection::EmbedIDTest < Test::Unit::TestCase
     @link.cleargrads
 
     @w = @link.w.data.copy()
-    @x = Numo::Int32[*data[:x_data]]
+    @x = xm::Int32[*data[:x_data]]
     y_shape = @x.shape + [2]
-    @gy = Numo::SFloat.new(*y_shape).rand(-1, 1)
+    @gy = xm::SFloat.new(*y_shape).rand(-1, 1)
   end
 
   data(data)
   def test_forward_cpu(data)
     _setup(data)
 
-    x = Chainer::Variable.new(Numo::Int32.cast(data[:x_data]))
+    x = Chainer::Variable.new(xm::Int32.cast(data[:x_data]))
     y = @link.(x)
-    assert_equal(y.data.class, Numo::SFloat)
+    assert_equal(y.data.class, xm::SFloat)
     y_expect = @gy.dup
 
     @x.shape.reduce(&:*).times do |i|
