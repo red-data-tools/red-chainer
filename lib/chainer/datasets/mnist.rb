@@ -41,7 +41,9 @@ module Chainer
         train_table = ::Datasets::MNIST.new(type: type).to_table
 
         xm = Chainer::Device.default.xm
-        { x: xm::UInt8[*train_table[:pixels]], y: xm::UInt8[*train_table[:label]] }
+        Proc.new { # Use Proc.new & call to avoid speed reduction in Ruby 2.5 or lower. It is unnecessary in Ruby 2.6 because it does not occur.
+          { x: xm::UInt8[*train_table[:pixels]], y: xm::UInt8[*train_table[:label]] }
+        }.call
       end
     end
   end
