@@ -7,5 +7,5 @@ rvm:
   - 2.3.6
   - 2.4.3
   - 2.5.0
-before_install: gem install bundler -v 1.15.1
+before_install: gem install bundler
 script: ruby test/run_test.rb
