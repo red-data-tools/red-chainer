@@ -5,10 +5,10 @@ module Chainer
         # Spatial max pooling function
         #
         # @param [Chainer::Variable] x Input variable
-        # @param [integer || 2D integer array] Size of pooling window
-        # @param [integer || 2D integer array] Stride of pooling applications
-        # @param [integer || 2D integer array] Spatial padding width for the input array
-        # @param [boolean] If `true`, all spatial locations are pooled int some output pixels
+        # @param [integer || 2D integer array] ksize Size of pooling window
+        # @param [integer || 2D integer array] stride Stride of pooling applications
+        # @param [integer || 2D integer array] pad Spatial padding width for the input array
+        # @param [boolean] cover_all If `true`, all spatial locations are pooled int some output pixels
         # @return [Chainer::Variable] Output variable
         def self.max_pooling_2d(x, ksize, stride: nil, pad: 0, cover_all: true)
           self.new(ksize, stride: stride, pad: pad, cover_all: cover_all).(x)

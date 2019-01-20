@@ -4,7 +4,7 @@ module Chainer
     # Gets a child serializer.
     # This operator creates a child serializer represented by the given key.
     # 
-    # @param [string] key: Name of the child serializer.
+    # @param [string] key Name of the child serializer.
     def [](key)
       raise NotImplementedError
     end
@@ -21,8 +21,8 @@ module Chainer
     # For arrays, the restored elements are directly copied into the
     # ``value`` argument. String values are treated like scalars.
     #
-    # @param [string] key: Name of the serialization entry.   
-    # @param [any] value: Object to be (de)serialized.
+    # @param [string] key Name of the serialization entry.
+    # @param [any] value Object to be (de)serialized.
     #                     ``None`` is only supported by deserializers.
     # @return Serialized or deserialized value.  
     def call(key, value)
@@ -35,7 +35,7 @@ module Chainer
     # Saves an object by this serializer.
     # This is equivalent to ``obj.serialize(self)``.
     #
-    # @param [any] obj: Target object to be serialized.  
+    # @param [any] obj Target object to be serialized.
     def save(obj)
       obj.serialize(self)
     end
