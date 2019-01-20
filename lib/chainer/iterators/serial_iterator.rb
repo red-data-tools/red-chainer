@@ -3,11 +3,13 @@ module Chainer
     class SerialIterator < Chainer::Dataset::Iterator 
       attr_reader :epoch, :is_new_epoch
 
-      def initialize(dataset, batch_size, repeat: true, shuffle: true)
+      def initialize(dataset, batch_size, repeat: true, shuffle: true, device: Chainer::Device.default)
         @dataset = dataset
         @batch_size = batch_size
         @repeat = repeat
         @shuffle = shuffle
+        @device = device
+        @xm = device.xm
 
         reset
       end
@@ -83,10 +85,10 @@ module Chainer
       def reset
         if @shuffle
           order = @dataset.size.times.map(&:to_i).shuffle
-          @order = Numo::Int64[*order]
+          @order = @xm::Int64[*order]
         else
           order = @dataset.size.times.map(&:to_i)
-          @order = Numo::Int64[*order]
+          @order = @xm::Int64[*order]
         end
 
         @current_position = 0

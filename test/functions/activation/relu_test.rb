@@ -3,18 +3,16 @@
 require 'chainer/functions/activation/relu'
 
 class Chainer::Functions::Activation::ReLUTest < Test::Unit::TestCase
-  data = {
-    'test1' => {shape: [3, 2], dtype: Numo::SFloat},
-    'test2' => {shape: [], dtype: Numo::SFloat},
-    'test3' => {shape: [3, 2], dtype: Numo::DFloat},
-    'test4' => {shape: [], dtype: Numo::DFloat}}
 
-  def _setup(data)
+  data(:shape, [[3, 2], []],             keep: true)
+  data(:dtype, [xm::SFloat, xm::DFloat], keep: true)
+
+  def setup
     # Avoid unstability of numerical grad
     @shape = data[:shape]
     @dtype = data[:dtype]
 
-    @dtype.srand(1) # To avoid false of "nearly_eq().all?", Use fixed seed value.
+    @dtype.srand(1) # To avoid false of "nearly_eq.all?", Use fixed seed value.
     @x = @dtype.new(@shape).rand(2) - 1
     @shape.map do |x|
       if (-0.1 < x) and (x < 0.1)
@@ -44,9 +42,7 @@ class Chainer::Functions::Activation::ReLUTest < Test::Unit::TestCase
     assert_true(y.data.nearly_eq(expected).all?)
   end
 
-  data(data)
-  def test_forward_cpu(data)
-    _setup(data)
+  def test_forward
     check_forward(@x.dup)
   end
 
@@ -54,9 +50,7 @@ class Chainer::Functions::Activation::ReLUTest < Test::Unit::TestCase
     Chainer::check_backward(Chainer::Functions::Activation::Relu.method(:relu), x_data, y_grad, @check_backward_options)
   end
 
-  data(data)
-  def test_backward_cpu(data)
-    _setup(data)
+  def test_backward
     check_backward(@x.dup, @gy.dup)
   end
 end

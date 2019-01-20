@@ -3,8 +3,8 @@ module Chainer
     attr_accessor :data, :grad, :requires_grad, :node, :grad_var
 
     def initialize(data=nil, name: nil, grad: nil, requires_grad: true)
-      unless data.nil? || data.is_a?(Numo::NArray)
-        raise TypeError, "Numo::NArray are expected."
+      unless data.nil? || Chainer.array?(data)
+        raise TypeError, "Numo::NArray or Cumo::NArray are expected."
       end
 
       @data = [data]

@@ -14,12 +14,12 @@ module Chainer
           self.new(ksize, stride: stride, pad: pad, cover_all: cover_all).(x)
         end
 
-        def forward_cpu(x)
+        def forward(x)
           retain_inputs([])
           @in_shape = x[0].shape
           @in_dtype = x[0].class
 
-          col = Chainer::Utils::Conv.im2col_cpu(x[0], @kh, @kw, @sy, @sx, @ph, @pw, pval: -Float::INFINITY, cover_all: @cover_all)
+          col = Chainer::Utils::Conv.im2col(x[0], @kh, @kw, @sy, @sx, @ph, @pw, pval: -Float::INFINITY, cover_all: @cover_all)
           n, c, kh, kw, out_h, out_w = col.shape
           col = col.reshape(n , c, kh * kw, out_h, out_w)
 
@@ -33,7 +33,7 @@ module Chainer
           [y]
         end
 
-        def backward_cpu(x, gy)
+        def backward(x, gy)
           n, c, out_h, out_w = gy[0].shape
           h, w  = @in_shape[2..-1]
           kh, kw = @kh, @kw
@@ -41,14 +41,15 @@ module Chainer
           gcol = @in_dtype.zeros(n * c * out_h * out_w * kh * kw)
 
           indexes = @indexes.flatten
-          indexes += Numo::Int64.new((indexes.size * kh * kw) / (kh * kw)).seq(0, kh * kw)
+          xm = Chainer.get_array_module(x, gy)
+          indexes += indexes.class.new((indexes.size * kh * kw) / (kh * kw)).seq(0, kh * kw)
          
           gcol[indexes] = gy[0].flatten.dup
           gcol = gcol.reshape(n, c, out_h, out_w, kh, kw)
           gcol = gcol.swapaxes(2, 4)
           gcol = gcol.swapaxes(3, 5)
 
-          gx = Chainer::Utils::Conv.col2im_cpu(gcol, @sy, @sx, @ph, @pw, h, w)
+          gx = Chainer::Utils::Conv.col2im(gcol, @sy, @sx, @ph, @pw, h, w)
           [gx]
         end
       end

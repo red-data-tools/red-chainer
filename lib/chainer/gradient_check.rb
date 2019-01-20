@@ -1,7 +1,6 @@
 module Chainer
   def _copy_arrays(xs)
-    xp = Chainer::get_array_module(*xs)
-    xs.map{|x| (x.is_a? Numo::NArray) ? x.dup : x}
+    xs.map{|x| Chainer.array?(x) ? x.dup : x}
   end
 
   # Computes numerical gradient by finite differences.
@@ -23,7 +22,6 @@ module Chainer
     raise unless eps > 0
     inputs = inputs.to_a
     grad_outputs = grad_outputs.to_a
-    xp = Numo::NArray
     grads = inputs.map{|x| x.new_zeros()}
 
     if inputs[0].ndim < 2
@@ -34,7 +32,7 @@ module Chainer
 
     tmp.each do |x, gx|
       x.each_with_index{|xx, *i|
-        orig = x[*i]   # hold original value
+        orig = x[*i].to_f   # hold original value
         x[*i] = orig + eps
         ys1 = _copy_arrays(f.call(x))
         x[*i] = orig - eps
@@ -43,7 +41,7 @@ module Chainer
 
         ys1.zip(ys2, grad_outputs).each do |y1, y2, gy|
           if !gy.nil?
-            if  ((y1 - y2) * gy).is_a? Numo::NArray
+            if Chainer.array?((y1 - y2) * gy)
               dot = ((y1 - y2) * gy).sum()
             else
               dot = ((y1 - y2) * gy).inject(:+)
@@ -153,6 +151,7 @@ module Chainer
   #
   def check_backward(func, x_data, y_grad, params=[], eps: 0.001, atol: 1e-5, rtol: 1e-4, no_grads: nil, dtype: nil)
     x_data = _as_tuple(x_data)
+    xm = Chainer.get_array_module(*x_data)
     if !y_grad.nil?
       y_grad = _as_tuple(y_grad)
     end
@@ -184,14 +183,14 @@ module Chainer
     if dtype.nil?
       casted_xs = x_data.map{|x| Chainer::Variable.new(x)}
     else
-      if (dtype != Numo::DFloat) and (dtype != Numo::SFloat)
+      if (dtype != xm::DFloat) and (dtype != xm::SFloat)
         raise TypeError, "`dtype` is allowed only float type"
       end
       if (params).size > 0
         raise TypeError, "`dtype` is available only if `params` is empty"
       end
       casted_xs = x_data.map{|x|
-                    if x.class == Numo::DFloat or x.class == Numo::SFloat
+                    if x.class == xm::DFloat or x.class == xm::SFloat
                       Chainer::Variable.new(dtype.cast(x))
                     else
                       Chainer::Variable.new(x)
@@ -206,7 +205,7 @@ module Chainer
     end
 
     if no_grads.nil?
-      no_grads = xs.map{|x| (x.dtype != Numo::DFloat) and (x.dtype != Numo::SFloat)}
+      no_grads = xs.map{|x| (x.dtype != xm::DFloat) and (x.dtype != xm::SFloat)}
     else
       if no_grads.size != xs.size
         raise TypeError, "Length of no_grads param and xs should be same."
@@ -223,7 +222,7 @@ module Chainer
       if dtype.nil?
         raise unless gx.class == x.grad.class
       else
-        if ((gx.class != Numo::DFloat) and (gx.class != Numo::SFloat)) and (gx.class != dtype)
+        if ((gx.class != xm::DFloat) and (gx.class != xm::SFloat)) and (gx.class != dtype)
            raise
         end
       end

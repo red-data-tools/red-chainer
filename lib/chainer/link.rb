@@ -80,6 +80,8 @@ module Chainer
     end
 
     def serialize(serializer)
+      # TODO(sonots): pass device from outside
+      xm = Chainer::Device.default.xm
       d = self.instance_variables.each_with_object({}) { |sym, h| h[sym] = self.instance_variable_get(sym) }
       @params.each do |name|
         param = d[name]
@@ -87,10 +89,10 @@ module Chainer
         if param.data.nil? && !data.nil?
           # Initialize the parameter here
           param.init(data.shape)
-          if param.data.is_a?(Numo::NArray)
+          if Chainer.array?(param.data)
             param.data.store(data)
           else
-            param.data.set(Numo::NArray.cast(data))
+            param.data.set(xm::NArray.cast(data))
           end
         end
       end

@@ -19,8 +19,10 @@ module Chainer
       end
 
       def call(array)
-        fan_in, fan_out = Chainer::Utils::Initializer.get_fans(array.shape)
-        s = @scale * Numo::NMath.sqrt(2.0 / fan_in)
+        # TODO(sonots): pass device from outside
+        device = Chainer::Device.default
+        fan_in, fan_out = Chainer::Utils::Initializer.get_fans(array.shape, device: device)
+        s = @scale * device.xm::NMath.sqrt(2.0 / fan_in)
         Normal.new(scale: s).(array)
       end
     end

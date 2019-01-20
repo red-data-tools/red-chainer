@@ -91,7 +91,8 @@ module Chainer
         def backward(x, gy)
           one = x[1].class.ones[0]
           gx0 = Utils::Array.force_array(x[1] * (x[0] ** (x[1] - one)) * gy[0])
-          gx1 = Utils::Array.force_array(Numo::NMath.log(x[0]) * @y * gy[0])
+          xm = Chainer.get_array_module(x[0])
+          gx1 = Utils::Array.force_array(xm::NMath.log(x[0]) * @y * gy[0])
           [gx0, gx1]
         end
       end
