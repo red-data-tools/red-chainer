@@ -18,33 +18,30 @@ module Chainer
             return [Chainer::Utils::Array.take(w, x, axis: 0)]
           end
 
-          mask = xm::Bit.cast(x.flatten.to_a.map{|i| i == @ignore_label}).reshape(*x.shape)
-          if mask.where.empty?
+          valid_x = x.ne(@ignore_label)
+          if valid_x.count == x.size
             return [Chainer::Utils::Array.take(w, x, axis: 0)]
           end
-          x = x.dup
-          x[mask.where] = 0
+          x *= valid_x
           y = Chainer::Utils::Array.take(w, x, axis: 0).dup
 
-          ndindex = Chainer::Utils::Array.ndindex(y.shape.take(y.shape.size - 1))
-          mask.where.each {|i| y[*ndindex[i], true] = 0 }
+          y = y.reshape(y.shape.take(y.shape.size - 1).reduce(&:*), true)
+          valid_x.where2.last.each {|i| y[i, true] = y.class.zeros(y.shape.last) }
 
-          [y]
+          [y.reshape(*x.shape, true)]
         end
 
         def backward(inputs, grad_outputs)
           (x, w) = inputs
-          gy = grad_outputs[0]
-          gw = w.class.zeros(w.shape)
-          ndindex = Chainer::Utils::Array.ndindex(gw.shape[0, gw.shape.size - 1])
+          gy = grad_outputs[0].reshape(x.size, true)
+          gw = w.class.zeros(w.shape).reshape(w.shape.take(w.shape.size - 1).reduce(&:*), true)
 
-          gy2 = gy.reshape(x.size, true)
           x.reshape(x.size).each_with_index do |ix, i|
             next if ix == @ignore_label
-            gw[*ndindex[ix], true] = gw[*ndindex[ix], true] + gy2[i, true]
+            gw[ix, true] = gw[ix, true] + gy[i, true]
           end
 
-          [nil, gw]
+          [nil, gw.reshape(*w.shape)]
         end
       end
     end
