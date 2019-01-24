@@ -19,7 +19,7 @@ class Chainer::Links::Connection::EmbedIDTest < Test::Unit::TestCase
   end
 
   data(data)
-  def test_forward_cpu(data)
+  def test_forward(data)
     _setup(data)
 
     x = Chainer::Variable.new(xm::Int32.cast(data[:x_data]))
