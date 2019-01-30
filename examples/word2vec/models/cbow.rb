@@ -2,8 +2,10 @@ class CBoW < Chainer::Chain
   def initialize(n_vocab, n_units, loss_func)
     super()
     init_scope do
-      @embed = Chainer::Links::Connection::EmbedID.new(nil, n_vocab, n_units, initial_weight: I.Uniform(1. / n_units), loss_func: loss_func)
+      initial_weight = Chainer::Initializers::Uniform.new(scale: (1.0 / n_units))
+      @embed = Chainer::Links::Connection::EmbedID.new(n_vocab, n_units, initial_w: initial_weight)
       @loss_func = loss_func
+
     end
   end
 

@@ -11,7 +11,7 @@ args = {
   epoch: 20,
   model: 'skipgram',
   negativesize: 5,
-  out_type: 'hsm',
+  out_type: 'original',
   out: 'result',
   test: false,
 }
@@ -23,7 +23,8 @@ opt.on('-b', '--batchsize VALUE', "Number of words in each mini-batch (default: 
 opt.on('-e', '--epoch VALUE', "Number of sweeps over the dataset to train (default: #{args[:epoch]})") { |v| args[:epoch] = v.to_i }
 opt.on('-m', '--model VALUE', "The model to use: skipgram or cbow (default: #{args[:model]})") { |v| args[:model] = v }
 opt.on('--negativesize VALUE', "Number of negative sample (default: #{args[:negativesize]})") { |v| args[:negativesize] = v.to_f }
-opt.on('-o', '--out-type VALUE', "Output model type: hsm or ns or original (default: #{args[:out_type]})") { |v| args[:out_type] = v }
+# todo implement hsm, ns
+# opt.on('-o', '--out-type VALUE', "Output model type: hsm or ns or original (default: #{args[:out_type]})") { |v| args[:out_type] = v }
 opt.on('--out VALUE', "Directory to output the result (default: #{args[:out]})") { |v| args[:out] = v }
 opt.on('--test') { args[:test] = true }
 opt.parse!(ARGV)
@@ -174,7 +175,7 @@ case args[:model]
 when 'skipgram'
   model = SkipGram.new(n_vocab, args[:unitsize], loss_func)
 when 'cbow'
-  model = ContinuousBoW.new(n_vocab, args[:unitsize], loss_func)
+  model = CBoW.new(n_vocab, args[:unitsize], loss_func)
 else
   raise "Unknown model type: @{args[:model]}"
 end
