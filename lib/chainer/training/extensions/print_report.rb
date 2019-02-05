@@ -2,7 +2,7 @@ module Chainer
   module Training
     module Extensions
       class PrintReport < Extension
-        def initialize(entries, log_report: 'LogReport', out: STDOUT)
+        def initialize(entries, log_report: 'LogReport', out: $stdout)
           @entries = entries
           @log_report = log_report
           @out = out
