@@ -45,7 +45,7 @@ module Chainer
 
         def backward(indexes, grad_outputs)
           if @axis.nil?
-            axis = [argone(@inputs[0].shape)]
+            axis = argone(@inputs[0].shape)
           else
             axis = @axis
             ndim = @inputs[0].shape.size

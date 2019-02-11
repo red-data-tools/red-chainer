@@ -157,7 +157,7 @@ module Chainer
 
       len_gxs = gxs.size
       if len_gxs == @inputs.size
-        gxs = target_indexes.map { |i| gxs[i] }
+        gxs = target_input_indexes.map { |i| gxs[i] }
       elsif len_gxs != target_input_indexes.size
         raise ArgumentError, "number of gradients returned by #{impl_name} (#{label}) is incorrect."
       end

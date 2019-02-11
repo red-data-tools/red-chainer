@@ -45,7 +45,7 @@ module Chainer
 
     def grad
       gv = @grad_var
-      gv.nil? ? nil : gv.data
+      gv.nil? ? nil : gv
     end
 
     def grad=(g)
@@ -57,7 +57,7 @@ module Chainer
     end
 
     def grad_var=(g)
-      Utils::Variable.check_grad_type(nil, self, g.data) unless g.nil?
+      Utils::Variable.check_grad_type(nil, self, g) unless g.nil?
       @grad_var = g
     end
 
@@ -130,7 +130,7 @@ module Chainer
         # For example, when the input variables are `(x, x)`,
         # the input gradient passed to the `backward_accumulate` method is `(gx, nil)` where `gx` is the current gradient of ``x``.
         # See also the docstring of `FunctionNode.backward_accumulate`.
-        inputs.each_with_index.map { |x, i| i if x.requires_grad }
+        target_input_indexes = inputs.each_with_index.map { |x, i| i if x.requires_grad }
         target_inputs = target_input_indexes.map { |i| inputs[i] }
         in_grad = []
         target_input_indexes.each_with_index do |index_i, i|
@@ -152,50 +152,33 @@ module Chainer
         unless retain_grad
           outputs.each do |y|
             unless y.nil? || y == @node
-              y.grad = nil
+              grads[y] = nil
+              y_var = y.get_variable
+              y_var.grad_var = nil unless y_var.nil?
             end
           end
         end
 
-        seen_vars = []
-        need_copy = []
-
-        func.inputs.zip(gxs).each do |x, gx|
+        gxs.each_with_index do |gx, i|
           next if gx.nil?
+          x = target_inputs[i]
           next unless x.requires_grad
 
           Utils::Variable.check_grad_type(func, x, gx)
 
-          id_x = x.object_id
-          if x.creator.nil? # leaf
-            if x.grad.nil?
-              x.grad = gx
-              need_copy << id_x
-            else
-              if need_copy.include?(id_x)
-                x.grad = Utils::Array.force_array(x.grad + gx)
-                need_copy.delete(id_x)
-              else
-                x.grad += gx
-              end
-            end
-          else # not leaf
-            funcs << x.creator
-            if seen_vars.include?(id_x)
-              if need_copy.include?(id_x)
-                x.grad = Utils::Array.force_array(gx + x.grad)
-                need_copy.delete(id_x)
-              else
-                x.grad += gx
-              end
-            else
-              x.grad = gx
-              seen_vars << id_x
-              need_copy << id_x
-            end
+          if target_inputs[0...i].include?(x)
+            cur_gx = grads[x]
+            grads[x] = cur_gx.nil? ? gx : gx + cur_gx
+          else
+            grads[x] = gx
           end
+
+          x_var = x.get_variable
+          x_var.grad_var = grads[x] if x_var
+
+          funcs << x.creator_node if x.creator_node
         end
-      end 
+      end
     end
 
     def -@
