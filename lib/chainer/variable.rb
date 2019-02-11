@@ -1,6 +1,6 @@
 module Chainer
   class Variable
-    attr_accessor :data, :grad, :requires_grad, :node, :grad_var
+    attr_accessor :data, :grad, :requires_grad, :node
 
     def initialize(data=nil, name: nil, grad: nil, requires_grad: true)
       unless data.nil? || Chainer.array?(data)
@@ -52,6 +52,15 @@ module Chainer
       @grad_var = g.nil? ? nil : Chainer::Variable.new(g)
     end
 
+    def grad_var
+      @grad_var
+    end
+
+    def grad_var=(g)
+      Utils::Variable.check_grad_type(nil, self, g.data) unless g.nil?
+      @grad_var = g
+    end
+
     def shape
       self.data.shape
     end
@@ -89,27 +98,56 @@ module Chainer
     end
 
     def backward(retain_grad: false)
-      return if self.creator.nil?
+      return if self.creator_node.nil?
 
-      if self.data.size == 1 && self.grad.nil?
+      grads = {}
+      if self.data.size == 1 && self.grad_var.nil?
         self.grad = self.data.new_ones
       end
+      grads[self.node] = self.grad_var
 
-      funcs = [self.creator]
+      funcs = [self.creator_node]
 
       while func = funcs.pop
+        inputs = func.inputs
         outputs = func.outputs.map(&:__getobj__)
-        in_data = func.inputs.map(&:data)
-        out_grad = outputs.map { |y| y.nil? ? nil : y.grad }
 
-        func.output_data = outputs.map { |y| y.nil? ? nil : y.data }
-        gxs = func.backward(in_data, out_grad)
-
-        raise "Unmatched matries size: gxs.size(#{gxs.size}) != in_data.size(#{in_data.size})" unless gxs.size == in_data.size
-
-        unless func.retain_after_backward
-          func.output_data = nil
+        in_data = inputs.map(&:data)
+        out_grad = outputs.map do |y|
+          next nil if y.nil?
+          next grads[y] unless grads[y].nil?
+          y.grad_var
         end
+        out_grad_data = out_grad.map { |g| g.nil? ? g : g.data }
+
+        # Collect the current input gradients.
+        #
+        # When the same variable is passed to multiple input slots (e.g. an expression like `f(x, x)`),
+        # it makes the gradient accumulation complicated since the back-propagated gradients w.r.t.
+        # the first and second argument should be accumulated to the current gradient w.r.t. the same variable.
+        # In this case, the current implementation passes the current gradient only to the first occurrence of the variable
+        # in the input tuple and passes `nil` to the rest of the occurrences.
+        # For example, when the input variables are `(x, x)`,
+        # the input gradient passed to the `backward_accumulate` method is `(gx, nil)` where `gx` is the current gradient of ``x``.
+        # See also the docstring of `FunctionNode.backward_accumulate`.
+        inputs.each_with_index.map { |x, i| i if x.requires_grad }
+        target_inputs = target_input_indexes.map { |i| inputs[i] }
+        in_grad = []
+        target_input_indexes.each_with_index do |index_i, i|
+          x = inputs[index_i]
+          if target_inputs[0...i].include?(x)
+            gx = nil
+          elsif grads[x]
+						gx = grads[x]
+          elsif x.creator_node.nil?
+            gx = x.grad_var
+          else
+            gx = nil
+          end
+          in_grad << gx
+        end
+        gxs = func.backward_accumulate(target_input_indexes, out_grad, in_grad)
+        raise "Unmatched matries size: gxs.size(#{gxs.size}) != in_grad.size(#{in_grad.size})" unless gxs.size == in_grad.size
 
         unless retain_grad
           outputs.each do |y|
