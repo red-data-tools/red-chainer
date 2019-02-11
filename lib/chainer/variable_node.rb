@@ -1,6 +1,6 @@
 module Chainer
   class VariableNode
-    attr_reader :dtype, :shape
+    attr_reader :dtype, :shape, :data
     attr_accessor :name, :requires_grad, :variable, :creator_node, :rank
 
     def initialize(variable: , name:)
@@ -12,6 +12,10 @@ module Chainer
       @requires_grad = variable.requires_grad
 
       set_data_type(variable.data)
+    end
+
+    def creator=(func)
+      self.creator_node = func
     end
 
     def creator_node=(func)
@@ -59,15 +63,19 @@ module Chainer
       var
     end
 
+    def set_creator(creator)
+      self.creator = creator
+    end
+
     # Sets a `FunctionNode` object that created this node.
     #
     # @params [Chainer::FunctionNode] Function node that has this variable as an output.
     def set_creator_node(creator_node)
-      @creator_node = creator_node
+      self.creator_node = creator_node
     end
 
     def unchain
-      @creator_node = nil
+      self.creator_node = nil
     end
 
     def retain_data
