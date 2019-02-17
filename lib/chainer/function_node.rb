@@ -39,7 +39,7 @@ module Chainer
     #   it is automatically wrapped with `Chainer::Variable`.
     # @return [Array<Chainer::Variable>] A tuple of output `Chainer::Variable` objectts.
     def apply(inputs)
-      input_vars = inputs.map { |x| x.is_a?(Chainer::Variable) ? x : Chainer::Variable.new(x, requires_grad: false) }
+      input_vars = inputs.map { |x| Chainer::Variable.as_variable(x) }
       in_data = input_vars.map(&:data)
       requires_grad = input_vars.map(&:requires_grad).any?
 

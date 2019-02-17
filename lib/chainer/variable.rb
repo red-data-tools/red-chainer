@@ -2,6 +2,12 @@ module Chainer
   class Variable
     attr_accessor :data, :grad, :requires_grad, :node
 
+    def self.as_variable(obj)
+      return obj if obj.kind_of?(Chainer::Variable)
+      # TODO if obj is_backprop_required is true, set requires_grad = true
+      self.new(obj, requires_grad: false)
+    end
+
     def initialize(data=nil, name: nil, grad: nil, requires_grad: true)
       unless data.nil? || Chainer.array?(data)
         raise TypeError, "Numo::NArray or Cumo::NArray are expected."
@@ -45,7 +51,7 @@ module Chainer
 
     def grad
       gv = @grad_var
-      gv.nil? ? nil : gv
+      gv.nil? ? nil : gv.data
     end
 
     def grad=(g)
@@ -57,7 +63,7 @@ module Chainer
     end
 
     def grad_var=(g)
-      Utils::Variable.check_grad_type(nil, self, g) unless g.nil?
+      Utils::Variable.check_grad_type(nil, self, g.data) unless g.nil?
       @grad_var = g
     end
 
@@ -82,7 +88,10 @@ module Chainer
     end
 
     def reshape(*shape)
-      self.data.reshape(*shape)
+      if shape.size == 1 && shape[0].kind_of?(::Aray)
+        shape = shape[0]
+      end
+      Chainer::Functions::Array::Reshape.reshape(self, shape)
     end
 
     # Clears the gradient array.
@@ -146,6 +155,7 @@ module Chainer
           end
           in_grad << gx
         end
+
         gxs = func.backward_accumulate(target_input_indexes, out_grad, in_grad)
         raise "Unmatched matries size: gxs.size(#{gxs.size}) != in_grad.size(#{in_grad.size})" unless gxs.size == in_grad.size
 
