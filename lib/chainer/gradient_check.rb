@@ -160,7 +160,7 @@ module Chainer
     xs = x_data.map{|x| Chainer::Variable.new(x)}
     y = func.(*xs)
     y = _as_tuple(y)
-    y = Chainer::Functions::Math::Identity.identity.apply(y)
+    y = Chainer::Functions::Math::Identity.new.apply(y)
 
     if !y_grad.nil?
       if (y).size != (y_grad).size

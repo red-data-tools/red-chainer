@@ -26,7 +26,7 @@ class Chainer::Functions::Array::BroadcastToTest < Test::Unit::TestCase
       check_backward_options = { eps: 2 ** -5, atol: 1e-3, rtol: 1e-2 }
     end
 
-    func = Chainer::Functions::Array::BroadcastTo.new(data[:shape][:out_shape])
+    func = lambda{ |x| Chainer::Functions::Array::BroadcastTo.broadcast_to(x, data[:shape][:out_shape]) }
     Chainer::check_backward(func, in_data, grads, **check_backward_options)
   end
 end
