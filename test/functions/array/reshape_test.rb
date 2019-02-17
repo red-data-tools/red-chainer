@@ -15,7 +15,7 @@ class Chainer::Functions::Array::ReshapeTest < Test::Unit::TestCase
     x = Chainer::Variable.new(in_data)
     y = Chainer::Functions::Array::Reshape.reshape(x, shape)
     assert_equal(y.data.class, data[:dtype])
-    assert_equal(x.reshape(*shape), y.data)
+    assert_equal(x.reshape(*shape).data, y.data)
   end
 
   def test_backward

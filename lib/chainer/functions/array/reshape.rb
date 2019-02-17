@@ -8,12 +8,8 @@ module Chainer
         end
 
         def self.reshape(x, shape)
-          if x.shape == shape
-            return x if x.is_a?(Chainer::Variable)
-            return Chainer::Variable.new(x, requires_grad: false)
-          end
-          y = self.new(shape).apply([x]).first
-          y
+          return Chainer::Variable.as_variable(x) if x.shape == shape
+          return self.new(shape).apply([x]).first
         end
 
         def forward(inputs)
@@ -23,7 +19,7 @@ module Chainer
 
         def backward(indexes, grad_outputs)
           gx = grad_outputs.first
-          [self.reshape(gx, @inputs.first.shape)]
+          [Reshape.reshape(gx, @inputs.first.shape)]
         end
       end
     end
