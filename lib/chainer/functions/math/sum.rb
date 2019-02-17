@@ -10,8 +10,7 @@ module Chainer
         # @param[boolean] keepdims If `true`, the specified axes are remained as axes of length one
         # @return [Chainer::Variable] Output variable
         def self.sum(x, axis: nil, keepdims: false)
-          y = Sum.new(axis: axis, keepdims: keepdims).apply([x]).first
-          y
+          Sum.new(axis: axis, keepdims: keepdims).apply([x]).first
         end
 
         def initialize(axis: nil, keepdims: false)
@@ -32,7 +31,7 @@ module Chainer
         def forward(inputs)
           x = inputs.first
           ret = x.sum(axis: @axis, keepdims: @keepdims)
-          ret = Numo::NArray.cast(ret)
+          ret = x.class.cast(ret)
           [ret]
         end
 

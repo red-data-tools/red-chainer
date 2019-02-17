@@ -168,7 +168,11 @@ module Chainer
       end
 
       y.zip(y_grad).each do |iy, igy|
-        iy.grad = igy
+        if igy.is_a?(Chainer::Variable)
+          iy.grad_var = igy
+        else
+          iy.grad = igy
+        end
       end
     else
       if (y).size != 1
@@ -176,6 +180,7 @@ module Chainer
       end
       y_grad = [1]
     end
+
     # We only need to call `backward` for one result `Chainer::Variable`.
     # `Chainer::Variable.backward` method calls `Chainer::Function.backward` of its creator.
     y[0].backward()

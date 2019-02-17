@@ -56,14 +56,18 @@ module Chainer
         end
 
         tile_shape = []
-        shape[-x.shape.size..-1].each_with_index do |s, i|
-          if  x.shape[i] == 1
-            tile_shape << s
-          elsif x.shape[i] == s
-            tile_shape << 1
-          else
-            raise TypeError, "Shape of data  mismatch\n#{x.shape} != #{shape}"
+        if x.shape.size > 0
+          shape[-x.shape.size..-1].each_with_index do |s, i|
+            if  x.shape[i] == 1
+              tile_shape << s
+            elsif x.shape[i] == s
+              tile_shape << 1
+            else
+              raise TypeError, "Shape of data  mismatch\n#{x.shape} != #{shape}"
+            end
           end
+        else
+          tile_shape = shape
         end
 
         x.tile(*shape[0...-x.shape.size], *tile_shape)
