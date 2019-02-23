@@ -82,7 +82,7 @@ module Chainer
     # method, and so you need to serialize the target link separately if you
     # want to fully recover the training state including parameters.
     #
-    # @param [Chainer::AbstractSerializer] serializer: Serializer object.
+    # @param [Chainer::AbstractSerializer] serializer Serializer object.
     def serialize(serializer)
       if @state.nil?
         if serializer.is_a?(Chainer::Deserializer)

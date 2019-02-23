@@ -44,8 +44,8 @@ module Chainer
       # Loads an object from the file in Marshal format.
       # This is a short-cut function to load from an Marshal file that contains only one object.
       #
-      # @param [string ]filename: Name of the file to be loaded.
-      # @param [object] obj: Object to be deserialized. It must support serialization protocol.
+      # @param [string] filename Name of the file to be loaded.
+      # @param [object] obj Object to be deserialized. It must support serialization protocol.
       def self.load_file(filename, obj)
         File.open(filename) do |f|
           d = self.new(Marshal.load(f))

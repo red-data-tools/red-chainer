@@ -9,4 +9,6 @@ rvm:
   - 2.5.0
   - 2.6.0
 before_install: gem install bundler
-script: ruby test/run_test.rb
+script:
+  - ruby test/run_test.rb
+  - yardoc --fail-on-warning
