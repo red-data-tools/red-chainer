@@ -56,7 +56,8 @@ module Chainer
     # @return [Chainer::Variable] The variable object that refers this node.
     def get_variable
       var = @variable
-      return var unless var.nil?
+      # workaround: check weakref_alive?, because weakref sometimes delegates references by GC
+      return var.__getobj__ if !var.nil? && var.weakref_alive?
 
       var = Chainer::Variable.new(@data, name: @name, requires_grad: @requires_grad)
       var.node = self
