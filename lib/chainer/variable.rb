@@ -87,6 +87,10 @@ module Chainer
       @node.rank
     end
 
+    def transpose
+      Chainer::Functions::Array::Transpose.transpose(self)
+    end
+
     def reshape(*shape)
       if shape.size == 1 && shape[0].kind_of?(::Aray)
         shape = shape[0]
@@ -109,6 +113,7 @@ module Chainer
     def backward(retain_grad: false)
       return if self.creator_node.nil?
 
+      seen_set = Set.new
       grads = {}
       if self.data.size == 1 && self.grad_var.nil?
         self.grad = self.data.new_ones
@@ -116,8 +121,9 @@ module Chainer
       grads[self.node] = self.grad_var
 
       funcs = [self.creator_node]
+      seen_set.add(self.creator_node)
 
-      while func = funcs.pop
+      while func = funcs.shift
         inputs = func.inputs
         outputs = func.outputs.map(&:__getobj__)
 
@@ -174,7 +180,7 @@ module Chainer
           x = target_inputs[i]
           next unless x.requires_grad
 
-          Utils::Variable.check_grad_type(func, x, gx)
+          Utils::Variable.check_grad_type(func, x, gx.data)
 
           if target_inputs[0...i].include?(x)
             cur_gx = grads[x]
@@ -186,8 +192,14 @@ module Chainer
           x_var = x.get_variable
           x_var.grad_var = grads[x] if x_var
 
-          funcs << x.creator_node if x.creator_node
+          if x.creator_node && !seen_set.include?(x.creator_node)
+            funcs << x.creator_node
+            seen_set.add(x.creator_node)
+          end
         end
+
+        funcs.sort_by! { |f| -f.rank }
+
       end
     end
 
@@ -197,15 +209,15 @@ module Chainer
 
     def +(other)
       if other.instance_of?(Chainer::Variable)
-        Functions::Math::Add.new.(*[self, other])
+        Functions::Math::Add.new.apply([self, other])[0]
       else
-        Functions::Math::AddConstant.new(other).(self)
+        Functions::Math::AddConstant.new(other).apply(self)[0]
       end
     end
 
     def -(other)
       if other.instance_of?(Chainer::Variable)
-        Functions::Math::Sub.new.apply(*[self, other])[0]
+        Functions::Math::Sub.new.apply([self, other])[0]
       else
         Functions::Math::AddConstant.new(-other).apply([self])[0]
       end
@@ -213,7 +225,7 @@ module Chainer
 
     def *(other)
       if other.instance_of?(Chainer::Variable)
-        Functions::Math::Mul.new.apply(*[self, other])[0]
+        Functions::Math::Mul.new.apply([self, other])[0]
       else
         Functions::Math::MulConstant.new(other).apply([self])[0]
       end
@@ -221,7 +233,7 @@ module Chainer
 
     def /(other)
       if other.instance_of?(Chainer::Variable)
-        Functions::Math::Div.new.apply(*[self, other])[0]
+        Functions::Math::Div.new.apply([self, other])[0]
       else
         Functions::Math::MulConstant.new(1 / other).apply([self])[0]
       end
@@ -229,7 +241,7 @@ module Chainer
 
     def **(other)
       if other.instance_of?(Chainer::Variable)
-        Functions::Math::PowVarVar.new.apply(*[self, other])[0]
+        Functions::Math::PowVarVar.new.apply([self, other])[0]
       else
         Functions::Math::PowVarConst.new(other).apply([self])[0]
       end

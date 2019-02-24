@@ -47,7 +47,7 @@ module Chainer
 
       class Mul < ::Chainer::FunctionNode
         def forward(x)
-          etain_inputs([0, 1])
+          retain_inputs([0, 1])
           [Utils::Array.force_array(x[0] * x[1])]
         end
 
