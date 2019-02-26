@@ -10,6 +10,14 @@ module Chainer
         end
       end
 
+      def self.get_deconv_outsize(size, k, s, p, cover_all: false)
+        if cover_all
+          s * (size - 1) + k -s + 1 - 2 * p
+        else
+          s * (size - 1) + k - 2 * p
+        end
+      end
+
       def self.im2col(img, kh, kw, sy, sx, ph, pw, pval: 0, cover_all: false, dy: 1, dx: 1)
         n, c, h, w = img.shape
 
