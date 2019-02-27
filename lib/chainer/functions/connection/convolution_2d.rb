@@ -1,7 +1,8 @@
 module Chainer
   module Functions
     module Connection
-      class Convolution2DFunction < Chainer::Function
+      class Convolution2DFunction < Chainer::FunctionNode
+        attr_reader :sy, :sx, :ph, :pw, :cover_all
         # Two-dimensional convolution function.
         # This is an implementation of two-dimensional convolution in ConvNets.
         # It takes three variables: the input image `x`, the filter weight `w`, and the bias vector `b`.
@@ -43,10 +44,12 @@ module Chainer
         def self.convolution_2d(x, w, b: nil, stride: 1, pad: 0, cover_all: false)
           func = self.new(stride: stride, pad: pad, cover_all: cover_all)
           if b.nil?
-              func.(x, w)
+            args = [x, w]
           else
-              func.(x, w, b)
+            args = [x, w, b]
           end
+
+          func.apply(args).first
         end
 
         def initialize(stride: 1, pad: 0, cover_all: false)
@@ -56,35 +59,49 @@ module Chainer
         end
 
         def forward(inputs)
+          retain_inputs([0, 1])
           x = inputs[0]
           w = inputs[1]
           b = inputs.size == 3 ? inputs[2] : nil
 
-          kh, kw = w.shape[2], w.shape[3]
+          unless inputs.all? { |i| i.is_a?(Numo::NArray) }
+            if b.nil?
+              raise TypeError, "Numo::NArray must not be used together w: #{w.class}, x: #{x.class}"
+            else
+              raise TypeError, "Numo::NArray must not be used together w: #{w.class}, x: #{x.class}, b: #{b.class}"
+            end
+          end
 
-          @col = Chainer::Utils::Conv.im2col(x, kh, kw, @sy, @sx, @ph, @pw, cover_all: @cover_all)
-          y = Chainer::Utils::Math.tensordot(@col, w, [[1, 2, 3], [1, 2, 3]])
+          kh, kw = w.shape[2..-1]
+          col = Chainer::Utils::Conv.im2col(x, kh, kw, @sy, @sx, @ph, @pw, cover_all: @cover_all)
+          y = Chainer::Utils::Math.tensordot(col, w, [[1, 2, 3], [1, 2, 3]]).cast_to(x.class)
           y += b if b
-          
+
           [y.transpose(0, 3, 1, 2)]
         end
 
-        def backward(inputs, grad_outputs)
-          x, w, b = inputs[0], inputs[1], inputs[2]
-          gy = grad_outputs[0]
-          height, width = x.shape[2..-1]
+        def backward(indexes, grad_outputs)
+          x, w = get_retained_inputs
+          gy = grad_outputs.first
 
-          gw = Chainer::Utils::Math.tensordot(gy, @col, [[0, 2, 3], [0, 4, 5]])
-          gcol = Chainer::Utils::Math.tensordot(w, gy, [0, 1])
-          gcol = gcol.transpose(3, 0, 1, 2)
-          gx = Chainer::Utils::Conv.col2im(gcol, @sy, @sx, @ph, @pw, height, width)
-
-          if b.nil?
-            [gx, gw]
-          else
-            gb = gy.sum(axis: [0, 2, 3])
-            [gx, gw, gb]
+          ret = []
+          if indexes.include?(0)
+            xh, xw = x.shape[2..-1]
+            gx = Deconvolution2DFunction.deconvolution_2d(gy, w, stride: [@sy, @sx], pad: [@ph, @pw], outsize: [xh, xw])
+            ret << gx
           end
+
+          if indexes.include?(1)
+            gw = Chainer::Functions::Connection::Convolution2DGradW.new(self).apply([x, gy]).first
+            ret << gw
+          end
+
+          if indexes.include?(2)
+            gb = Chainer::Functions::Math::Sum.sum(gy, axis: [0, 2, 3])
+            ret << gb
+          end
+
+          ret
         end
       end
     end
