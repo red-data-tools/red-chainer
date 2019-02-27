@@ -2,6 +2,8 @@ module Chainer
   module Functions
     module Connection
       class Deconvolution2DFunction < Chainer::FunctionNode
+        attr_reader :sy, :sx, :ph, :pw, :cover_all
+
         def self.deconvolution_2d(x, w, b: nil, stride: 1, pad: 0, outsize: nil)
           func = Deconvolution2DFunction.new(stride: stride, pad: pad, outsize: outsize)
           if b.nil?
@@ -13,6 +15,8 @@ module Chainer
         end
 
         def initialize(stride: 1, pad: 0, outsize: nil)
+          @cover_all = nil
+
           @sy, @sx = stride.is_a?(::Array) ? stride : [stride, stride]
           @ph, @pw = pad.is_a?(::Array) ? pad : [pad, pad]
           @outh, @outw = outsize.nil? ? [nil, nil] : outsize
@@ -55,6 +59,41 @@ module Chainer
             y += b.reshape(1, b.size, 1, 1)
           end
           [y]
+        end
+
+        def backward(indexes, grad_outputs)
+          x, w = get_retained_inputs
+          gy = grad_outputs.first
+
+          ret = []
+
+          if indexes.include?(0)
+            set_cover_all(x, w) if @cover_all.nil?
+            gw = Chainer::Functions::Connection::Convolution2DFunction.convolution_2d(gy, w, stride: [@sy, @sx], pad: [@ph, @pw], cover_all: @cover_all)
+            ret << gw
+          end
+
+          if indexes.include?(1)
+            set_cover_all(x, w) if @cover_all.nil?
+            gw = Chainer::Functions::Connection::Convolution2DGradW.new(self).apply([gy, x]).first
+            ret << gw
+          end
+
+          if indexes.include?(2)
+            gb = Chainer::Functions::Math::Sum.sum(gy, axis: [0, 2, 3])
+            ret << gb
+          end
+
+          ret
+        end
+
+        private
+
+        def set_cover_all(x, w)
+          in_h, in_w = x.shape[2..-1]
+          kh, kw = w.shape[2..-1]
+
+          @cover_all = in_h != Chainer::Utils::Conv.get_conv_outsize(@outh, kh, @sy, @ph) || in_w != Chainer::Utils::Conv.get_conv_outsize(@outw, kw, @sx, @pw)
         end
       end
     end
