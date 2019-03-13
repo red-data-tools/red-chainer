@@ -2,7 +2,7 @@ module Chainer
   module Functions
     module Activation
       # Logistic sigmoid function.
-      class Sigmoid < Function
+      class Sigmoid < FunctionNode
         # Element-wise sigmoid logistic function.
         #
         # $$
@@ -21,22 +21,23 @@ module Chainer
         #   [0.119203, 0.5, 0.880797]
         #
         def self.sigmoid(x)
-          self.new.(x)
+          self.new.apply([x]).first
         end
 
-        def forward(x)
+        def forward(inputs)
+          x, = inputs
           half = 0.5
-          xm = Chainer.get_array_module(x[0])
-          y = Utils::Array.force_array((xm::NMath.tanh(x[0] * half) * half)+ half)
-          retain_inputs([])
+          xm = Chainer.get_array_module(x)
+          y = Utils::Array.force_array((xm::NMath.tanh(x * half) * half)+ half)
           retain_outputs([0])
-          return [y]
+          [y]
         end
 
-        def backward(x, gy)
-          one = 1
-          y = @output_data[0]
-          [Utils::Array.force_array((gy[0] * y) * (one - y))]
+        def backward(indexes, grad_outputs)
+          x = nil
+          y = get_retained_outputs.first
+          gy, = grad_outputs
+          Chainer::Functions::Activation::SigmoidGrad.new([x]).apply([y, gy])
         end
       end
     end
