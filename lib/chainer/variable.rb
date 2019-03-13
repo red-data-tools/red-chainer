@@ -211,7 +211,7 @@ module Chainer
       if other.instance_of?(Chainer::Variable)
         Functions::Math::Add.new.apply([self, other])[0]
       else
-        Functions::Math::AddConstant.new(other).apply(self)[0]
+        Functions::Math::AddConstant.new(other).apply([self])[0]
       end
     end
 
@@ -253,7 +253,7 @@ module Chainer
 
     # when left side is Numeric value and right side is Chainer::Value, call this method.
     def coerce(other)
-      other = self.data.class[*other] if other.kind_of?(Numeric)
+      other = self.data.class.new.fill(other) if other.kind_of?(Numeric)
       [Chainer::Variable.new(other, requires_grad: false), self]
     end
   end

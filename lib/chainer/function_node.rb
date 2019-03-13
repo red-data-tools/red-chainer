@@ -195,7 +195,7 @@ module Chainer
       outputs_modified = false
 
       @output_indexes_to_retain.zip(@retained_output_data) do |index, data|
-        output = outputs[indx].()
+        output =  outputs[index].__getobj__
         if output.nil?
           output_var = Chainer::Variable.new(data)
           output_var.creator_node = self
