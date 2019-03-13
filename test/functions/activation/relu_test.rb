@@ -12,8 +12,7 @@ class Chainer::Functions::Activation::ReLUTest < Test::Unit::TestCase
     @shape = data[:shape]
     @dtype = data[:dtype]
 
-    @dtype.srand(1) # To avoid false of "nearly_eq.all?", Use fixed seed value.
-    @x = @dtype.new(@shape).rand(2) - 1
+    @x = @dtype.new(@shape).rand(-1, 1)
     @shape.map do |x|
       if (-0.1 < x) and (x < 0.1)
         0.5
@@ -21,7 +20,9 @@ class Chainer::Functions::Activation::ReLUTest < Test::Unit::TestCase
         x
       end
     end
-    @gy = @dtype.new(@shape).rand(2) - 1
+
+    @gy = @dtype.new(@shape).rand(-1, 1)
+    @ggx = @dtype.new(@shape).rand(-1, 1)
     @check_backward_options = {}
   end
 
@@ -52,5 +53,18 @@ class Chainer::Functions::Activation::ReLUTest < Test::Unit::TestCase
 
   def test_backward
     check_backward(@x.dup, @gy.dup)
+  end
+
+  def check_double_backward(x_data, y_grad, x_grad_grad, use_cudnn: 'always')
+    func = -> (x) do
+      x = Chainer::Functions::Activation::Relu.relu(x)
+      x * x
+    end
+
+    Chainer::check_double_backward(func, x_data, y_grad, x_grad_grad, @check_backward_options)
+  end
+
+  def test_double_backward
+    check_double_backward(@x, @gy, @ggx)
   end
 end
