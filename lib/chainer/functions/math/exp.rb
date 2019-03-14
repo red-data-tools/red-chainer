@@ -18,7 +18,7 @@ module Chainer
         end
 
         def backward(indexes, gy)
-        	y = get_retained_outputs.first
+          y = get_retained_outputs.first
           [y * gy.first]
         end
       end
