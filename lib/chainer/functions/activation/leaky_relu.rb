@@ -39,7 +39,7 @@ module Chainer
         end
 
         def forward(inputs)
-					x, = inputs
+          x, = inputs
           y = x.dup
           y[x < 0] *= @slope
           if @slope >= 0
