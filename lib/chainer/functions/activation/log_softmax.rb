@@ -17,7 +17,7 @@ module Chainer
       end
 
       # Log-softmax activation function.
-      class LogSoftmax < Function
+      class LogSoftmax < FunctionNode
         # Channel-wise log-softmax function.
         #
         # This function computes its logarithm of softmax along the second axis.
@@ -57,23 +57,57 @@ module Chainer
         #   => true
         #
         def self.log_softmax(x)
-          self.new.(x)
+          self.new.apply([x]).first
         end
 
         def forward(xs)
           y = Chainer::Functions::Activation._log_softmax(xs[0])
           @x_shape = xs[0].shape
           @x_dtype = xs[0].class
-          retain_inputs([])
           retain_outputs([0])
           [y]
         end
 
-        def backward(x, gy)
-          y = @output_data[0]
-          xm = Chainer.get_array_module(y)
-          gx = gy[0] - xm::NMath.exp(y) * gy[0].sum(axis: 1, keepdims: true)
+        def backward(indexes, gy)
+          y = get_retained_outputs.first
+          LogSoftmaxGrad.new(@x_shape, @x_dtype).apply([y, gy[0]])
+        end
+      end
+
+      class LogSoftmaxGrad < FunctionNode
+        def initialize(x_shape, x_dtype)
+          @x_shape = x_shape
+          @x_dtype = x_dtype
+        end
+
+        def forward(inputs)
+          retain_inputs([0, 1])
+          y, gy = inputs
+
+          gx = gy - xm::NMath.exp(y) * gy.sum(axis: 1, keepdims: true)
           [gx]
+        end
+
+        def backward(indexes, ggx)
+          y, gy = get_retained_inputs
+          ret = []
+          exp_y = Chainer::Functions::Math::Exp.exp(y)
+
+          if indexes.include?(0)
+            gy_sum = Chainer::Functions::Math::Sum.sum(gy, axis: 1, keepdims: true)
+            gy_sum = Chainer::Functions::Array::BroadcastTo.broadcast_to(gy_sum, gy.shape)
+
+            g0 = -ggx.first * exp_y * gy_sum
+            ret << g0
+          end
+          if indexes.include?(1)
+            a = Chainer::Functions::Math::Sum.sum(ggx.first * exp_y, axis: 1, keepdims: true)
+            a = Chainer::Functions::Array::BroadcastTo.broadcast_to(a, gy.shape)
+            g1 = ggx.first - a
+            ret << g1
+          end
+
+          ret
         end
       end
     end

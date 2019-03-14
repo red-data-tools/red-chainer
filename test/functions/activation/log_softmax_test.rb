@@ -20,6 +20,7 @@ class Chainer::Functions::Activation::LogSoftmaxTest < Test::Unit::TestCase
       @x = @dtype.new(@shape).rand(2) - 1
     end
     @gy = @dtype.new(@x.shape).rand(2) - 1
+    @ggx = @dtype.new(@x.shape).rand(2) - 1
     @check_forward_options = {}
     @check_backward_options = {dtype: xm::DFloat}
   end
@@ -45,5 +46,13 @@ class Chainer::Functions::Activation::LogSoftmaxTest < Test::Unit::TestCase
 
   def test_backward
     check_backward(@x.dup, @gy.dup)
+  end
+
+  def check_double_backward(x_data, gy_data, ggx_data, use_cudnn: 'always')
+    Chainer::check_double_backward(Chainer::Functions::Activation::LogSoftmax.method(:log_softmax), x_data, gy_data, ggx_data, @check_backward_options)
+  end
+
+  def test_double_backward
+    check_double_backward(@x, @gy, @ggx)
   end
 end
