@@ -204,7 +204,7 @@ module Chainer
     end
 
     def -@
-      Functions::Math::Neg.new.(self) 
+      Functions::Math::Neg.new.apply([self]).first
     end
 
     def +(other)
