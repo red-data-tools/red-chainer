@@ -3,7 +3,7 @@ module Chainer
     module Pooling
       # Base class of pooling function over a set of 2d planes
       class Pooling2D < Chainer::FunctionNode
-        attr_reader :kh, :kw, :sy, :sx, :ph, :pw
+        attr_reader :kh, :kw, :sy, :sx, :ph, :pw, :cover_all
 
         def initialize(ksize, stride: nil, pad: 0, cover_all: true)
           if stride.nil?
