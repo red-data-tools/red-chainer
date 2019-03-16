@@ -2,12 +2,16 @@ module Chainer
   module Functions
     module Math
       class Neg < ::Chainer::FunctionNode
+        def label
+          '__neg__'
+        end
+
         def forward(x)
           [Utils::Array.force_array(-x[0])]
         end
 
         def backward(indexes, gy)
-          [Utils::Array.force_array(-gy[0])]
+          [-gy[0]]
         end
       end
 
@@ -36,12 +40,16 @@ module Chainer
       end
 
       class Sub < ::Chainer::FunctionNode
+        def label
+          '_ - _'
+        end
+
         def forward(x)
           [Utils::Array.force_array(x[0] - x[1])]
         end
 
         def backward(indexes, gy)
-          [gy[0], Utils::Array.force_array(-gy[0])]
+          [gy[0], -gy[0]]
         end
       end
 
