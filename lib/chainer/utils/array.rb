@@ -44,7 +44,30 @@ module Chainer
       end
 
       def self.rollaxis(y, axis, start: 0)
-        axes = (0...y.ndim).to_a
+        n = y.ndim
+        # normalize axis
+        axis = axis < 0 ? n + axis : axis
+        if axis >= n
+          raise ArgumentError, "axis #{axis} is out of bounds for array of dimension #{n}"
+        end
+
+        if start < 0
+          start += n
+        end
+
+        unless 0 <= start && start < n + 1
+          raise ArgumentError, "start arg requires #{-n} <= start < #{n}, but #{start} was passed in"
+        end
+
+        if axis < start
+          start -= 1
+        end
+
+        if axis == start
+          return y
+        end
+
+        axes = (0...n).to_a
         axes.delete_at(axis)
         axes.insert(start <= axes.size ? start : -1, axis)
         y.transpose(*axes)
