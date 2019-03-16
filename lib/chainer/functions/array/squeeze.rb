@@ -39,8 +39,9 @@ module Chainer
             end
             new_shape.compact!
           end
+          ret = new_shape.size.zero? ? x.class.new.fill(x[0]) : x.reshape(*new_shape)
 
-          [x.reshape(*new_shape)]
+          [ret]
         end
 
         def backward(indexes, grad_outputs)

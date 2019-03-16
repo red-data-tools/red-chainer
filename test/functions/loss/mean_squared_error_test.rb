@@ -5,8 +5,11 @@ require 'chainer/functions/loss/mean_squared_error'
 class Chainer::Functions::Loss::MeanSquaredErrorTest < Test::Unit::TestCase
 
   def setup
-    @x0 = xm::SFloat.new([4, 3]).rand(2) - 1
-    @x1 = xm::SFloat.new([4, 3]).rand(2) - 1
+    @x0 = xm::SFloat.new([4, 3]).rand(-1, 1)
+    @x1 = xm::SFloat.new([4, 3]).rand(-1, 1)
+    @gy = xm::SFloat.new.rand(-1, 1)
+    @ggx0 = xm::SFloat.new(4, 3).rand(-1, 1)
+    @ggx1 = xm::SFloat.new(4, 3).rand(-1, 1)
   end
 
   def check_forward(x0_data, x1_data)
@@ -32,5 +35,14 @@ class Chainer::Functions::Loss::MeanSquaredErrorTest < Test::Unit::TestCase
 
   def test_backward
     check_backward(@x0, @x1)
+  end
+
+  def check_double_backward(x0_data, x1_data, gy_data, ggx0_data, ggx1_data)
+    func = Chainer::Functions::Loss::MeanSquaredError.method(:mean_squared_error)
+    Chainer::check_double_backward(func, [x0_data, x1_data],  gy_data, [ggx0_data, ggx1_data], eps: 1e-2)
+  end
+
+  def test_double_backward
+    check_double_backward(@x0, @x1, @gy, @ggx0, @ggx1)
   end
 end
