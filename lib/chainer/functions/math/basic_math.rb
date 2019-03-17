@@ -75,7 +75,7 @@ module Chainer
         end
 
         def backward(indexes, gy)
-          [@value * gy[0]]
+          [gy[0] * @value]
         end
       end
 

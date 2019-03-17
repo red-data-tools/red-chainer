@@ -26,7 +26,8 @@ module Chainer
             loss = loss * class_weight
           end
 
-          in_use = t.ne(ignore_label).cast_to(x.dtype)
+          dtype = x.is_a?(Chainer::Variable) ? x.dtype : x.class
+          in_use = t.ne(ignore_label).cast_to(dtype)
 
           loss = Chainer::Functions::Array::Rollaxis.rollaxis(loss, 1, start:  loss.ndim)
 
