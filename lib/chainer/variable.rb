@@ -145,7 +145,7 @@ module Chainer
         # For example, when the input variables are `(x, x)`,
         # the input gradient passed to the `backward_accumulate` method is `(gx, nil)` where `gx` is the current gradient of ``x``.
         # See also the docstring of `FunctionNode.backward_accumulate`.
-        target_input_indexes = inputs.each_with_index.map { |x, i| i if x.requires_grad }
+        target_input_indexes = inputs.each_with_index.map { |x, i| i if x.requires_grad }.compact
         target_inputs = target_input_indexes.map { |i| inputs[i] }
         in_grad = []
         target_input_indexes.each_with_index do |index_i, i|
