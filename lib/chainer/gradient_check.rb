@@ -48,7 +48,7 @@ module Chainer
             #   # => [0, 5]
             #   (x - x).shape
             #   # => [0, 0]
-            if y1.empty? || y2.empty? || gy.empty?
+            if (Chainer.array?(y1) && y1.empty?) || (Chainer.array?(y2) && y2.empty?) || (Chainer.array?(gy) && gy.empty?)
               dot = 0
             elsif Chainer.array?((y1 - y2) * gy)
               dot = ((y1 - y2) * gy).sum()

@@ -2,31 +2,66 @@ module Chainer
   module Functions
     module Loss
       class SoftmaxCrossEntropy < Function
-        def self.softmax_cross_entropy(x, t, normalize: true, cache_score: true, class_weight: nil, ignore_label: -1, reduce: 'mean')
-          self.new(normalize: normalize, cache_score: cache_score, class_weight: class_weight, ignore_label: ignore_label, reduce: reduce).(x, t)
+        def self.softmax_cross_entropy(x, t, normalize: true, cache_score: true, class_weight: nil, ignore_label: -1, reduce: 'mean', enable_double_backprop: false)
+          if enable_double_backprop
+            self.double_backward_softmax_cross_entropy(x, t, normalize, class_weight, ignore_label, reduce)
+          else
+            self.new(normalize: normalize, cache_score: cache_score, class_weight: class_weight, ignore_label: ignore_label, reduce: reduce).(x, t)
+          end
+        end
+
+        def self.double_backward_softmax_cross_entropy(x, t, normalize, class_weight, ignore_label, reduce)
+          if t.is_a?(Chainer::Variable)
+            t =  t.data
+          end
+
+          self.check_class_weight_option(class_weight)
+          self.check_reduce_option(reduce)
+
+          loss = -Activation::LogSoftmax.log_softmax(x)
+
+          if class_weight
+            shape = x.ndim.times.map { |d| d != 1 ? 1 : class_weight.shape[-1] }
+            class_weight = Chainer::Functions::Array::BroadcastTo.broadcast_to(class_weight.reshape(*shape), x.shape)
+            loss = loss * class_weight
+          end
+
+          in_use = t.ne(ignore_label).cast_to(x.dtype)
+
+          loss = Chainer::Functions::Array::Rollaxis.rollaxis(loss, 1, start:  loss.ndim)
+
+          # TODO: loss = chainer.functions.reshape(loss, (-1, loss.shape[-1]))
+          shape = loss.shape
+          last_shape = shape.pop
+          loss = Chainer::Functions::Array::Reshape.reshape(loss, [shape.inject(:*), last_shape])
+
+          # Replace ignore_label value with one valid for F.select_item below.
+          t = t.clip(0, loss.shape[1] - 1)
+
+          loss = Chainer::Functions::Array::SelectItem.select_item(loss, t.flatten.dup)
+          loss = Chainer::Functions::Array::Reshape.reshape(loss, t.shape)
+
+          loss = loss * in_use
+
+          if reduce == "mean"
+            count = normalize ? in_use.sum : x.shape.first
+            count = [count, 1.0].max
+            loss = loss * (1.0 / count)
+            return Chainer::Functions::Math::Sum.sum(loss)
+          else
+            return loss
+          end
         end
 
         def initialize(normalize: true, cache_score: true, class_weight: nil, ignore_label: -1, reduce: 'mean')
           @normalize = normalize
           @cache_score = cache_score
+          self.class.check_class_weight_option(class_weight)
           @class_weight = class_weight
 
-          unless class_weight.nil?
-            xm = Chainer.get_array_module(@class_weight)
-            if @class_weight.ndim != 1
-              raise ArgumentError, 'class_weight.ndim should be 1'
-            elsif (@class_weight.class != xm::DFloat) and (@class_weight.class != xm::SFloat)
-              raise ArgumentError, "The dtype of class_weight should be 'DFloat' or 'SFloat'"
-            elsif @class_weight.kind_of?(Chainer::Variable)
-              raise ArgumentError, 'class_weight should be a NArray, not a chainer.Variable'
-            end
-          end
-
           @ignore_label = ignore_label
-          unless ['mean', 'no'].include?(reduce)
-            raise ArgumentError, "only 'mean' and 'no' are valid for 'reduce', but #{reduce} is given"
-          end
 
+          self.class.check_reduce_option(reduce)
           @reduce = reduce
         end
 
@@ -126,6 +161,25 @@ module Chainer
             gx *= gloss[true,:- , false]
           end
           return [gx, nil]
+        end
+
+        def self.check_class_weight_option(class_weight)
+          return if class_weight.nil?
+
+          xm = Chainer.get_array_module(@class_weight)
+          if class_weight.ndim != 1
+            raise ArgumentError, 'class_weight.ndim should be 1'
+          elsif (class_weight.class != xm::DFloat) and (class_weight.class != xm::SFloat)
+            raise ArgumentError, "The dtype of class_weight should be 'DFloat' or 'SFloat'"
+          elsif class_weight.kind_of?(Chainer::Variable)
+            raise ArgumentError, 'class_weight should be a NArray, not a chainer.Variable'
+          end
+        end
+
+        def self.check_reduce_option(reduce)
+          unless ['mean', 'no'].include?(reduce)
+            raise ArgumentError, "only 'mean' and 'no' are valid for 'reduce', but #{reduce} is given"
+          end
         end
       end
     end

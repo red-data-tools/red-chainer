@@ -9,6 +9,7 @@ class TestSoftmaxCrossEntropy < Test::Unit::TestCase
   data(:ignore_index, [nil, false, [0], [0, 1], [0, 1, 0]],   group: :sfloat, keep: true)
   data(:dtype,        [xm::SFloat],                           group: :sfloat, keep: true)
   data(:weight_apply, [false, true],                          group: :sfloat, keep: true)
+  data(:enable_double_backprop, [false, true],                          group: :sfloat, keep: true)
 
   data(:shape,        [nil, [2, 3], [2, 3, 2], [2, 3, 2, 2]], group: :general, keep: true)
   data(:cache_score,  [false],                                group: :general, keep: true)
@@ -16,6 +17,8 @@ class TestSoftmaxCrossEntropy < Test::Unit::TestCase
   data(:ignore_index, [[0, 1]],                               group: :general, keep: true)
   data(:dtype,        [xm::SFloat, xm::DFloat],               group: :general, keep: true)
   data(:weight_apply, [false, true],                          group: :general, keep: true)
+  data(:enable_double_backprop, [false, true],                          group: :general, keep: true)
+
 
   def setup
     @shape        = data[:shape]
@@ -37,11 +40,13 @@ class TestSoftmaxCrossEntropy < Test::Unit::TestCase
         @t[@ignore_index] = -1
       end
     end
-    @check_forward_options = {}
+
+    @check_forward_options = { atol: 5e-4, rtol: 5e-3}
+    @check_backward_options = { dtype: Numo::DFloat, atol: 5e-4, rtol: 5e-3}
     @check_backward_options_dtype = xm::DFloat
 
     if @weight_apply
-      @class_weight = @dtype.new([@x.shape[1]]).rand(10)
+      @class_weight = @dtype.new([@x.shape[1]]).rand(0, 10)
     else
       @class_weight = nil
     end
@@ -50,10 +55,12 @@ class TestSoftmaxCrossEntropy < Test::Unit::TestCase
   def check_forward(x_data, t_data, class_weight, use_cudnn: "always")
     x = Chainer::Variable.new(x_data)
     t = Chainer::Variable.new(t_data)
-    loss = Chainer::Functions::Loss::SoftmaxCrossEntropy.softmax_cross_entropy(x, t, normalize: @normalize, cache_score: @cache_score, class_weight: class_weight)
+    loss = Chainer::Functions::Loss::SoftmaxCrossEntropy.softmax_cross_entropy(x, t, normalize: @normalize, cache_score: @cache_score, class_weight: class_weight, enable_double_backprop: data[:enable_double_backprop])
     assert_equal([], loss.data.shape)
     assert_equal(@dtype, loss.data.class)
-    assert_equal(@cache_score, loss.creator.instance_variable_defined?(:@y))
+    unless data[:enable_double_backprop]
+      assert_equal(@cache_score, loss.creator.instance_variable_defined?(:@y))
+    end
     loss_value = loss.data.to_f
     loss_expect = 0.0
     count = 0
@@ -82,7 +89,7 @@ class TestSoftmaxCrossEntropy < Test::Unit::TestCase
     else
       loss_expect = loss_expect / t_data.shape[0].to_f
     end
-    Chainer::Testing.assert_allclose(loss_expect, loss_value)
+    Chainer::Testing.assert_allclose(loss_expect, loss_value, **@check_forward_options)
   end
 
   def test_forward
@@ -91,7 +98,7 @@ class TestSoftmaxCrossEntropy < Test::Unit::TestCase
 
   def check_backward(x_data, t_data, class_weight, use_cudnn: "always")
     func =  Chainer::Functions::Loss::SoftmaxCrossEntropy.new(cache_score: @cache_score, class_weight: class_weight)
-    Chainer::check_backward(func, [x_data, t_data], nil, eps: 0.02, dtype: @check_backward_options_dtype)
+    Chainer::check_backward(func, [x_data, t_data], nil, eps: 0.02, dtype: @check_backward_options_dtype, **@check_backward_options)
   end
 
   def test_backward
@@ -163,7 +170,8 @@ class TestElementwiseSoftmaxCrossEntropy < Test::Unit::TestCase
     end
 
     @g = @dtype.new(@t.shape).rand(2) - 1
-    @check_forward_options = {}
+    @check_forward_options = {atol: 5e-4, rtol: 5e-3}
+    @check_backward_options = { dtype: Numo::DFloat, atol: 5e-4, rtol: 5e-3}
     @check_backward_options_dtype = xm::DFloat
 
     if @weight_apply
@@ -199,7 +207,7 @@ class TestElementwiseSoftmaxCrossEntropy < Test::Unit::TestCase
       else
         loss_expect = -(xi - log_z)[ti] * class_weight[ti]
       end
-      Chainer::Testing.assert_allclose(loss_expect, li)
+      Chainer::Testing.assert_allclose(loss_expect, li, **@check_forward_options)
     end
   end
 
@@ -209,7 +217,7 @@ class TestElementwiseSoftmaxCrossEntropy < Test::Unit::TestCase
 
   def check_backward(x_data, t_data, g_data, class_weight)
     func = Chainer::Functions::Loss::SoftmaxCrossEntropy.new(cache_score: @cache_score, class_weight: class_weight, reduce: "no")
-    Chainer::check_backward(func, [x_data, t_data], g_data, eps: 0.02,  dtype: @check_backward_options_dtype)
+    Chainer::check_backward(func, [x_data, t_data], g_data, eps: 0.02,  dtype: @check_backward_options_dtype, **@check_backward_options)
   end
 
   def test_backward
