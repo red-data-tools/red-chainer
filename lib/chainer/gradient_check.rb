@@ -34,14 +34,23 @@ module Chainer
       x.each_with_index{|xx, *i|
         orig = x[*i].to_f   # hold original value
         x[*i] = orig + eps
-        ys1 = _copy_arrays(f.call(x))
+        ys1 = _copy_arrays(f.call)
         x[*i] = orig - eps
-        ys2 = _copy_arrays(f.call(x))
+        ys2 = _copy_arrays(f.call)
         x[*i] = orig
 
         ys1.zip(ys2, grad_outputs).each do |y1, y2, gy|
           if !gy.nil?
-            if Chainer.array?((y1 - y2) * gy)
+            # TODO: Subtracting between empty matrices loses shape
+            # For example:
+            #   x = Numo::DFloat.new(0, 5)
+            #   x.shape
+            #   # => [0, 5]
+            #   (x - x).shape
+            #   # => [0, 0]
+            if y1.empty? || y2.empty? || gy.empty?
+              dot = 0
+            elsif Chainer.array?((y1 - y2) * gy)
               dot = ((y1 - y2) * gy).sum()
             else
               dot = ((y1 - y2) * gy).inject(:+)
@@ -190,7 +199,7 @@ module Chainer
       casted_xs = x_data.map { |x| Chainer::Variable.new(x) }
     else
       raise '`dtype` is allowed only float type' if dtype != xm::DFloat && dtype != xm::SFloat
-      casted_xs = x_data.map { |x| (x.class == xm::SFloat || x.class == xm::DFloat) ? Chainer::Variable.new(x.cast_to(dtype)) : x  }
+      casted_xs = x_data.map { |x| x.is_a?(Numo::NArray) ? Chainer::Variable.new(x.cast_to(dtype)) : x  }
     end
 
     if no_grads.nil?
@@ -203,7 +212,7 @@ module Chainer
 
     no_grads.zip(xs).each do |skip, x|
       if skip
-        Chainer::Testing.assert_equeal(nil, x.grad)
+        raise "x.grad is not nil" if  x.grad != nil
       else
         raise 'gradients of some arguments are not calculated' if x.grad.nil?
       end
@@ -215,12 +224,12 @@ module Chainer
       one = dtype.new().fill(1.0)
     end
 
-    g = lambda do |_|
+    g = lambda do
       # This functions is called twice in `numerical_grad`.
       # `one` is `1 + epsilon` or `1 - epsilon` in these calls.
       # See the document of `numerical_grad`.
       no_grads.zip(casted_xs, casted_data).each do |skip, cx, data|
-        next if skip
+        next if skip || cx.data.empty?
         # astype is require to store data with the given type
         data = (one * data).cast_to(data.class)
         cx.data = data
@@ -262,7 +271,7 @@ module Chainer
         gxi = gxi.cast_to(dtype)
         cxi = cxi.cast_to(dtype)
       end
-      gx_accum += gxi.dot(cxi)
+      gx_accum += gxi.empty? ? 0 : gxi.dot(cxi)
     end
 
     params.each do |p|
