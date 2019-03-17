@@ -41,6 +41,15 @@ module Chainer
       @node.label
     end
 
+    # deprecated FunctionNode
+    def creator
+      @node.creator
+    end
+
+    def creator=(func)
+      @node.creator = func
+    end
+
     def creator_node
       @node.creator_node
     end
