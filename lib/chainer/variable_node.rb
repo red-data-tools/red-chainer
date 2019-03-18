@@ -14,6 +14,18 @@ module Chainer
       set_data_type(variable.data)
     end
 
+    def creator
+      node = @creator_node
+      if node.nil?
+        return nil
+      end
+
+      if node.is_a?(Chainer::FunctionAdapter)
+        return node.function
+      end
+      node
+    end
+
     def creator=(func)
       self.creator_node = func
     end
