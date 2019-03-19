@@ -1,9 +1,12 @@
 # frozen_string_literal: true
 
 class Chainer::Functions::Noise::DropoutTest < Test::Unit::TestCase
+  data(:dtype, [xm::SFloat, xm::DFloat], keep: true)
+  data(:ratio, [0.0, 0.3, 0.5], keep: true)
+
   def setup
-    @dtype = Numo::SFloat
-    @ratio = 0.3
+    @dtype = data[:dtype]
+    @ratio = data[:ratio]
 
     @x = @dtype.new([2, 3]).rand(-1, 1)
     @gy = @dtype.new([2, 3]).rand(-1, 1)
@@ -29,8 +32,9 @@ class Chainer::Functions::Noise::DropoutTest < Test::Unit::TestCase
   end
 
   def check_backward(x_data, y_grad)
+    dropout = Chainer::Functions::Noise::Dropout.new(@ratio)
     f = -> (x) do
-      Chainer::Functions::Noise::Dropout.dropout(x, ratio: @ratio)
+      dropout.apply([x]).first
     end
     Chainer::check_backward(f, x_data, y_grad, **@check_backward_options)
   end
@@ -39,37 +43,16 @@ class Chainer::Functions::Noise::DropoutTest < Test::Unit::TestCase
     check_backward(@x, @gy)
   end
 
-
-
-
-=begin
-  def check_backward(x_data, y_grad)
-    func = -> (x) do
-      Chainer::Functions::Math::Exp.exp(x)
-    end
-
-    Chainer::check_backward(func, x_data, y_grad, atol: 1e-4, rtol: 1e-3, dtype: xm::DFloat)
-  end
-
-  def test_backward
-    check_backward(@x.dup, @gy.dup)
-  end
-
   def check_double_backward(x_data, y_grad, x_grad_grad)
-    func = -> (x) do
-      Chainer::Functions::Math::Exp.exp(x)
+    dropout = Chainer::Functions::Noise::Dropout.new(@ratio)
+    f = -> (x) do
+      x, = dropout.apply([x])
+      x * x
     end
-
-    Chainer::check_double_backward(func, x_data, y_grad, x_grad_grad, atol: 1e-4, rtol: 1e-3, dtype: xm::DFloat)
+    Chainer::check_double_backward(f, x_data, y_grad, x_grad_grad, **@check_double_backward_options)
   end
 
   def test_double_backward
-    check_double_backward(@x, @gy, @ggy)
+    check_double_backward(@x, @gy, @ggx)
   end
-
-  def test_label
-    label = Chainer::Functions::Math::Exp.new.label
-    assert_equal('exp', label)
-  end
-=end
 end

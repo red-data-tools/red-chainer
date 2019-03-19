@@ -18,7 +18,7 @@ module Chainer
   # @param [Float] eps Epsilon value of finite differences.
   # @return [Array] Numerical gradient arrays corresponding to +inputs+.
   #
-  def numerical_grad(f, inputs, grad_outputs, eps=0.001)
+  def numerical_grad(f, inputs, grad_outputs, eps=1e-3)
     raise unless eps > 0
     inputs = inputs.to_a
     grad_outputs = grad_outputs.to_a
@@ -32,7 +32,7 @@ module Chainer
 
     tmp.each do |x, gx|
       x.each_with_index{|xx, *i|
-        orig = x[*i].to_f   # hold original value
+        orig = x[*i].dup.to_f   # hold original value
         x[*i] = orig + eps
         ys1 = _copy_arrays(f.call)
         x[*i] = orig - eps
