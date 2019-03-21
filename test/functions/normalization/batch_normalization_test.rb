@@ -26,7 +26,8 @@ class Chainer::Functions::Normalization::BatchNormalizationFunctionTest < Test::
     @ggargs = [@ggx, @gggamma, @ggbeta]
     @aggr_axes = [0] + (head_ndim...(@x.ndim)).to_a
     @mean = @x.mean(axis: @aggr_axes)
-    @var = @x.var(axis: @aggr_axes) + @eps
+    @var = ((@x - @x.mean(axis: @aggr_axes, keepdims: true)) ** 2).mean(axis: @aggr_axes)
+    @var += @eps
     @train = true
     @check_forward_options = { atol: 1e-4, rtol: 1e-3}
     @check_backward_options = { dtype: xm::DFloat}
