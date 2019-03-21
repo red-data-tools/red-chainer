@@ -66,7 +66,10 @@ module Chainer
           gamma = expander.(gamma)
           beta = expander.(beta)
           @mean = x.mean(axis: @axis)
-          var = x.var(axis: @axis)
+
+          # TODO: Numo::Array can not be specified standard deviation
+          var = ((x - x.mean(axis: @axis, keepdims: true)) ** 2).mean(axis: @axis)
+
           var += @eps
           @inv_std = var ** (-0.5)
 
