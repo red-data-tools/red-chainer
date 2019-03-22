@@ -133,7 +133,7 @@ module Chainer
           expander = @expander
 
           x, gamma, gy = inputs
-          gx1, ggamma1, = @output_data
+          gx1, ggamma1, = output_data
           ggx1, gggamma1, ggbeta1 = grad_outputs
           xp = Chainer.get_array_module(x)
 
