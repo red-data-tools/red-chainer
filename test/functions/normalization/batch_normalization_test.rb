@@ -1,8 +1,12 @@
 class Chainer::Functions::Normalization::BatchNormalizationFunctionTest < Test::Unit::TestCase
+  data(:param_shape, [[3], [3, 4], [3, 2, 3]], keep: true)
+  data(:ndim, [0, 1, 2], keep: true)
+  data(:dtype, [xm::SFloat, xm::DFloat], keep: true)
+
   def setup
-    @param_shape = [3]
-    @ndim = 1
-    @dtype = Numo::DFloat
+    @param_shape = data[:param_shape]
+    @ndim = data[:ndim]
+    @dtype = data[:dtype]
 
     @expander = -> (arr) do
       new_shape = [1] + arr.shape + [1] * @ndim
@@ -67,5 +71,18 @@ class Chainer::Functions::Normalization::BatchNormalizationFunctionTest < Test::
 
   def test_backward
     check_backward(@args, @gy)
+  end
+
+  def check_double_backward(args, y_grad, x_grad_grad, use_cudnn: 'always')
+    func = -> (*args) do
+      y = Chainer::Functions::Normalization::BatchNormalization.batch_normalization(*args, decay: @decay, eps: @eps)
+      y * y
+    end
+
+    Chainer::check_double_backward(func, args, y_grad, x_grad_grad, **@check_double_backward_options)
+  end
+
+  def test_double_backward
+    check_double_backward(@args, @gy, @ggargs)
   end
 end
