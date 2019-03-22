@@ -41,7 +41,7 @@ module Chainer
     end
 
     def output_data
-      @node.output_data
+      node.output_data
     end
 
     def rank
@@ -87,10 +87,7 @@ module Chainer
     end
 
     def retain_outputs(indexes, retain_after_backward: false)
-      @output_indexes_to_retain = indexes
-      if retain_after_backward
-        @retain_after_backward = retain_after_backward
-      end
+      node.retain_outputs(indexes)
     end
   end
 

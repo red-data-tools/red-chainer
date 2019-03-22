@@ -32,6 +32,18 @@ module Chainer
       self.class.name
     end
 
+    # A tuple of the retained output arrays.
+    # This property is mainly used by $Function$. Users basically do
+    # not have to use this property; use $get_retained_outputs$ instead.
+    def output_data
+      raise RuntimeError, 'retained output data is gone' if @retained_output_data.nil?
+      out_data = [nil] * @outputs.size
+      @output_indexes_to_retain.zip(@retained_output_data).each do |index, data|
+        out_data[index] = data
+      end
+      out_data
+    end
+
     # Computes output variables and grows the computational graph.
     #
     # Basic behavior is expressed in the documentation of `FunctionNode`.
