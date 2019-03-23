@@ -243,6 +243,199 @@ module Chainer
     def impl_name
       self.class.name
     end
-
   end
+
+  def self.grad(outputs, inputs, grad_outputs: nil, grad_inputs: nil, set_grad: false, retain_grad: false, enable_double_backprop: false)
+    # The implementation consists of three steps.
+
+    # 1. Backward enumeration: all the nodes reachable backward from the output
+    #    nodes are enumerated. The forward direction links are collected in
+    #    this step. Note that the variable nodes whose requires_grad is false
+    #    are ignored and their creators are not searched.
+    candidate_funcs = outputs.map(&:creator_node).compact
+    visited_funcs = Set.new
+    forward_graph = {}
+
+    while func = candidate_funcs.pop
+      next if visited_funcs.include?(func)
+      visited_funcs.add(func)
+
+      func.inputs.each do |x|
+        next unless x.requires_grad
+        forward_graph[x] = [] if forward_graph[x].nil?
+        forward_graph[x] << func
+        creator = x.creator_node
+        if creator && !visited_funcs.include?(creator)
+          candidate_funcs << creator
+        end
+      end
+    end
+
+    # 2. Forward enumeration: all the nodes in the subgraph reachable from the
+    #    input nodes are enumerated. The extracted (sub-)subgraph is the union
+    #    of all paths that backpropagation will visit.
+    candidate_vars = inputs.map(&:node)
+    visited_funcs = Set.new
+    grad_required = Set.new
+    while x = candidate_vars.pop
+      grad_required.add(x)
+      forward_graph[x].each do |func|
+        next if visited_funcs.include?(func)
+        visited_funcs.add(func)
+        func.outputs.each do |y_ref|
+          y = y_ref.__getobj__
+          if y && forward_graph[y]
+            candidate_vars << y
+          end
+        end
+      end
+    end
+
+    # 3. Backpropagation: the backpropagation is executed along the
+    #    (sub-)subgraph. It uses the topological order of the subgraph which is
+    #    induced by the reversed order of function applications ("rank").
+    grads = {}  # mapping from variable nodes to their gradients
+
+    # Initialize the gradient mapping.
+    grad_outputs = [nil] * outputs.size if grad_outputs.nil?
+    outputs.zip(grad_outputs).each do |y, gy|
+      if gy.nil?
+        gy_data = y.data.new_ones
+        gy = Chainer::Variable.new(gy_data, requires_grad: false)
+      end
+
+      grads[y.node] = gy
+    end
+
+    unless grad_inputs.nil?
+      inputs.zip(grad_inputs).each do |x, gx|
+        grads[x.node] = gx unless gx.nil?
+      end
+    end
+
+    # Backprop implementation. It edits grads which will only contain the
+    # gradients w.r.t. the inputs.
+    old_enable_backprop = Chainer.configuration.enable_backprop
+    Chainer.configuration.enable_backprop = enable_double_backprop
+    backprop(outputs, inputs, grad_required, retain_grad, grads)
+    Chainer.configuration.enable_backprop = old_enable_backprop
+
+    # Extract the gradients w.r.t. the inputs and return them.
+    ret = inputs.map { |x| grads[x.node] }
+    if set_grad
+      inputs.zip(ret).each do |x, gx|
+        x.grad_var = gx
+      end
+    end
+
+    ret
+  end
+
+  def self.backprop(outputs, inputs, grad_required, retain_grad, grads)
+    candidate_funcs = []
+    visited_funcs = Set.new
+
+    push_candidate = -> (func) do
+      return if visited_funcs.include?(func)
+
+      # Negate since heapq is min-heap
+      # The second element is used to make each item unique
+      visited_funcs.add(func)
+      candidate_funcs << func
+      candidate_funcs.sort_by! { |f| -f.rank }
+    end
+
+    pop_candidate = -> () do
+      candidate_funcs.pop
+    end
+
+    outputs.each do |y|
+      creator = y.creator_node
+      next if creator.nil?
+      push_candidate.(creator)
+    end
+
+    input_nodes = Set.new(inputs.map(&:node))
+
+    while func = pop_candidate.()
+      # Collect the gradients w.r.t. the outputs
+      gys = []
+
+      func.outputs.each do |y_ref|
+        y = y_ref.__getobj__
+        if y.nil?
+          gys << nil
+          next
+        end
+        gys << grads[y]
+      end
+
+      # Collect the gradients w.r.t. the inputs
+      #
+      # Note (Tokui): when the same variable is passed multiple times as
+      # inputs in the same function (e.g. an expression like f(x, x)), the
+      # current implementation passes None as the current gradient w.r.t.
+      # such an input except for the first one (i.e., it builds gxs like
+      # (gx, None) where gx is the current gradient w.r.t. x).
+      gxs = []
+      input_indexes = []
+      selected_inputs = Set.new
+      func.inputs.each_with_index do |x, i|
+        next unless grad_required.include?(x)
+
+        input_indexes << i
+        if selected_inputs.include?(x)
+          gxs << nil
+        else
+          gxs << grads[x]
+          selected_inputs.add(x)
+        end
+      end
+
+      next if input_indexes.empty?
+
+      # Do backward
+      new_gxs = func.backward_accumulate(input_indexes, gys, gxs)
+
+      # Delete output gradients that are not required to return
+      func.outputs.each do |y_ref|
+        y = y_ref.__getobj__
+        if y && grads[y] && !input_nodes.include?(y)
+          grads.delete(y)
+        end
+      end
+
+      # Update grads
+      selected_inputs = Set.new
+      input_indexes.zip(new_gxs).each do |i, g|
+        next if g.nil?
+
+        node = func.inputs[i]
+        if selected_inputs.include?(node)
+          # Accumulate the duplicated gradients here
+          cur_gx = grads[node]
+          if cur_gx
+            g = g + cur_gx
+          end
+        else
+          selected_inputs.add(node)
+        end
+
+        grads[node] = g
+
+        if retain_grad
+          v = node.get_variable
+          if v
+            v.grad_var = g
+          end
+        end
+
+        creator = node.creator_node
+        if creator
+          push_candidate.(creator)
+        end
+      end
+    end
+  end
+  private_class_method :backprop
 end
