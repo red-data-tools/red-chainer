@@ -36,11 +36,13 @@ module Chainer
     def data
       return @data[0]
     end
+    alias_method :array, :data
 
     def data=(d)
       @data[0] = d
       @node.set_data_type(d)
     end
+    alias_method :array=, :data=
 
     def name
       return @node.name
