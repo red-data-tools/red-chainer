@@ -2,6 +2,19 @@ module Chainer
   class Variable
     attr_accessor :data, :grad, :requires_grad, :node
 
+    # Converts an array or a variable into +Chainer::Variable+.
+    # This is a convenient function to get a +Chainer::Variable+ object
+    # transparently from a raw array or a variable.
+    # Note: that this function should only be used for type consistency
+    # (i.e. to enforce the return value of an API having type +Chainer::Variable+).
+    # The +Chianer::Variable.requires_grad+ flag is kept as is; if +obj+ is a raw array,
+    # the newly created variable has +requires_grad = false+.
+    # In order to make a variable w.r.t. which you want to compute the gradient,
+    # you should use $Chainer::Variable$ directly.
+    #
+    # @param [Numo::NArray or Chainer::Variable] obj An array or a variable that you want to convert to $Chainer::Variable$.
+    # @return [Chainer::Variable] A variable converted from +obj+. If +obj+ is a raw array,
+    #   this is a new +Chianer::Variable+ object that wraps the array. If +obj+ is already a +Chainer::Variable+ object, this function returns +obj+ as is.
     def self.as_variable(obj)
       return obj if obj.kind_of?(Chainer::Variable)
       # TODO if obj is_backprop_required is true, set requires_grad = true
@@ -146,14 +159,14 @@ module Chainer
 
         # Collect the current input gradients.
         #
-        # When the same variable is passed to multiple input slots (e.g. an expression like `f(x, x)`),
+        # When the same variable is passed to multiple input slots (e.g. an expression like +f(x, x)+),
         # it makes the gradient accumulation complicated since the back-propagated gradients w.r.t.
         # the first and second argument should be accumulated to the current gradient w.r.t. the same variable.
         # In this case, the current implementation passes the current gradient only to the first occurrence of the variable
-        # in the input tuple and passes `nil` to the rest of the occurrences.
-        # For example, when the input variables are `(x, x)`,
-        # the input gradient passed to the `backward_accumulate` method is `(gx, nil)` where `gx` is the current gradient of ``x``.
-        # See also the docstring of `FunctionNode.backward_accumulate`.
+        # in the input tuple and passes +nil+ to the rest of the occurrences.
+        # For example, when the input variables are +(x, x)+,
+        # the input gradient passed to the +backward_accumulate+ method is +(gx, nil)+ where +gx+ is the current gradient of ++x++.
+        # See also the docstring of +FunctionNode.backward_accumulate+.
         target_input_indexes = inputs.each_with_index.map { |x, i| i if x.requires_grad }.compact
         target_inputs = target_input_indexes.map { |i| inputs[i] }
         in_grad = []
