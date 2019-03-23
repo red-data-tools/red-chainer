@@ -128,3 +128,23 @@ class Chainer::VariableTest < Test::Unit::TestCase
     }
   end
 end
+
+class Chainer::AsVariableTest < Test::Unit::TestCase
+  def test_to_variable_from_array
+    x = Numo::DFloat.new(3).seq
+    y = Chainer::Variable.as_variable(x)
+
+    assert_equal(Chainer::Variable, y.class)
+    assert_equal(x, y.data)
+    assert_equal(false, y.requires_grad)
+  end
+
+  def test_to_variable_from_variable
+    x = Numo::DFloat.new(3).seq
+    x = Chainer::Variable.new(x)
+    y = Chainer::Variable.as_variable(x)
+
+    assert_equal(x, y)
+    assert_equal(true, y.requires_grad)
+  end
+end
