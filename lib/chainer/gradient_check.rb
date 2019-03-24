@@ -295,7 +295,7 @@ module Chainer
       # See the comment in check_backward.
       y = Chainer::Functions::Math::Identity.new.apply(y)
       set_y_grad(y, gys)
-      y[0].backward
+      y[0].backward(enable_double_backprop: true)
 
       xs.map(&:grad_var) + params.map(&:grad_var)
     end

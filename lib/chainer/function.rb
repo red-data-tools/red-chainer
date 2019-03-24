@@ -48,6 +48,10 @@ module Chainer
       @node.rank
     end
 
+    def label
+      self.class.to_s
+    end
+
     def forward(inputs)
       xm = Chainer.get_array_module(*inputs)
       if xm == Cumo
@@ -128,6 +132,7 @@ module Chainer
           g = nil
         else
           g = Chainer::Variable.new(gxs[i])
+          g.node.old_style_grad_generator = @function.label
         end
         ret << g
       end

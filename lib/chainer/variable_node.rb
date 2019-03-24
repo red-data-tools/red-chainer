@@ -1,7 +1,7 @@
 module Chainer
   class VariableNode
     attr_reader :dtype, :shape, :data
-    attr_accessor :name, :requires_grad, :variable, :creator_node, :rank
+    attr_accessor :name, :requires_grad, :variable, :creator_node, :rank, :old_style_grad_generator
 
     def initialize(variable: , name:)
       @variable = WeakRef.new(variable)
@@ -10,6 +10,8 @@ module Chainer
       @rank = 0
       @name = name
       @requires_grad = variable.requires_grad
+
+      @old_style_grad_generator = nil
 
       set_data_type(variable.data)
     end
@@ -112,6 +114,12 @@ module Chainer
     def set_grad_with_check(g, func, var)
       Utils::Variable.check_grad_type(func, var, g)
       @grad = g
+    end
+
+    def check_old_style_gradient
+      if @old_style_grad_generator
+        raise RuntimeError, "cannot twice-differentiate an old style Function #{@old_style_grad_generator}"
+      end
     end
   end
 end
