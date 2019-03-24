@@ -24,39 +24,25 @@ module Chainer
     grad_outputs = grad_outputs.to_a
     grads = inputs.map{|x| x.new_zeros()}
 
-    if inputs[0].ndim < 2
-      tmp = [[inputs[0], grads[0]]]
-    else
-      tmp = (0...inputs[0].shape[0]).map{|i|[inputs[0][i, false], grads[0][i, false]]}
-    end
-
-    tmp.each do |x, gx|
-      x.each_with_index{|xx, *i|
-        orig = x[*i].dup.to_f   # hold original value
+    inputs.zip(grads).each do |x, gx|
+      orig_x = x.dup # hold original value
+      x.each_with_index{|_, *i|
+        orig = orig_x[*i]
         x[*i] = orig + eps
-        ys1 = _copy_arrays(f.call)
+        ys1 = _copy_arrays(f.())
         x[*i] = orig - eps
-        ys2 = _copy_arrays(f.call)
+        ys2 = _copy_arrays(f.())
         x[*i] = orig
 
         ys1.zip(ys2, grad_outputs).each do |y1, y2, gy|
-          if !gy.nil?
-            # TODO: Subtracting between empty matrices loses shape
-            # For example:
-            #   x = Numo::DFloat.new(0, 5)
-            #   x.shape
-            #   # => [0, 5]
-            #   (x - x).shape
-            #   # => [0, 0]
-            if (Chainer.array?(y1) && y1.empty?) || (Chainer.array?(y2) && y2.empty?) || (Chainer.array?(gy) && gy.empty?)
-              dot = 0
-            elsif Chainer.array?((y1 - y2) * gy)
-              dot = ((y1 - y2) * gy).sum()
-            else
-              dot = ((y1 - y2) * gy).inject(:+)
-            end
-            gx[*i] += dot / (2*eps).to_f
+          next if gy.nil?
+          diff = y1 - y2
+          if Chainer.array?(diff) && diff.empty?
+            dot = 0
+          else
+            dot = (diff * gy).sum
           end
+          gx[*i] += dot / (2 * eps)
         end
       }
     end
