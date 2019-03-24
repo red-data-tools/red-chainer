@@ -13,7 +13,7 @@ module Chainer
         # @param [float] ratio Dropout ratio. The ``ratio`` must be `0.0 <= ratio < 1.0`.
         # @return [Chainer::Variable] Output variable.
         def self.dropout(x, ratio: 0.5)
-          Chainer.configuration.train ? self.new(ratio).apply([x])[0] : x
+          Chainer.configuration.train ? self.new(ratio).apply([x])[0] : Chainer::Variable.as_variable(x)
         end
 
         def initialize(dropout_ratio)
