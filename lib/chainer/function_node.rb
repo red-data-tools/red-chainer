@@ -248,6 +248,19 @@ module Chainer
   def self.grad(outputs, inputs, grad_outputs: nil, grad_inputs: nil, set_grad: false, retain_grad: false, enable_double_backprop: false)
     # The implementation consists of three steps.
 
+    if !outputs.is_a?(Array)
+      raise TypeError, "outputs must be Array, not #{outputs.class}"
+    end
+    if !inputs.is_a?(Array)
+      raise TypeError, "inputs must be Array, not #{inputs.class}"
+    end
+    if !grad_outputs.nil? && !grad_outputs.is_a?(Array)
+      raise TypeError, "grad_outputs must be Array, not #{grad_outputs.class}"
+    end
+    if !grad_inputs.nil? && !grad_inputs.is_a?(Array)
+      raise TypeError, "grad_inputs must be Array, not #{grad_inputs.class}"
+    end
+
     # 1. Backward enumeration: all the nodes reachable backward from the output
     #    nodes are enumerated. The forward direction links are collected in
     #    this step. Note that the variable nodes whose requires_grad is false

@@ -2,6 +2,30 @@
 
 require 'chainer'
 
+class TestGradTypeCheck < Test::Unit::TestCase
+  def test_type_check
+    x = Chainer::Variable.new(xm::DFloat.new(2, 3).rand(-1, 1))
+    y = x * x
+    gx = Chainer::Variable.new(xm::DFloat.new(2, 3).rand(-1, 1))
+    gy = Chainer::Variable.new(xm::DFloat.new(2, 3).rand(-1, 1))
+
+    Chainer.grad([y], [x], grad_outputs: [gx], grad_inputs: [gy])
+
+    assert_raise(TypeError) do
+      Chainer.grad(y, [x], grad_outputs: [gx], grad_inputs: [gy])
+    end
+    assert_raise(TypeError) do
+      Chainer.grad([y], x, grad_outputs: [gx], grad_inputs: [gy])
+    end
+    assert_raise(TypeError) do
+      Chainer.grad([y], [x], grad_outputs: gx, grad_inputs: [gy])
+    end
+    assert_raise(TypeError) do
+      Chainer.grad([y], [x], grad_outputs: [gx], grad_inputs: gy)
+    end
+  end
+end
+
 class Chainer::GradTestBase < Test::Unit::TestCase
   def setup
     @shape ||= [3]
