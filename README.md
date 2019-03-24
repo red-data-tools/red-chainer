@@ -8,7 +8,7 @@ It ported python's [Chainer](https://github.com/chainer/chainer) with Ruby.
 
 ## Requirements
 
-* Ruby 2.3 or later
+* Ruby 2.4 or later
 
 ## Installation
 
