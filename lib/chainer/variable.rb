@@ -79,7 +79,7 @@ module Chainer
     end
 
     def grad=(g)
-      @grad_var = g.nil? ? nil : Chainer::Variable.new(g)
+      self.grad_var = g.nil? ? nil : Chainer::Variable.new(g)
     end
 
     def grad_var
@@ -134,7 +134,15 @@ module Chainer
       @node.set_creator_node(fnode)
     end
 
-    def backward(retain_grad: false)
+    def backward(retain_grad: false, enable_double_backprop: true)
+      old_enable_backprop = Chainer.configuration.enable_backprop
+      Chainer.configuration.enable_backprop = enable_double_backprop
+      _backward_main(retain_grad)
+      Chainer.configuration.enable_backprop = old_enable_backprop
+    end
+
+    def _backward_main(retain_grad)
+      node.check_old_style_gradient
       return if self.creator_node.nil?
 
       seen_set = Set.new

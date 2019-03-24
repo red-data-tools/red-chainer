@@ -18,7 +18,7 @@ module Chainer
 
         # Just returns input variables.
         def self.identity(*inputs)
-          ret = self.new.apply(*inputs)
+          ret = self.new.apply(inputs)
           ret.size == 1 ? ret[0] : ret
         end
       end
