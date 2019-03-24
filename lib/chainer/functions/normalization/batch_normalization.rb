@@ -174,6 +174,7 @@ module Chainer
         end
 
         def initialize(eps: 2e-5)
+          @inv_std = nil
           @inv_var = nil
           @eps = eps
         end
@@ -230,8 +231,9 @@ module Chainer
           expander = @expander
           xp = Chainer.get_array_module(x)
 
-          if @inv_var.nil?
-            @inv_var = @inv_std.square
+          if @inv_std.nil? || @inv_var.nil?
+            @inv_var = (var + @eps).reciprocal
+            @inv_std = xm::NMath.sqrt(@inv_var)
           end
 
           @gamma_over_std = gamma * @inv_std
