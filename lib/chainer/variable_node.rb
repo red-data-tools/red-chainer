@@ -84,7 +84,7 @@ module Chainer
 
     # Sets a `FunctionNode` object that created this node.
     #
-    # @params [Chainer::FunctionNode] Function node that has this variable as an output.
+    # @param [Chainer::FunctionNode] creator_node Function node that has this variable as an output.
     def set_creator_node(creator_node)
       self.creator_node = creator_node
     end
