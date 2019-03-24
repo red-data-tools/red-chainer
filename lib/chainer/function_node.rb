@@ -156,7 +156,7 @@ module Chainer
     # Users have to override either of this method or `backward`.
     # It is often simpler to implement `backward` and is recommended if you do not need to provide efficient gradient accumulation.
     #
-    # @param [Array<Integer>] target_indexes Indices of the input variables w.r.t. which the gradients are required.
+    # @param [Array<Integer>] target_input_indexes Indices of the input variables w.r.t. which the gradients are required.
     #   It is guaranteed that this tuple contains at least one element.
     # @param [Array<Chainer::Variable>] grad_outputs Gradients w.r.t. the output variables.
     #   If the gradient w.r.t. an output variable is not given, the corresponding element is `None`.

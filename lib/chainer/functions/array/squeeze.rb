@@ -3,8 +3,8 @@ module Chainer
     module Array
       class Squeeze < FunctionNode
         # Remove demensions of size one from the shape of a Numo::NArray.
-        # @param [Chainer::Variable or Numo::NArray] x: Input data.
-        # @param [nil or integer or array of integer] axis: A subset of the single-dimensional entries in the shape to remove.
+        # @param [Chainer::Variable or Numo::NArray] x Input data.
+        # @param [nil or integer or array of integer] axis A subset of the single-dimensional entries in the shape to remove.
         #   If `nil` is supplied, all of them are removed. The dimension index starts at zero.
         #   If an axis with dimension greater than one is selected, an error is raised.
         # @return [Chainer::Variable] Variable whose dimensions of size 1 are removed.

@@ -129,7 +129,7 @@ module Chainer
 
     # Notifies the variable that the given node is its creator.
     #
-    # @param [Chainer::FunctionNode] Function node that has this variable as an output.
+    # @param [Chainer::FunctionNode] fnode node that has this variable as an output.
     def set_creator_node(fnode)
       @node.set_creator_node(fnode)
     end
