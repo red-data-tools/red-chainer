@@ -1,12 +1,11 @@
 module Chainer
   module Training
     class ExtensionEntry
-      attr_accessor :extension, :trigger, :invoke_before_training, :priority
+      attr_accessor :extension, :trigger, :priority
 
-      def initialize(extension, priority, trigger, invoke_before_training)
+      def initialize(extension, priority, trigger)
         @extension = extension
         @trigger = trigger
-        @invoke_before_training = invoke_before_training
         @priority = priority
       end
     end
@@ -47,7 +46,7 @@ module Chainer
         Time.now.to_f - @start_at + @snapshot_elapsed_time.to_f
       end
 
-      def extend(extension, name: nil, trigger: nil, priority: nil, invoke_before_training: nil)
+      def extend(extension, name: nil, trigger: nil, priority: nil)
         if name.nil?
           name = if extension.name
                    extension.name
@@ -69,10 +68,6 @@ module Chainer
           priority = extension.methods.include?(:priority) ? extension.priority : Extension::PRIORITY_READER
         end
 
-        if invoke_before_training.nil?
-          invoke_before_training = extension.methods.include?(:invoke_before_training) ? extension.invoke_before_training : false
-        end
-
         modified_name = name
         ordinal = 0
 
@@ -82,7 +77,7 @@ module Chainer
         end
 
         extension.name = modified_name
-        @extensions[modified_name] = ExtensionEntry.new(extension, priority, trigger, invoke_before_training)
+        @extensions[modified_name] = ExtensionEntry.new(extension, priority, trigger)
       end
 
       def get_extension(name)
