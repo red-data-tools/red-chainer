@@ -28,3 +28,22 @@ class Chainer::Functions::Array::CastTest < Test::Unit::TestCase
     Chainer::check_backward(func, @x, @g, **check_backward_options)
   end
 end
+
+class Chainer::Functions::Array::NoCastTest < Test::Unit::TestCase
+  def setup
+    @dtype = xm::SFloat
+    @x = @dtype.new(1).rand
+  end
+
+  def test_forward_no_cast_array
+    y = Chainer::Functions::Array::Cast.cast(@x, @dtype)
+    assert_equal(Chainer::Variable, y.class)
+    assert_equal(@x, y.data)
+  end
+
+  def test_forward_no_cast_variable
+    x = Chainer::Variable.new(@x)
+    y = Chainer::Functions::Array::Cast.cast(x, @dtype)
+    assert_equal(x, y)
+  end
+end
