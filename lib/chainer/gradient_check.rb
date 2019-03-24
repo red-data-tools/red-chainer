@@ -171,24 +171,7 @@ module Chainer
     y = _as_tuple(y)
     y = Chainer::Functions::Math::Identity.new.apply(y)
 
-    if !y_grad.nil?
-      if (y).size != (y_grad).size
-        raise TypeError, "`y_grad` must have the same length of output values"
-      end
-
-      y.zip(y_grad).each do |iy, igy|
-        if igy.is_a?(Chainer::Variable)
-          iy.grad_var = igy
-        else
-          iy.grad = igy
-        end
-      end
-    else
-      if (y).size != 1
-        raise TypeError, "When `y_grad` is `nil`, the function must return azero-dimentional array"
-      end
-      y_grad = [1]
-    end
+    y_grad = set_y_grad(y, y_grad)
 
     # We only need to call `backward` for one result `Chainer::Variable`.
     # `Chainer::Variable.backward` method calls `Chainer::Function.backward` of its creator.
@@ -299,24 +282,7 @@ module Chainer
       # Let all elements of y share the same creator.
       # See the comment in check_backward.
       y = Chainer::Functions::Math::Identity.new.apply(y)
-      if !gys.nil?
-        if (y).size != (gys).size
-          raise TypeError, "`gys` must have the same length of output values"
-        end
-
-        y.zip(gys).each do |iy, igy|
-          if igy.is_a?(Chainer::Variable)
-            iy.grad_var = igy
-          else
-            iy.grad = igy
-          end
-        end
-      else
-        if (y).size != 1
-          raise TypeError, "When `gys` is `nil`, the function must return azero-dimentional array"
-        end
-        gys = [1]
-      end
+      set_y_grad(y, gys)
       y[0].backward
 
       ret = xs.map { |x| x.grad_var }
@@ -328,5 +294,28 @@ module Chainer
     check_backward(first_order_grad, inputs, x_grad_grad, params=params, eps: eps, atol: atol, rtol: rtol, no_grads: no_grads, dtype: dtype)
   end
 
-  module_function :_copy_arrays, :numerical_grad, :_as_tuple, :check_backward, :check_double_backward
+  def set_y_grad(y, y_grad)
+    if y_grad.nil?
+      if y.size != 1
+        raise TypeError, 'When `y_grad` is `None`, the function must return a zero-dimentional array'
+      end
+      y_grad = [1]
+    else
+      if y.size != y_grad.size
+        raise TypeError, '`y_grad` must have the same length of output values'
+      end
+      y.zip(y_grad).each do |iy, igy|
+        if igy.is_a?(Chainer::Variable)
+          iy.grad_var = igy
+        else
+          iy.grad = igy
+        end
+      end
+    end
+
+    y_grad
+  end
+
+  module_function :_copy_arrays, :numerical_grad, :_as_tuple, :check_backward, :check_double_backward, :set_y_grad
+  private_class_method :set_y_grad
 end
