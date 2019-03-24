@@ -10,7 +10,7 @@ module Chainer
       end
 
       if shape.nil?
-        if Chainer.array?(@initializer)
+        if Chainer.array?(initializer)
           super(initializer, name: name)
         else
           super(name: name)
