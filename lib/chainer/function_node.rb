@@ -341,8 +341,8 @@ module Chainer
       # Negate since heapq is min-heap
       # The second element is used to make each item unique
       visited_funcs.add(func)
-      candidate_funcs << func
-      candidate_funcs.sort_by! { |f| -f.rank }
+      candidate_funcs.unshift(func)
+      candidate_funcs.sort_by! { |f| f.rank }
     end
 
     pop_candidate = -> () do
