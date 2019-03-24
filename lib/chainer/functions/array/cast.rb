@@ -16,6 +16,9 @@ module Chainer
         # > y.dtype
         # # => Numo::DFloat
         def self.cast(x, type)
+          if (Chainer.array?(x) && x.class == type) || (x.is_a?(Chainer::Variable) && x.dtype == type)
+            return Chainer::Variable.as_variable(x)
+          end
           self.new(type).apply([x]).first
         end
 
