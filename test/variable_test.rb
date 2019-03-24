@@ -19,6 +19,12 @@ def constant(xs, value)
   return Constant.new(value).(*xs)
 end
 
+class DummyId < Chainer::Functions::Math::Identity
+  def backward(a, b)
+    raise 'backward should not be called on inputs that do not require grads'
+  end
+end
+
 class Chainer::VariableTest < Test::Unit::TestCase
   data({'test1' => {x_shape: [10], c_shape: [2, 5], label: "(2, 5), #{xm}::SFloat"},
         'test2' => {x_shape: [],   c_shape: [1],    label: "(1), #{xm}::SFloat"}},   keep: true)
@@ -146,6 +152,13 @@ class Chainer::VariableTest < Test::Unit::TestCase
 
   def test_double_backprop
     check_double_backprop
+  end
+
+  def test_backward_no_grad_required
+    x = Chainer::Variable.new(@x)
+    y1, y2 = DummyId.new.apply([x, x])
+    x.node.requires_grad = false
+    y1.backward
   end
 end
 
