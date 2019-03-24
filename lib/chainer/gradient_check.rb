@@ -173,6 +173,10 @@ module Chainer
 
     y_grad = set_y_grad(y, y_grad)
 
+    # Clear gradients which may exist if func calls backward inside of itself.
+    clear_grads(xs)
+    clear_grads(params)
+
     # We only need to call `backward` for one result `Chainer::Variable`.
     # `Chainer::Variable.backward` method calls `Chainer::Function.backward` of its creator.
     y[0].backward()
@@ -200,6 +204,9 @@ module Chainer
         raise 'gradients of some arguments are not calculated' if x.grad.nil?
       end
     end
+
+    # Keep the gradient arrays of params which may be overwritten by func
+    params_grad = params.map(&:grad)
 
     if dtype.nil?
       one = Numo::DFloat.new().fill(1.0)
@@ -230,6 +237,10 @@ module Chainer
         param.data = (one * data.cast_to(param_dtype)).cast_to(param_dtype)
       end
 
+      # Clear gradients to support func that calls backward inside of itself.
+      clear_grads(casted_xs)
+      clear_grads(params)
+
       ys = func.(*casted_xs)
       ys = _as_tuple(ys)
       ys_data = ys.map { |y| y.data }
@@ -257,8 +268,8 @@ module Chainer
       gx_accum += gxi.empty? ? 0 : gxi.dot(cxi)
     end
 
-    params.each do |p|
-      gpi = p.grad.flatten.dup
+    params.zip(params_grad).each do |p, gpi|
+      gpi =gpi.flatten.dup
       pi = p.data.flatten.dup
       unless dtype.nil?
         gpi = gpi.cast_to(dtype)
@@ -272,6 +283,7 @@ module Chainer
 
   def check_double_backward(func, x_data, y_grad, x_grad_grad, params=[], params_grad_grad=[], eps: 1e-3, atol: 1e-4, rtol: 1e-3, no_grads: nil, dtype: nil)
     x_data = _as_tuple(x_data)
+    params = _as_tuple(params)
     n_x = x_data.size
 
     first_order_grad = -> *inputs do
@@ -285,13 +297,12 @@ module Chainer
       set_y_grad(y, gys)
       y[0].backward
 
-      ret = xs.map { |x| x.grad_var }
-      xs.each { |x| x.grad_var = nil }
-      ret
+      xs.map(&:grad_var) + params.map(&:grad_var)
     end
 
     inputs = x_data + _as_tuple(y_grad)
-    check_backward(first_order_grad, inputs, x_grad_grad, params=params, eps: eps, atol: atol, rtol: rtol, no_grads: no_grads, dtype: dtype)
+    grad_grad = _as_tuple(x_grad_grad) + _as_tuple(params_grad_grad)
+    check_backward(first_order_grad, inputs, grad_grad, params=params, eps: eps, atol: atol, rtol: rtol, no_grads: no_grads, dtype: dtype)
   end
 
   def set_y_grad(y, y_grad)
@@ -316,6 +327,12 @@ module Chainer
     y_grad
   end
 
-  module_function :_copy_arrays, :numerical_grad, :_as_tuple, :check_backward, :check_double_backward, :set_y_grad
-  private_class_method :set_y_grad
+  def clear_grads(xs)
+    xs.each do |x|
+      x.grad_var = nil
+    end
+  end
+
+  module_function :_copy_arrays, :numerical_grad, :_as_tuple, :check_backward, :check_double_backward, :set_y_grad, :clear_grads
+  private_class_method :set_y_grad, :clear_grads
 end
