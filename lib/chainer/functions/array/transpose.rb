@@ -27,14 +27,15 @@ module Chainer
         end
 
         def backward(indexes, grad_outputs)
-          gy = grad_outputs.first
           inv_axes = @axes
-          if @axes
-            axes = @axes.map { |ax| ax % @axes.size }
+          if inv_axes
+            axes_len = inv_axes.size
+
+            axes = inv_axes.map { |ax| ax % axes_len }
             inv_axes = Numo::NArray[*axes].sort_index.to_a
           end
 
-          [Transpose.transpose(gy, axes: inv_axes)]
+          Transpose.new(axes: inv_axes).apply(grad_outputs)
         end
       end
     end
