@@ -88,7 +88,7 @@ class Chainer::Functions::Normalization::BatchNormalizationFunctionTest < Test::
 end
 
 class Chainer::Functions::Normalization::FixedBatchNormalizationTest < Test::Unit::TestCase
-  data(:param_shape, [[3, 4], [3, 2, 3]], keep: true)
+  data(:param_shape, [[3], [3, 4], [3, 2, 3]], keep: true)
   data(:ndim, [0, 1, 2], keep: true)
   data(:dtype, [xm::SFloat, xm::DFloat], keep: true)
 
