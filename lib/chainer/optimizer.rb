@@ -10,13 +10,32 @@ module Chainer
       @hooks = {}
     end
 
+    def add_hook(hook, name: nil)
+      if !hook.class.method_defined?(:call)
+        raise TypeError, 'hook function is not callable'
+      end
+
+      name = hook.name if name.nil?
+      if @hooks[name]
+        raise TypeError, "hook #{name} already exists"
+      end
+      @hooks[name] = hook
+    end
+
+    def call_hooks
+      @hooks.values.each do |hook|
+        _call_hook(hook)
+        reallocate_cleared_grads
+      end
+    end
+
     def _call_hook(hook)
       if hook.methods.include?(:call_for_each_param)
-        @target.params.each do |param|
+        @target.params do |param|
           hook.(param.update_rule, param)
         end
       else
-        hook(self)
+        hook.(self)
       end
     end
 
@@ -47,7 +66,9 @@ module Chainer
       return unless @enabled
 
       @t += 1
-      prepare(param)
+      unless param.data.nil?
+        prepare(param)
+      end
       @hooks.values.each do |hook|
         hook.call(param)
       end
@@ -136,11 +157,11 @@ module Chainer
   #
   # @param [Float] rate Coefficient for the weight decay
   class WeightDecay
-    def self.name
+    def name
       "WeightDecay"
     end
 
-    def self.call_for_each_param
+    def call_for_each_param
       true
     end
 
@@ -150,7 +171,7 @@ module Chainer
 
     def call(rule, param)
       return if param.data.nil? || param.grad.nil?
-      param.grad += @rate * param.data
+      param.grad += (@rate * param.data)
     end
   end
 end
