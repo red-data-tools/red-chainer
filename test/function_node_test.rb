@@ -42,6 +42,20 @@ class Chainer::GradTestBase < Test::Unit::TestCase
     end
   end
 
+  def check_double_grad
+    forward
+    ys = @y_names.map { |name| self.instance_variable_get("@#{name}") }
+    gxs = Chainer.grad(ys, @xs, grad_outputs: @gys, grad_inputs: @gxs, enable_double_backprop: true)
+    y = gxs.sum
+    ggxs = Chainer.grad([y], @xs)
+
+    expected = expected_double_grad
+    assert_equal(expected.size, ggxs.size)
+    ggxs.zip(expected).each do |a, e|
+      Chainer::Testing.assert_allclose(get_value(e), get_value(a))
+    end
+  end
+
   private
 
   def to_grad_names(names)
@@ -83,9 +97,13 @@ class Chainer::TestGradSimple < Chainer::GradTestBase
     [2 * @gy]
   end
 
-  #def test_grad
-  #  check_grad
-  #end
+  def test_grad
+    check_grad
+  end
+
+  def test_double_grad
+    check_double_grad
+  end
 end
 
 class TestGradComplex < Chainer::GradTestBase
@@ -114,5 +132,9 @@ class TestGradComplex < Chainer::GradTestBase
 
   def test_grad
     check_grad
+  end
+
+  def test_double_grad
+    check_double_grad
   end
 end
