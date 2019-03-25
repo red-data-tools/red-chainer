@@ -14,7 +14,8 @@ module Chainer
 
         def forward(inputs)
           x = inputs.first
-          [x.reshape(*@shape)]
+          new_shape = @shape.map { |s| s == -1 ? nil : s }
+          [x.reshape(*new_shape)]
         end
 
         def backward(indexes, grad_outputs)
