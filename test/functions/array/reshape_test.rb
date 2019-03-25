@@ -5,9 +5,13 @@ require 'chainer/functions/array/reshape'
 class Chainer::Functions::Array::ReshapeTest < Test::Unit::TestCase
   xm = Chainer::Device.default.xm
 
-  data(:in_shape,  [[4, 3, 2]],              keep: true)
-  data(:out_shape, [[2, 2, 6]],              keep: true)
-  data(:dtype,     [xm::SFloat, xm::DFloat], keep: true)
+  data(:in_shape,  [[4, 3, 2]],              group: :positive, keep: true)
+  data(:out_shape, [[2, 2, 6]],              group: :positive, keep: true)
+  data(:dtype,     [xm::SFloat, xm::DFloat], group: :positive, keep: true)
+
+  data(:in_shape,  [[2, 3, 6]],              group: :negative, keep: true)
+  data(:out_shape, [[2, -1]],              group: :negative, keep: true)
+  data(:dtype,     [xm::SFloat, xm::DFloat], group: :negative, keep: true)
 
   def test_forward
     shape = data[:out_shape]
