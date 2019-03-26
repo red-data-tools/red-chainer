@@ -82,8 +82,8 @@ module Chainer
 
             ret = Chainer::Functions::Normalization::BatchNormalization.batch_normalization(x, gamma, beta, eps: @eps, running_mean: @avg_mean, running_var: @avg_var, decay: decay)
           else
-            mean = Chainer::Variable(@avg_mean)
-            var = Chainer::Variable(@avg_var)
+            mean = Chainer::Variable.new(@avg_mean)
+            var = Chainer::Variable.new(@avg_var)
             ret = Chainer::Functions::Normalization::FixedBatchNormalization.fixed_batch_normalization(x, gamma, beta, mean, var, eps: @eps)
           end
 
