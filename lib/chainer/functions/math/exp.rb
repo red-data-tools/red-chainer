@@ -14,6 +14,7 @@ module Chainer
         def forward(x)
           retain_inputs([])
           retain_outputs([0])
+          xm = Chainer.get_array_module(x.first)
           [Utils::Array.force_array(xm::NMath.exp(x.first))]
         end
 

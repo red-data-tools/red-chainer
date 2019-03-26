@@ -200,7 +200,7 @@ module Chainer
           beta = expander.(beta)
           var += @eps
           @inv_var = var.reciprocal
-          @inv_std = xm::NMath.sqrt(@inv_var)
+          @inv_std = xp::NMath.sqrt(@inv_var)
 
           y = apply_bn_fwd(xp, x, expander.(mean), expander.(@inv_std), gamma, beta)
           [y]
@@ -233,7 +233,7 @@ module Chainer
 
           if @inv_std.nil? || @inv_var.nil?
             @inv_var = (var + @eps).reciprocal
-            @inv_std = xm::NMath.sqrt(@inv_var)
+            @inv_std = xp::NMath.sqrt(@inv_var)
           end
 
           @gamma_over_std = gamma * @inv_std

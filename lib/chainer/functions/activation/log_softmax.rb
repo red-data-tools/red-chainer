@@ -84,6 +84,7 @@ module Chainer
           retain_inputs([0, 1])
           y, gy = inputs
 
+          xm = Chainer.get_array_module(y)
           gx = gy - xm::NMath.exp(y) * gy.sum(axis: 1, keepdims: true)
           [gx]
         end
