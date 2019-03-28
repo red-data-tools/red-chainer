@@ -2,7 +2,7 @@ module Chainer
   module Functions
     module Activation
       # Rectified Linear Unit.
-      class Relu < Function
+      class Relu < FunctionNode
         # Rectified Linear Unit function.
         #
         # $$
@@ -23,18 +23,18 @@ module Chainer
         #   => [3, 2]
         #
         def self.relu(x)
-          self.new.(x)
+          y, = self.new.apply([x])
+          y
         end
 
         def forward(x)
-          retain_inputs([])
           retain_outputs([0])
           [Utils::Array.force_array(x[0].class.maximum(x[0], 0))]
         end
 
-        def backward(x, gy)
-          y = @output_data[0]
-          [Utils::Array.force_array(gy[0] * (y > 0))]
+        def backward(indexes, gy)
+          y = get_retained_outputs.first
+          ReLUGrad2.new(y).apply([gy[0]])
         end
       end
     end

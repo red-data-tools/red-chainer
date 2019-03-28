@@ -1,7 +1,7 @@
 require 'chainer/gradient_check'
 
 def _uniform(*shape)
-  return xm::SFloat.new(shape).rand(2) - 1
+  xm::SFloat.new(shape).rand(-1, 1)
 end
 
 def _dot(x, y)
@@ -24,10 +24,11 @@ class NumericalGradientTest < Test::Unit::TestCase
 
   def check_numerical_grad_one(f, df, xs, gys, eps)
     dfxs = df.(xs)
-    gys = gys.map{|gy| gy.nil? ? 0 : gy}.to_a
-    dx_expect = dfxs.map{|dfx| _dot(dfx, gys)}.to_a
-    func = lambda do |_|
-      return f.call(xs)
+    gys = gys.map{|gy| gy.nil? ? 0 : gy}
+    dx_expect = dfxs.map{|dfx| _dot(dfx, gys)}
+
+    func = lambda do
+      f.call(xs)
     end
     dx_actual = Chainer::numerical_grad(func, xs, gys, eps)
     assert_equal((dx_actual).size, (dx_expect).size)
@@ -64,7 +65,7 @@ class NumericalGradientReferenceTest < Test::Unit::TestCase
   def check_reference(x)
     # A returned value and an input refers the same memory.
     # See issue https://github.com/chainer/chainer/issues/488
-    func = lambda do |x|
+    func = lambda do
       return [x]
     end
     gx, = Chainer::numerical_grad(func, [x], [1])
@@ -89,35 +90,6 @@ class NumericalGradientInvalidEps < NumericalGradientTest
   end
 end
 
-class NumericalGradientInvalidType < Test::Unit::TestCase
-  def setup
-    @x = xm::NArray.cast(0)
-    @y = xm::NArray.cast(0)
-    @f = lambda{}
-  end
-
-  def test_invalid_inputs
-    y = @y
-    assert_raise(ArgumentError) {
-      Chainer::numerical_grad(@f, [@x, y], [])
-    }
-  end
-
-  def test_invalid_outputs
-    y = @y
-    assert_raise(NoMethodError) {
-      Chainer::numerical_grad(@f, [], [@x, y])
-    }
-  end
-
-  def test_invalid_mixed
-    y = @y
-    assert_raise(ArgumentError) {
-      Chainer::numerical_grad(@f, [@x], [y])
-    }
-  end
-end
-
 class NumericalGradientEpsTest < Test::Unit::TestCase
   def setup
     @x = xm::SFloat.cast(0.0)
@@ -125,7 +97,7 @@ class NumericalGradientEpsTest < Test::Unit::TestCase
   end
 
   def check_different_eps(x, y)
-    f = lambda do |x|
+    f = lambda do
       if (-1 < x).all? and (x < 1).all?
         return [x.dup]
       else
@@ -194,7 +166,50 @@ class TestCheckBackward < Test::Unit::TestCase
       return [s]
     end
 
-    assert_raise(NoMethodError){Chainer::check_backward(f, [x1, x2], g1, no_grads: [false, false])}
+    assert_raise(RuntimeError){Chainer::check_backward(f, [x1, x2], g1, no_grads: [false, false])}
     Chainer::check_backward(f, [x1, x2], g1, no_grads: [false, true])
+  end
+end
+
+class TestCheckDoubleBackward < Test::Unit::TestCase
+  def check_multiple_input_output
+    one = xm::DFloat.ones([1])
+    x1 = one.dup
+    x2 = one.dup
+    gy1 = one.dup
+    gy2 = one.dup
+    ggx1 = one.dup
+    ggx2 = one.dup
+
+    f = -> (x, y) do
+      w1 = x + y
+      w2 = w1 + y
+      [w1 * w1, w2 * w2]
+    end
+    Chainer::check_double_backward(f, [x1, x2], [gy1, gy2], [ggx1, ggx2])
+  end
+
+  def test_multiple_input_output
+    check_multiple_input_output
+  end
+
+  def check_double_backward_with_params
+    one = xm::DFloat.ones([1])
+    x = one.dup
+    gy = one.dup
+    ggx = one.dup
+    param_a = one.dup
+    ggparam = one.dup
+
+    param = Chainer::Variable.new(param_a)
+
+    f = -> (x) do
+      x * param
+    end
+    Chainer::check_double_backward(f, x, gy, ggx, param, ggparam)
+  end
+
+  def test_double_backward_with_params
+    check_double_backward_with_params
   end
 end

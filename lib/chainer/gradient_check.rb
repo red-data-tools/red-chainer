@@ -18,36 +18,31 @@ module Chainer
   # @param [Float] eps Epsilon value of finite differences.
   # @return [Array] Numerical gradient arrays corresponding to +inputs+.
   #
-  def numerical_grad(f, inputs, grad_outputs, eps=0.001)
+  def numerical_grad(f, inputs, grad_outputs, eps=1e-3)
     raise unless eps > 0
     inputs = inputs.to_a
     grad_outputs = grad_outputs.to_a
     grads = inputs.map{|x| x.new_zeros()}
 
-    if inputs[0].ndim < 2
-      tmp = [[inputs[0], grads[0]]]
-    else
-      tmp = (0...inputs[0].shape[0]).map{|i|[inputs[0][i, false], grads[0][i, false]]}
-    end
-
-    tmp.each do |x, gx|
-      x.each_with_index{|xx, *i|
-        orig = x[*i].to_f   # hold original value
+    inputs.zip(grads).each do |x, gx|
+      orig_x = x.dup # hold original value
+      x.each_with_index{|_, *i|
+        orig = orig_x[*i]
         x[*i] = orig + eps
-        ys1 = _copy_arrays(f.call(x))
+        ys1 = _copy_arrays(f.())
         x[*i] = orig - eps
-        ys2 = _copy_arrays(f.call(x))
+        ys2 = _copy_arrays(f.())
         x[*i] = orig
 
         ys1.zip(ys2, grad_outputs).each do |y1, y2, gy|
-          if !gy.nil?
-            if Chainer.array?((y1 - y2) * gy)
-              dot = ((y1 - y2) * gy).sum()
-            else
-              dot = ((y1 - y2) * gy).inject(:+)
-            end
-            gx[*i] += dot / (2*eps).to_f
+          next if gy.nil?
+          diff = y1 - y2
+          if Chainer.array?(diff) && diff.empty?
+            dot = 0
+          else
+            dot = (diff * gy).sum
           end
+          gx[*i] += dot / (2 * eps)
         end
       }
     end
@@ -160,80 +155,170 @@ module Chainer
     xs = x_data.map{|x| Chainer::Variable.new(x)}
     y = func.(*xs)
     y = _as_tuple(y)
-    y = Chainer::Functions::Math::Identity.identity(*y)
-    y = _as_tuple(y)
+    y = Chainer::Functions::Math::Identity.new.apply(y)
 
-    if !y_grad.nil?
-      if (y).size != (y_grad).size
-        raise TypeError, "`y_grad` must have the same length of output values"
-      end
+    y_grad = set_y_grad(y, y_grad)
 
-      y.zip(y_grad).each do |iy, igy|
-        iy.grad = igy
-      end
-    else
-      if (y).size != 1
-        raise TypeError, "When `y_grad` is `nil`, the function must return azero-dimentional array"
-      end
-      y_grad = [1]
-    end
+    # Clear gradients which may exist if func calls backward inside of itself.
+    clear_grads(xs)
+    clear_grads(params)
+
     # We only need to call `backward` for one result `Chainer::Variable`.
     # `Chainer::Variable.backward` method calls `Chainer::Function.backward` of its creator.
     y[0].backward()
 
+    param_data = params.map { |p| p.data }
     if dtype.nil?
-      casted_xs = x_data.map{|x| Chainer::Variable.new(x)}
+      casted_xs = x_data.map { |x| Chainer::Variable.new(x) }
     else
-      if (dtype != xm::DFloat) and (dtype != xm::SFloat)
-        raise TypeError, "`dtype` is allowed only float type"
-      end
-      if (params).size > 0
-        raise TypeError, "`dtype` is available only if `params` is empty"
-      end
-      casted_xs = x_data.map{|x|
-                    if x.class == xm::DFloat or x.class == xm::SFloat
-                      Chainer::Variable.new(dtype.cast(x))
-                    else
-                      Chainer::Variable.new(x)
-                    end
-                  }
-    end
-
-    f = lambda do |_|
-      ys = func.(*casted_xs)
-      ys = _as_tuple(ys)
-      return ys.map{|y| y.data}.to_a
+      raise '`dtype` is allowed only float type' if dtype != xm::DFloat && dtype != xm::SFloat
+      casted_xs = x_data.map { |x| x.is_a?(Numo::NArray) ? Chainer::Variable.new(x.cast_to(dtype)) : x  }
     end
 
     if no_grads.nil?
-      no_grads = xs.map{|x| (x.dtype != xm::DFloat) and (x.dtype != xm::SFloat)}
+      no_grads = xs.map { |x| x.dtype != Numo::SFloat && x.dtype != Numo::DFloat }
     else
-      if no_grads.size != xs.size
-        raise TypeError, "Length of no_grads param and xs should be same."
+      raise "Length of no_grads param and xs should be same." if no_grads.size != xs.size
+    end
+
+    casted_data = casted_xs.map { |x| x.data.dup }
+
+    no_grads.zip(xs).each do |skip, x|
+      if skip
+        raise "x.grad is not nil" if  x.grad != nil
+      else
+        raise 'gradients of some arguments are not calculated' if x.grad.nil?
       end
     end
 
-    no_grads.zip(xs, casted_xs).each do |skip, x, cx|
-      if skip
-        raise unless x.grad.nil?
-        next
+    # Keep the gradient arrays of params which may be overwritten by func
+    params_grad = params.map(&:grad)
+
+    if dtype.nil?
+      one = Numo::DFloat.new().fill(1.0)
+    else
+      one = dtype.new().fill(1.0)
+    end
+
+    g = lambda do
+      # This functions is called twice in `numerical_grad`.
+      # `one` is `1 + epsilon` or `1 - epsilon` in these calls.
+      # See the document of `numerical_grad`.
+      no_grads.zip(casted_xs, casted_data).each do |skip, cx, data|
+        next if skip || cx.data.empty?
+        # astype is require to store data with the given type
+        data = (one * data).cast_to(data.class)
+        cx.data = data
       end
-      gx, = numerical_grad(f, [cx.data], y_grad, eps)
-      Chainer::Testing.assert_allclose(x.grad, gx, atol: atol, rtol: rtol)
-      if dtype.nil?
-        raise unless gx.class == x.grad.class
-      else
-        if ((gx.class != xm::DFloat) and (gx.class != xm::SFloat)) and (gx.class != dtype)
-           raise
+
+      params.zip(param_data).each do |param, data|
+        if !dtype.nil?
+          param_dtype = dtype
+        else
+          param_dtype = param.dtype
+        end
+        # The inner astype is required to calculates __mul__ in
+        # `param_type` when data is low accuracy float.
+        # The outer one is require to store data with the given type.
+        param.data = (one * data.cast_to(param_dtype)).cast_to(param_dtype)
+      end
+
+      # Clear gradients to support func that calls backward inside of itself.
+      clear_grads(casted_xs)
+      clear_grads(params)
+
+      ys = func.(*casted_xs)
+      ys = _as_tuple(ys)
+      ys_data = ys.map { |y| y.data }
+      no_grads.zip(casted_xs, casted_data).each do |skip, cx, data|
+        next if skip
+        cx.data = data
+      end
+      params.zip(param_data).each do |param, data|
+        param.data = data
+      end
+      ys_data
+    end
+
+    gx, = numerical_grad(g, [one], y_grad, eps)
+    gx_accum = 0
+
+    no_grads.zip(xs, casted_xs).each do |skip, x, cx|
+      next if skip
+      gxi = x.grad.flatten.dup
+      cxi = cx.data.flatten.dup
+      unless dtype.nil?
+        gxi = gxi.cast_to(dtype)
+        cxi = cxi.cast_to(dtype)
+      end
+      gx_accum += gxi.empty? ? 0 : gxi.dot(cxi)
+    end
+
+    params.zip(params_grad).each do |p, gpi|
+      gpi =gpi.flatten.dup
+      pi = p.data.flatten.dup
+      unless dtype.nil?
+        gpi = gpi.cast_to(dtype)
+        pi = pi.cast_to(dtype)
+      end
+      gx_accum += gpi.dot(pi)
+    end
+
+    Chainer::Testing.assert_allclose(gx, gx_accum, atol: atol, rtol: rtol)
+  end
+
+  def check_double_backward(func, x_data, y_grad, x_grad_grad, params=[], params_grad_grad=[], eps: 1e-3, atol: 1e-4, rtol: 1e-3, no_grads: nil, dtype: nil)
+    x_data = _as_tuple(x_data)
+    params = _as_tuple(params)
+    n_x = x_data.size
+
+    first_order_grad = -> *inputs do
+      xs = inputs[0...n_x]
+      gys = inputs[n_x..-1]
+
+      y = _as_tuple(func.(*xs))
+      # Let all elements of y share the same creator.
+      # See the comment in check_backward.
+      y = Chainer::Functions::Math::Identity.new.apply(y)
+      set_y_grad(y, gys)
+      y[0].backward(enable_double_backprop: true)
+
+      xs.map(&:grad_var) + params.map(&:grad_var)
+    end
+
+    inputs = x_data + _as_tuple(y_grad)
+    grad_grad = _as_tuple(x_grad_grad) + _as_tuple(params_grad_grad)
+    check_backward(first_order_grad, inputs, grad_grad, params=params, eps: eps, atol: atol, rtol: rtol, no_grads: no_grads, dtype: dtype)
+  end
+
+  def set_y_grad(y, y_grad)
+    if y_grad.nil?
+      if y.size != 1
+        raise TypeError, 'When `y_grad` is `None`, the function must return a zero-dimentional array'
+      end
+      y_grad = [1]
+    else
+      if y.size != y_grad.size
+        raise TypeError, '`y_grad` must have the same length of output values'
+      end
+      y.zip(y_grad).each do |iy, igy|
+        if igy.is_a?(Chainer::Variable)
+          iy.grad_var = igy
+        else
+          iy.grad = igy
         end
       end
     end
 
-    params.each do |p|
-      gp, = numerical_grad(f, [p.data], y_grad, eps)
-      Chainer::Testing.assert_allclose(p.grad, gp, atol: atol, rtol: rtol)
-      raise unless gp.dtype === p.grad.dtype
+    y_grad
+  end
+
+  def clear_grads(xs)
+    xs.each do |x|
+      x.grad_var = nil
     end
   end
-  module_function :_copy_arrays, :numerical_grad, :_as_tuple, :check_backward
+
+  module_function :_copy_arrays, :numerical_grad, :_as_tuple, :check_backward, :check_double_backward, :set_y_grad, :clear_grads
+  private_class_method :set_y_grad, :clear_grads
 end

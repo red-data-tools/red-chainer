@@ -97,8 +97,7 @@ module Chainer
         # @return dict Result dictionary. This dictionary is further reported via `Chainer.save_report` without specifying any observer.
         def evaluate
           iterator = @iterators[:main]
-          target = @targets[:main]
-          eval_func = @eval_func || target
+          eval_func = @eval_func || @targets[:main]
 
           @eval_hook.(self) if @eval_hook
 

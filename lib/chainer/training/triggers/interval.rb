@@ -13,6 +13,11 @@ module Chainer
           @previous_epoch_detail = 0.0
         end
 
+        # Decides whether the extension should be called on this iteration.
+        #
+        # @param [Chainer::Trainer] trainer Trainer object that this trigger is associated with.
+        #   The updater associated with this trainer is used to determine if the trigger should fire.
+        # @return [boolean]  True if the corresponding extension should be invoked in this iteration.
         def call(trainer)
           updater = trainer.updater
           if @unit == 'epoch'
@@ -30,7 +35,7 @@ module Chainer
             iteration = updater.iteration
             previous_iteration = @previous_iteration
             if previous_iteration < 0
-                previous_iteration = iteration - 1
+              previous_iteration = iteration - 1
             end
             fire = previous_iteration.div(@period).floor != iteration.div(@period).floor
           end
@@ -38,7 +43,7 @@ module Chainer
           # save current values
           @previous_iteration = updater.iteration
           @previous_epoch_detail = updater.epoch_detail
-        
+
           fire
         end
 

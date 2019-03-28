@@ -1,57 +1,55 @@
+require 'chainer/function_node'
 module Chainer
   class Function
 
     attr_reader :rank, :inputs, :outputs, :retain_after_backward
-    attr_accessor :output_data
+    attr_accessor :output_data, :owned_node
 
     def initialize
       @rank = 0
     end
 
     def call(*inputs)
-      inputs = inputs.map do |x|
-        if x.kind_of?(Chainer::Variable)
-          x
-        else
-          Variable.new(x, requires_grad: false)
-        end
-      end
+      node = self.node
 
-      in_data = inputs.map(&:data)
-      requires_grad = inputs.any?(&:requires_grad)
+      node.function = self
+      node.weak_function = nil
+      @node = WeakRef.new(node)
+      @owned_node = nil
 
-      @input_indexes_to_retain = nil
-      @output_indexes_to_retain = nil
-      outputs = forward(in_data)
-      raise "outputs is not a Array: class=#{outputs.class}" if !outputs.is_a? ::Array
-
-      ret = outputs.map do |y|
-        Variable.new(y, requires_grad: requires_grad)
-      end
-
-      if Chainer.configuration.enable_backprop
-        @rank = inputs.map(&:rank).max || 0
-
-        ret.each { |y| y.creator = self }
-
-        @inputs = inputs.map(&:node)
-        @outputs = ret.map { |y| WeakRef.new(y.node) }
-
-        @input_indexes_to_retain = 0...inputs.size if @input_indexes_to_retain.nil?
-        @input_indexes_to_retain.each do |index|
-          inputs[index].retain_data()
-        end
-        remove_instance_variable(:@input_indexes_to_retain)
-
-        unless @output_indexes_to_retain.nil?
-          @output_indexes_to_retain.each do |index|
-            ret[index].retain_data()
-          end
-          remove_instance_variable(:@output_indexes_to_retain)
-        end
-      end
+      ret = node.apply(inputs)
 
       ret.size == 1 ? ret[0] : ret
+    end
+
+    def inputs
+      @node.inputs
+    end
+
+    def outputs
+      @node.outputs
+    end
+
+    def node
+      noderef = @node
+      nd = noderef ? noderef.__getobj__ : @owned_node
+      return nd if nd
+
+      nd = FunctionAdapter.new(self)
+      @owned_node = nd
+      nd
+    end
+
+    def output_data
+      node.output_data
+    end
+
+    def rank
+      @node.rank
+    end
+
+    def label
+      self.class.to_s
     end
 
     def forward(inputs)
@@ -93,10 +91,53 @@ module Chainer
     end
 
     def retain_outputs(indexes, retain_after_backward: false)
-      @output_indexes_to_retain = indexes
-      if retain_after_backward
-        @retain_after_backward = retain_after_backward
+      node.retain_outputs(indexes)
+    end
+  end
+
+  class FunctionAdapter < ::Chainer::FunctionNode
+    attr_accessor :function, :weak_function
+
+    def initialize(function)
+      super()
+      @weak_function = WeakRef.new(function)
+      function.owned_node = self
+    end
+
+    def function
+      func = @function
+      return func if func
+
+      weak_func = @weak_function
+      weak_func.__getobj__
+    end
+
+    def label
+      @function.label
+    end
+
+    def forward(inputs)
+      retain_inputs(inputs.size.times.to_a)
+      @function.forward(inputs)
+    end
+
+    def backward(target_input_indexes, grad_outputs)
+      in_data = @inputs.map { |input| input.data }
+      grad_out_data = grad_outputs.map { |grad| grad.nil? ? nil : grad.data }
+
+      gxs = @function.backward(in_data, grad_out_data)
+      ret = []
+      target_input_indexes.each do |i|
+        if gxs[i].nil?
+          g = nil
+        else
+          g = Chainer::Variable.new(gxs[i])
+          g.node.old_style_grad_generator = @function.label
+        end
+        ret << g
       end
+
+      ret
     end
   end
 end

@@ -1,23 +1,40 @@
 module Chainer
   class VariableNode
-    attr_reader :dtype, :shape
-    attr_accessor :data, :name, :grad, :rank, :creator, :requires_grad, :variable
+    attr_reader :dtype, :shape, :data
+    attr_accessor :name, :requires_grad, :variable, :creator_node, :rank, :old_style_grad_generator
 
-    def initialize(variable: , name:, grad: nil)
+    def initialize(variable: , name:)
       @variable = WeakRef.new(variable)
-      @creator = nil
+      @creator_node = nil
       @data = nil
       @rank = 0
       @name = name
       @requires_grad = variable.requires_grad
 
-      set_data_type(variable.data)
+      @old_style_grad_generator = nil
 
-      @grad = grad
+      set_data_type(variable.data)
+    end
+
+    def creator
+      node = @creator_node
+      if node.nil?
+        return nil
+      end
+
+      if node.is_a?(Chainer::FunctionAdapter)
+        return node.function
+      end
+      node
     end
 
     def creator=(func)
-      @creator = func
+      self.creator_node = func
+    end
+
+    def creator_node=(func)
+      func = func.node if func.is_a?(Chainer::Function)
+      @creator_node = func
       unless func.nil?
         @rank = func.rank + 1
       end
@@ -28,9 +45,16 @@ module Chainer
       set_data_type(data)
     end
 
-    def grad=(g)
-      Utils::Variable.check_grad_type(nil, self, g)
-      @grad = g
+    # Gradient array of the corresponding variable.
+    def grad
+      var = get_variable
+      var.nil? ? nil : var.grad
+    end
+
+    # Gradient variable of the corresponding variable.<Paste>
+    def grad_var
+			var  = get_variable
+      var.nil? ? nil : var.grad_var
     end
 
     def label
@@ -41,8 +65,32 @@ module Chainer
       end
     end
 
+    # Returns the corresponding :class:`Variable` object.
+    #
+    # @return [Chainer::Variable] The variable object that refers this node.
+    def get_variable
+      var = @variable
+      # workaround: check weakref_alive?, because weakref sometimes delegates references by GC
+      return var.__getobj__ if !var.nil? && var.weakref_alive?
+
+      var = Chainer::Variable.new(@data, name: @name, requires_grad: @requires_grad)
+      var.node = self
+      var
+    end
+
+    def set_creator(creator)
+      self.creator = creator
+    end
+
+    # Sets a `FunctionNode` object that created this node.
+    #
+    # @param [Chainer::FunctionNode] creator_node Function node that has this variable as an output.
+    def set_creator_node(creator_node)
+      self.creator_node = creator_node
+    end
+
     def unchain
-      @creator = nil
+      self.creator_node = nil
     end
 
     def retain_data
@@ -66,6 +114,12 @@ module Chainer
     def set_grad_with_check(g, func, var)
       Utils::Variable.check_grad_type(func, var, g)
       @grad = g
+    end
+
+    def check_old_style_gradient
+      if @old_style_grad_generator
+        raise RuntimeError, "cannot twice-differentiate an old style Function #{@old_style_grad_generator}"
+      end
     end
   end
 end
