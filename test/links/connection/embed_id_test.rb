@@ -8,7 +8,7 @@ class Chainer::Links::Connection::EmbedIDTest < Test::Unit::TestCase
     test4: {x_data: [[0, 1, -1], [-1, 0, 1]], ignore_label: -1},
   }
 
-  def _setup(data)
+  def setup
     @link = Chainer::Links::Connection::EmbedID.new(3, 2, ignore_label: data[:ignore_label])
     @link.cleargrads
 
@@ -20,8 +20,6 @@ class Chainer::Links::Connection::EmbedIDTest < Test::Unit::TestCase
 
   data(data)
   def test_forward(data)
-    _setup(data)
-
     x = Chainer::Variable.new(xm::Int32.cast(data[:x_data]))
     y = @link.(x)
     assert_equal(y.data.class, xm::SFloat)
@@ -39,7 +37,6 @@ class Chainer::Links::Connection::EmbedIDTest < Test::Unit::TestCase
 
   data(data)
   def test_backward(data)
-    _setup(data)
     Chainer::check_backward(@link, @x, @gy, @link.w)
   end
 end
