@@ -153,6 +153,7 @@ args = {
   epoch: 39,
   gradclip: 5,
   resume: nil,
+  gpu: Integer(ENV['RED_CHAINER_GPU'] || -1),
   model: "model.npz",
   negativesize: 5,
   out: 'result',
@@ -163,6 +164,7 @@ opt = OptionParser.new
 opt.on("-u", "--unitsize VALUE", "Number of units (default: #{args[:unitsize]})") { |v| args[:unitsize] = v.to_i }
 opt.on("-b", "--batchsize VALUE", "Number of words in each mini-batch (default: #{args[:batchsize]})") { |v| args[:batchsize] = v.to_i }
 opt.on("-l", "--bproplene VALUE", "Number of words in each mini-batch(= length of truncated BPTT)  (default: #{args[:bproplen]})") { |v| args[:bproplen] = v.to_i }
+opt.on('-g', '--gpu VALUE', "GPU ID (negative value indicates CPU) (default: #{args[:gpu]})") { |v| args[:gpu] = v.to_i }
 opt.on("-e", "--epoch VALUE", "Number of sweeps over the dataset to train (default: #{args[:epoch]})") { |v| args[:epoch] = v.to_i }
 opt.on("-c", "--gradclip VALUE", "Gradient norm threshold to clip (default: #{args[:gradclip]})") { |v| args[:gradclip] = v.to_i }
 opt.on("-r", "--resume VALUE", "Resume the training from snapshot") { |v| args[:resume] = v }
@@ -172,6 +174,7 @@ opt.on("-o", "--out VALUE", "Directory to output the result (default: #{args[:ou
 opt.on("--test", "Use tiny datasets for quick tests") { args[:test] = true }
 opt.parse!(ARGV)
 
+puts "GPU: #{args[:gpu]}"
 
 class BagOfWords
   attr_reader :counter, :vocabularies, :ids
@@ -200,6 +203,9 @@ class BagOfWords
   end
 end
 # Load the Penn Tree Bank long word sequence dataset
+
+device = Chainer::Device.create(args[:gpu])
+Chainer::Device.change_default(device)
 
 train = Datasets::PennTreebank.new(type: :train)
 valid = Datasets::PennTreebank.new(type: :valid)
@@ -236,7 +242,7 @@ optimizer.setup(model)
 optimizer.add_hook(Chainer::GradientClipping.new(args[:gradclip]))
 
 # Set up a trainer
-updater = BPTTUpdater.new(train_iter, optimizer, args[:bproplen])
+updater = BPTTUpdater.new(train_iter, optimizer, args[:bproplen], args[:gpu])
 trainer = Chainer::Training::Trainer.new(updater, stop_trigger: [args[:epoch], 'epoch'], out: args[:out])
 
 eval_model = model.dup  # Model with shared params and distinct states
@@ -244,7 +250,7 @@ eval_rnn = eval_model.predictor
 trainer.extend(Chainer::Training::Extensions::Evaluator.new(
     val_iter,
     eval_model,
-    device: -1,
+    device: args[:gpu],
     # Reset the RNN state at the beginning of each evaluation
     eval_hook: -> (_) { eval_rnn.reset_state }
 ))
@@ -267,7 +273,7 @@ trainer.run()
 # Evaluate the final model
 print('test')
 eval_rnn.reset_state()
-evaluator = Chainer::Extensions::Evaluator.new(test_iter, eval_model, device: -1)
+evaluator = Chainer::Extensions::Evaluator.new(test_iter, eval_model, device: args[:gpu])
 result = evaluator.()
 puts "test perplexity: #{Numo::NMath.exp(result['main/loss'].to_f)}"
 
