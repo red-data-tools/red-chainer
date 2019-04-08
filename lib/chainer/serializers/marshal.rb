@@ -46,9 +46,9 @@ module Chainer
       #
       # @param [string] filename Name of the file to be loaded.
       # @param [object] obj Object to be deserialized. It must support serialization protocol.
-      def self.load_file(filename, obj)
+      def self.load_file(filename, obj, path: '', strict: true)
         File.open(filename) do |f|
-          d = self.new(Marshal.load(f))
+          d = self.new(Marshal.load(f), path: path, strict: strict)
           d.load(obj)
         end
       end
