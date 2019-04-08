@@ -18,28 +18,32 @@ module Chainer
         end
       end
 
-      def self.take(x, indices, axis: nil)
-        if axis
-          indices = make_indecies_with_axis(x.shape, indices, axis)
+      def self.ndindex(shape)
+        shape.reduce(&:*).times.map do |i|
+          shape.size.times.reduce([]) do |ndidx, j|
+            ndidx << (i / shape.drop(j + 1).reduce(1, &:*)) % shape[j]
+          end
         end
-        x[indices]
       end
 
-      def self.make_indecies_with_axis(shape, indices, axis, values = [])
-        target_axis = values.size
-        if shape.size == values.size
-          values.zip(shape.drop(1) + [1]).reduce(0) do |sum, (x, ndim)|
-            (sum + x) * ndim
-          end
-        else
-          enum = (axis == target_axis) ? indices : (0...shape[target_axis])
-          if enum.is_a?(Integer)
-            make_indecies_with_axis(shape, indices, axis, values + [indices])
-          else
-            enum.map do |x|
-              make_indecies_with_axis(shape, indices, axis, values + [x])
+      def self.take(x, indices, axis: nil)
+        if axis
+          dimensional_indices = ::Array.new(x.shape.size, true)
+
+          indices_narray = Numo::Int32.cast(indices)
+          if indices_narray.shape.size > 1
+            y = x.class.zeros(*indices_narray.shape, *x.shape.drop(axis + 1))
+            self.ndindex(indices_narray.shape).each do |ndidx|
+              dimensional_indices[axis] = indices_narray[*ndidx]
+              y[*ndidx, *::Array.new(x.shape.size - axis - 1, true)] = x[*dimensional_indices]
             end
+            return y
+          else
+            dimensional_indices[axis] = indices
           end
+          x[*dimensional_indices]
+        else
+          x[indices]
         end
       end
 
