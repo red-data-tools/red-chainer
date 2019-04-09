@@ -2,7 +2,7 @@ module Chainer
   module Functions
     module Normalization
       module Calculation
-        def apply_bn_fwd(xp, x, mean, inv_std, gamma, beta)
+        def apply_bn_fwd(xm, x, mean, inv_std, gamma, beta)
           # NOTE: all arguments should be broadcasted to x.shape
           # (mean, inv_std, gamma, and beta have to already be expanded)
           x_hat = x_hat(x, mean, inv_std)
@@ -17,7 +17,7 @@ module Chainer
           x_mu
         end
 
-        def zero_if_none(xp, x, shape, dtype)
+        def zero_if_none(xm, x, shape, dtype)
           # TODO: Return broadcasted 0 instead of a zeroed array.
           x.nil? ? dtype.zeros(*shape) : x
         end
@@ -81,11 +81,9 @@ module Chainer
           end
           @expander = expander
 
-          xp = Chainer.get_array_module(x)
-          @use_cudnn = (xp == Cumo and can_use_cudnn?(@axis))
-
-          if @use_cudnn
-            y = _forward_cudnn(x, gamma, beta)
+          xm = Chainer.get_array_module(x)
+          if @use_cudnn = (xm == Cumo and can_use_cudnn?(@axis))
+            return _forward_cudnn(x, gamma, beta)
           else
             gamma = expander.(gamma)
             beta = expander.(beta)
@@ -97,7 +95,7 @@ module Chainer
             var += @eps
             @inv_std = var ** (-0.5)
 
-            y = apply_bn_fwd(xp, x, expander.(@mean), expander.(@inv_std), gamma, beta)
+            y = apply_bn_fwd(xm, x, expander.(@mean), expander.(@inv_std), gamma, beta)
             # Update running statistics
             m = x.size.div(gamma.size)
             adjust = m / [m - 1.0, 1.0].max
@@ -171,7 +169,7 @@ module Chainer
             expander = @expander
 
             inv_m = gamma.class.new.fill(1.0 / x.size.div(gamma.size))
-            xp = Chainer.get_array_module(x)
+            xm = Chainer.get_array_module(x)
 
             gbeta = gy.sum(axis: @axis)
             x_hat = x_hat(x, expander.(@mean), expander.(@inv_std))
@@ -199,7 +197,7 @@ module Chainer
           x, gamma, gy = inputs
           gx1, ggamma1, = output_data
           ggx1, gggamma1, ggbeta1 = grad_outputs
-          xp = Chainer.get_array_module(x)
+          xm = Chainer.get_array_module(x)
 
           # auxiliary values
           inv_m = gamma.class.new.fill(1.0 / x.size.div(gamma.size))
@@ -209,9 +207,9 @@ module Chainer
           x_hat = x_hat(x, expander.(@mean), expander.(@inv_std))
 
           # handle None in output gradients
-          ggx1 = zero_if_none(xp, ggx1, x.shape, x.class)
-          gggamma1 = zero_if_none(xp, gggamma1, gamma.shape, gamma.class)
-          ggbeta1 = zero_if_none(xp, ggbeta1, gamma.shape, gamma.class)
+          ggx1 = zero_if_none(xm, ggx1, x.shape, x.class)
+          gggamma1 = zero_if_none(xm, gggamma1, gamma.shape, gamma.class)
+          ggbeta1 = zero_if_none(xm, ggbeta1, gamma.shape, gamma.class)
 
           gggamma2 = gggamma1 - coeff_m * (x_hat * ggx1).sum(axis: @axis)
         	ggbeta2 = ggbeta1 - coeff_m * ggx1.sum(axis: @axis)
@@ -246,7 +244,7 @@ module Chainer
         def forward(inputs)
           retain_inputs([0, 1, 3, 4])
           x, gamma, beta, mean, var = inputs
-          xp = Chainer.get_array_module(x)
+          xm = Chainer.get_array_module(x)
 
           # expander inserts singleton dimensions to gamma and beta so that they
           # can be broadcasted with x.
@@ -264,9 +262,9 @@ module Chainer
           beta = expander.(beta)
           var += @eps
           @inv_var = var.reciprocal
-          @inv_std = xp::NMath.sqrt(@inv_var)
+          @inv_std = xm::NMath.sqrt(@inv_var)
 
-          y = apply_bn_fwd(xp, x, expander.(mean), expander.(@inv_std), gamma, beta)
+          y = apply_bn_fwd(xm, x, expander.(mean), expander.(@inv_std), gamma, beta)
           [y]
         end
 
@@ -293,11 +291,11 @@ module Chainer
           retain_inputs([0, 1, 2, 4])
           x, gamma, mean, var, gy = inputs
           expander = @expander
-          xp = Chainer.get_array_module(x)
+          xm = Chainer.get_array_module(x)
 
           if @inv_std.nil? || @inv_var.nil?
             @inv_var = (var + @eps).reciprocal
-            @inv_std = xp::NMath.sqrt(@inv_var)
+            @inv_std = xm::NMath.sqrt(@inv_var)
           end
 
           @gamma_over_std = gamma * @inv_std
@@ -319,12 +317,12 @@ module Chainer
           gx1, ggamma1, gbeta1, gmean1, gvar1 = output_data
 
           # Handle None in output gradients.
-          xp = Chainer.get_array_module(x)
-          ggx1 = zero_if_none(xp, ggx1, x.shape, x.class)
-          gggamma1 = zero_if_none(xp, gggamma1, gamma.shape, gamma.class)
-          ggbeta1 = zero_if_none(xp, ggbeta1, gamma.shape, gamma.class)
-          ggmean1 = zero_if_none(xp, ggmean1, mean.shape, mean.class)
-          ggvar1 = zero_if_none(xp, ggvar1, mean.shape, mean.class)
+          xm = Chainer.get_array_module(x)
+          ggx1 = zero_if_none(xm, ggx1, x.shape, x.class)
+          gggamma1 = zero_if_none(xm, gggamma1, gamma.shape, gamma.class)
+          ggbeta1 = zero_if_none(xm, ggbeta1, gamma.shape, gamma.class)
+          ggmean1 = zero_if_none(xm, ggmean1, mean.shape, mean.class)
+          ggvar1 = zero_if_none(xm, ggvar1, mean.shape, mean.class)
 
           expander = @expander
           x_hat = x_hat(x, expander.(mean), expander.(@inv_std))
