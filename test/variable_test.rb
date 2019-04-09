@@ -204,7 +204,7 @@ end
 
 class Chainer::AsVariableTest < Test::Unit::TestCase
   def test_to_variable_from_array
-    x = Numo::DFloat.new(3).seq
+    x = xm::DFloat.new(3).seq
     y = Chainer::Variable.as_variable(x)
 
     assert_equal(Chainer::Variable, y.class)
@@ -213,7 +213,7 @@ class Chainer::AsVariableTest < Test::Unit::TestCase
   end
 
   def test_to_variable_from_variable
-    x = Numo::DFloat.new(3).seq
+    x = xm::DFloat.new(3).seq
     x = Chainer::Variable.new(x)
     y = Chainer::Variable.as_variable(x)
 

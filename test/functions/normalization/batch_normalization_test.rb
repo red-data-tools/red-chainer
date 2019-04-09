@@ -93,7 +93,7 @@ class Chainer::Functions::Normalization::FixedBatchNormalizationTest < Test::Uni
   data(:dtype, [xm::SFloat, xm::DFloat], keep: true)
 
   def setup
-    Numo::NArray.srand
+    xm::NArray.srand
 
     @param_shape = data[:param_shape]
     @ndim = data[:ndim]
@@ -129,7 +129,7 @@ class Chainer::Functions::Normalization::FixedBatchNormalizationTest < Test::Uni
 
     @train = false
     @check_forward_options = { atol: 1e-4, rtol: 1e-3}
-    @check_backward_options = { dtype: Numo::DFloat }
+    @check_backward_options = { dtype: xm::DFloat }
   end
 
   def batch_normalization(expander, gamma, beta, x, mean, var)

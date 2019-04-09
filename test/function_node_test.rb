@@ -89,7 +89,7 @@ class Chainer::GradTestBase < Test::Unit::TestCase
   def init_attrs(names)
     ret = []
     names.each do |name|
-      x = Numo::DFloat.new(@shape).rand(-4, 6)
+      x = xm::DFloat.new(@shape).rand(-4, 6)
       v = Chainer::Variable.new(x, name: name)
       ret << v
       self.instance_variable_set("@#{name}", v)

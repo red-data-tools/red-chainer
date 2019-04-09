@@ -2,8 +2,8 @@
 
 class Chainer::Functions::Connection::Convolution2DTest < Test::Unit::TestCase
   data(:cover_all, [true, false], keep: true)
-  data(:x_dtype, [Numo::SFloat], keep: true)
-  data(:w_dtype, [Numo::SFloat], keep: true)
+  data(:x_dtype, [xm::SFloat], keep: true)
+  data(:w_dtype, [xm::SFloat], keep: true)
 
   def setup
     in_channels = 3
@@ -13,7 +13,7 @@ class Chainer::Functions::Connection::Convolution2DTest < Test::Unit::TestCase
     @stride = 2
     @pad = 1
 
-    @w = data[:w_dtype].new(out_channels, in_channels, kh, kw).rand_norm(0, Numo::NMath.sqrt(1.0 / (kh * kw * in_channels)))
+    @w = data[:w_dtype].new(out_channels, in_channels, kh, kw).rand_norm(0, xm::NMath.sqrt(1.0 / (kh * kw * in_channels)))
     @b = data[:x_dtype].new(out_channels).rand(-1, 1)
 
     @x = data[:x_dtype].new([2, 3, 4, 3]).rand(-1, 1)
@@ -28,8 +28,8 @@ class Chainer::Functions::Connection::Convolution2DTest < Test::Unit::TestCase
     @ggb = data[:x_dtype].new(*@b.shape).rand(-1, 1)
 
     @check_forward_options = {}
-    @check_backward_options = { dtype: Numo::DFloat }
-    @check_double_backward_options = { dtype: Numo::DFloat }
+    @check_backward_options = { dtype: xm::DFloat }
+    @check_double_backward_options = { dtype: xm::DFloat }
   end
 
   def test_forward(data)

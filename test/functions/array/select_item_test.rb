@@ -60,7 +60,7 @@ class Chainer::Functions::Array::SelectItemTest < Test::Unit::TestCase
       y * y
     end
 
-    Chainer::check_double_backward(func, x_data, gy_data, ggx_data, eps: 0.01, dtype: Numo::DFloat, **@check_backward_options)
+    Chainer::check_double_backward(func, x_data, gy_data, ggx_data, eps: 0.01, dtype: xm::DFloat, **@check_backward_options)
   end
 
   def test_double_backward

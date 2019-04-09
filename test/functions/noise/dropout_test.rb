@@ -12,8 +12,8 @@ class Chainer::Functions::Noise::DropoutTest < Test::Unit::TestCase
     @gy = @dtype.new([2, 3]).rand(-1, 1)
     @ggx = @dtype.new([2, 3]).rand(-1, 1)
 
-    @check_backward_options = { dtype: Numo::DFloat }
-    @check_double_backward_options = { dtype: Numo::DFloat }
+    @check_backward_options = { dtype: xm::DFloat }
+    @check_double_backward_options = { dtype: xm::DFloat }
   end
 
   def check_forward(x_data)
