@@ -30,23 +30,6 @@ module Chainer
           axis
         end
 
-        def compute_key_axis(x_ndim, gamma_ndim=1, axis=nil)
-          axis = compute_axis(x_ndim, gamma_ndim, axis)
-          # [1]
-          (0...x_ndim).to_a - axis
-        end
-
-        def reduced_shape(x_shape, axis, keepdims: false)
-          if keepdims
-            reduced_shape = x_shape.dup
-            axis.each {|i| reduced_shape[i] = 1 }
-          else
-            reduced_shape = x_shape.dup
-            axis.reverse.each {|i| reduced_shape.delete_at(i) }
-          end
-          reduced_shape
-        end
-
         def can_use_cudnn?(axis)
           # cuDNN restriction
           return true if (
@@ -86,7 +69,6 @@ module Chainer
           x, gamma, beta = inputs
 
           @axis = compute_axis(x.ndim, gamma.ndim)
-          @key_axis = compute_key_axis(x.ndim, gamma.ndim)
 
           # expander inserts singleton dimensions to gamma and beta so that they
           # can be broadcasted with x.
