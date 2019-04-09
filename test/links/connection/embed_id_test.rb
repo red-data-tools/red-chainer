@@ -37,7 +37,7 @@ class Chainer::Links::Connection::EmbedIDTest < Test::Unit::TestCase
 
   data(data)
   def test_backward(data)
-    Chainer::check_backward(@link, @x, @gy, @link.w)
+    Chainer::check_backward(@link, @x, @gy, @link.w, atol: 1e-4)
   end
 end
 
