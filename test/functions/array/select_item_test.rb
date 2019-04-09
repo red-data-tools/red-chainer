@@ -32,7 +32,7 @@ class Chainer::Functions::Array::SelectItemTest < Test::Unit::TestCase
 
     y_exp = x_data.class.zeros(t_data.size)
     t_data.size.times.each do |i|
-      y_exp[i] = x_data[i, t_data[i]]
+      y_exp[i] = x_data[i, t_data[i].to_i]
     end
 
     assert_equal(@dtype, y.data.class)
