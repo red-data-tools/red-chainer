@@ -97,12 +97,8 @@ module Chainer
 
           indexes = @indexes.flatten.dup
 
-          # TODO: col = col[numpy.arange(len(indexes)), indexes]
-          new_col = col.class.zeros(indexes.size)
-          x[0].class.new(indexes.size).seq.each_with_index do |v, i|
-            new_col[i] = col[v, indexes[i]]
-          end
-          col = new_col
+          # col = col[numpy.arange(len(indexes)), indexes]
+          col = col[true, indexes].diagonal.dup
 
           [col.reshape(n, c, out_h, out_w)]
         end
