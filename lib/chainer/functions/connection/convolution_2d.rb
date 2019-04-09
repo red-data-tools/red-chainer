@@ -73,6 +73,10 @@ module Chainer
             end
           end
 
+          if xm == Cumo and Cumo::CUDA::CUDNN.available? and !@cover_all
+            return _forward_cudnn(x, w, b)
+          end
+
           kh, kw = w.shape[2..-1]
           col = Chainer::Utils::Conv.im2col(x, kh, kw, @sy, @sx, @ph, @pw, cover_all: @cover_all)
           y = Chainer::Utils::Math.tensordot(col, w, [[1, 2, 3], [1, 2, 3]]).cast_to(x.class)
@@ -82,6 +86,12 @@ module Chainer
           end
 
           [y]
+        end
+
+        private def _forward_cudnn(x, w, b)
+          w = w.cast_to(x.class)
+          b = b.cast_to(x.class) if b
+          [x.conv(w, b: b, stride: [@sy, @sx], pad: [@ph, @pw])]
         end
 
         def backward(indexes, grad_outputs)
