@@ -172,11 +172,11 @@ module Chainer
       casted_xs = x_data.map { |x| Chainer::Variable.new(x) }
     else
       raise '`dtype` is allowed only float type' if dtype != xm::DFloat && dtype != xm::SFloat
-      casted_xs = x_data.map { |x| x.is_a?(Numo::NArray) ? Chainer::Variable.new(x.cast_to(dtype)) : x  }
+      casted_xs = x_data.map { |x| x.is_a?(xm::NArray) ? Chainer::Variable.new(x.cast_to(dtype)) : x  }
     end
 
     if no_grads.nil?
-      no_grads = xs.map { |x| x.dtype != Numo::SFloat && x.dtype != Numo::DFloat }
+      no_grads = xs.map { |x| x.dtype != xm::SFloat && x.dtype != xm::DFloat }
     else
       raise "Length of no_grads param and xs should be same." if no_grads.size != xs.size
     end
@@ -195,7 +195,7 @@ module Chainer
     params_grad = params.map(&:grad)
 
     if dtype.nil?
-      one = Numo::DFloat.new().fill(1.0)
+      one = xm::DFloat.new().fill(1.0)
     else
       one = dtype.new().fill(1.0)
     end
