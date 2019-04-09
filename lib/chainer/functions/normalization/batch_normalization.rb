@@ -82,29 +82,29 @@ module Chainer
           @expander = expander
 
           xm = Chainer.get_array_module(x)
-          if @use_cudnn = (xm == Cumo and can_use_cudnn?(@axis))
+          if @use_cudnn = (xm == Cumo and Cumo::CUDA::CUDNN.available? and can_use_cudnn?(@axis))
             return _forward_cudnn(x, gamma, beta)
-          else
-            gamma = expander.(gamma)
-            beta = expander.(beta)
-            @mean = x.mean(axis: @axis)
+          end
 
-            # TODO: Numo::Array can not be specified standard deviation
-            var = ((x - x.mean(axis: @axis, keepdims: true)) ** 2).mean(axis: @axis)
+          gamma = expander.(gamma)
+          beta = expander.(beta)
+          @mean = x.mean(axis: @axis)
 
-            var += @eps
-            @inv_std = var ** (-0.5)
+          # TODO: Numo::Array can not be specified standard deviation
+          var = ((x - x.mean(axis: @axis, keepdims: true)) ** 2).mean(axis: @axis)
 
-            y = apply_bn_fwd(xm, x, expander.(@mean), expander.(@inv_std), gamma, beta)
-            # Update running statistics
-            m = x.size.div(gamma.size)
-            adjust = m / [m - 1.0, 1.0].max
-            if !@running_mean.nil?
-              @running_mean *= @decay
-              @running_mean += (1 - @decay) * @mean
-              @running_var *= @decay
-              @running_var += (1 - @decay) * adjust * var
-            end
+          var += @eps
+          @inv_std = var ** (-0.5)
+
+          y = apply_bn_fwd(xm, x, expander.(@mean), expander.(@inv_std), gamma, beta)
+          # Update running statistics
+          m = x.size.div(gamma.size)
+          adjust = m / [m - 1.0, 1.0].max
+          if !@running_mean.nil?
+            @running_mean *= @decay
+            @running_mean += (1 - @decay) * @mean
+            @running_var *= @decay
+            @running_var += (1 - @decay) * adjust * var
           end
 
           [y]
@@ -128,7 +128,7 @@ module Chainer
             eps: @eps,
             decay: @decay,
             axis: @axis)
-          y
+          [y]
         end
 
         def backward(indexes, grad_outputs)
@@ -162,33 +162,34 @@ module Chainer
         def forward(inputs)
           retain_inputs([0, 1, 2])
           x, gamma, gy = inputs
+          retain_outputs([0, 1])
 
           if @use_cudnn
-            gx, ggamma, gbeta = _forward_cudnn(x, gamma, gy)
-          else
-            expander = @expander
-
-            inv_m = gamma.class.new.fill(1.0 / x.size.div(gamma.size))
-            xm = Chainer.get_array_module(x)
-
-            gbeta = gy.sum(axis: @axis)
-            x_hat = x_hat(x, expander.(@mean), expander.(@inv_std))
-            ggamma = (gy * x_hat).sum(axis: @axis)
-            gx = expander.(gamma * @inv_std) * (gy - (x_hat * expander.(ggamma) + expander.(gbeta)) * inv_m)
+            return _forward_cudnn(x, gamma, gy)
           end
 
-          retain_outputs([0, 1])
+          expander = @expander
+
+          inv_m = gamma.class.new.fill(1.0 / x.size.div(gamma.size))
+          xm = Chainer.get_array_module(x)
+
+          gbeta = gy.sum(axis: @axis)
+          x_hat = x_hat(x, expander.(@mean), expander.(@inv_std))
+          ggamma = (gy * x_hat).sum(axis: @axis)
+          gx = expander.(gamma * @inv_std) * (gy - (x_hat * expander.(ggamma) + expander.(gbeta)) * inv_m)
+
           [gx, ggamma, gbeta]
         end
 
         private def _forward_cudnn(x, gamma, gy)
-          return x.batch_norm_backward(
+          gx, ggamma, gbeta = x.batch_norm_backward(
             gamma,
             gy,
             mean: @mean,
             inv_std: @inv_std,
             eps: @eps,
             axis: @axis)
+          [gx, ggamma, gbeta]
         end
 
         def backward(inputs, grad_outputs)

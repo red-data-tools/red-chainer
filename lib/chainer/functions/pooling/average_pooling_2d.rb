@@ -26,7 +26,7 @@ module Chainer
 
           xm = Chainer.get_array_module(x[0])
           if @use_cudnn = (xm == Cumo and Cumo::CUDA::CUDNN.available? and !@cover_all)
-            return forward_cudnn(x[0])
+            return _forward_cudnn(x[0])
           end
 
           col = Chainer::Utils::Conv.im2col(x[0], @kh, @kw, @sy, @sx, @ph, @pw)
@@ -35,7 +35,7 @@ module Chainer
           [y]
         end
 
-        private def forward_cudnn(x)
+        private def _forward_cudnn(x)
           retain_inputs([0])
           y = x.avg_pool([@kh, @kw], stride: [@sy, @sx], pad: [@ph, @pw], pad_value: 0)
           retain_outputs([0])
@@ -67,7 +67,6 @@ module Chainer
           end
 
           h, w  = @in_shape[2..-1]
-
           shape = gy[0].shape
           shape.insert(2, 1, 1)
           gcol = gy[0].reshape(*shape).tile(1, 1, @kh, @kw, 1, 1)
