@@ -70,7 +70,7 @@ class Chainer::Functions::Activation::TanhGradTest < Test::Unit::TestCase
   end
 
   def test_backward
-    y = Numo::NMath.tanh(@x)
+    y = xm::NMath.tanh(@x)
     check_backward(@x, y, @gy, @ggx)
   end
 end

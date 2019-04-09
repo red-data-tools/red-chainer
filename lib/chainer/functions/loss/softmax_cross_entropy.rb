@@ -167,11 +167,11 @@ module Chainer
         def self.check_class_weight_option(class_weight)
           return if class_weight.nil?
 
-          xm = Chainer.get_array_module(@class_weight)
+          xm = Chainer.get_array_module(class_weight)
           if class_weight.ndim != 1
             raise ArgumentError, 'class_weight.ndim should be 1'
           elsif (class_weight.class != xm::DFloat) and (class_weight.class != xm::SFloat)
-            raise ArgumentError, "The dtype of class_weight should be 'DFloat' or 'SFloat'"
+            raise ArgumentError, "The dtype of class_weight should be 'DFloat' or 'SFloat', but was #{class_weight.class}"
           elsif class_weight.kind_of?(Chainer::Variable)
             raise ArgumentError, 'class_weight should be a NArray, not a chainer.Variable'
           end

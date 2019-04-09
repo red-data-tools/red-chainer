@@ -90,7 +90,7 @@ class Chainer::Utils::ArrayTest < Test::Unit::TestCase
       multidimensional_array1: {
         indices: [[1], [0]],
         axis: 0,
-        expect: Numo::DFloat[[[[12, 13, 14, 15],
+        expect: xm::DFloat[[[[12, 13, 14, 15],
                                [16, 17, 18, 19],
                                [20, 21, 22, 23]]],
                               [[[ 0,  1,  2,  3],

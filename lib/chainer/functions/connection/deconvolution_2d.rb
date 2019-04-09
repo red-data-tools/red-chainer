@@ -85,11 +85,12 @@ module Chainer
           x, w = inputs[0...2]
           b = inputs.size == 3 ? inputs[2] : nil
 
-          unless inputs.all? { |i| i.is_a?(Numo::NArray) }
+          xm = Chainer.get_array_module(x)
+          unless inputs.all? { |i| i.is_a?(xm::NArray) }
             if b.nil?
-              raise TypeError, "Numo::NArray must not be used together w: #{w.class}, x: #{x.class}"
+              raise TypeError, "#{xm}::NArray must not be used together w: #{w.class}, x: #{x.class}"
             else
-              raise TypeError, "Numo::NArray must not be used together w: #{w.class}, x: #{x.class}, b: #{b.class}"
+              raise TypeError, "#{xm}::NArray must not be used together w: #{w.class}, x: #{x.class}, b: #{b.class}"
             end
           end
 

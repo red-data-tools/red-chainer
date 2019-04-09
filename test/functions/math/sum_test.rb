@@ -21,10 +21,10 @@ class Chainer::Functions::Math::SumTest < Test::Unit::TestCase
     x = data[:dtype].new([3, 2, 4]).rand
 
     g = x.sum(axis: data[:axis], keepdims: data[:keepdims])
-    g_shape = g.is_a?(Numo::NArray) ? g.shape : []
+    g_shape = g.is_a?(xm::NArray) ? g.shape : []
     gy = data[:dtype].new(g_shape).rand
 
     func = lambda{ |x| Chainer::Functions::Math::Sum.sum(x, axis: data[:axis], keepdims: data[:keepdims]) }
-    Chainer::check_backward(func, x, gy, atol: 1e-4, dtype: Numo::DFloat)
+    Chainer::check_backward(func, x, gy, atol: 1e-4, dtype: xm::DFloat)
   end
 end

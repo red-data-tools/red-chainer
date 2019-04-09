@@ -32,14 +32,14 @@ class Chainer::Functions::Pooling::MaxPooling2DTest < Test::Unit::TestCase
         x = @x[k, c, false]
         if @cover_all
           expect = xm::DFloat[
-            [x[0...2, 0...2, false].max, x[0...2, 1...3, false].max],
-            [x[1...4, 0...2, false].max, x[1...4, 1...3, false].max],
-            [x[1...4, 0...2, false].max, x[3...4, 1...3, false].max],
+            [x[0...2, 0...2, false].max.to_f, x[0...2, 1...3, false].max.to_f],
+            [x[1...4, 0...2, false].max.to_f, x[1...4, 1...3, false].max.to_f],
+            [x[1...4, 0...2, false].max.to_f, x[3...4, 1...3, false].max.to_f],
           ]
         else
           expect = xm::DFloat[
-            [x[0...2, 0...2, false].max, x[0...2, 1...3, false].max],
-            [x[1...4, 0...2, false].max, x[1...4, 1...3, false].max],
+            [x[0...2, 0...2, false].max.to_f, x[0...2, 1...3, false].max.to_f],
+            [x[1...4, 0...2, false].max.to_f, x[1...4, 1...3, false].max.to_f],
           ]
         end
         Chainer::Testing.assert_allclose(expect, y_data[k, c, false])

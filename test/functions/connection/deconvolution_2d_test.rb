@@ -21,7 +21,7 @@ class Chainer::Functions::Connection::Deconvolution2DFunctionTest < Test::Unit::
     sh, sw = data[:stride].is_a?(::Array) ? data[:stride] : [data[:stride], data[:stride]]
     ph, pw = [1, 1]
 
-    @w = data[:w_dtype].new(in_channels, out_channels, kh, kw).rand_norm(0, Numo::NMath.sqrt(1.0 / (kh * kw * in_channels)).to_f)
+    @w = data[:w_dtype].new(in_channels, out_channels, kh, kw).rand_norm(0, xm::NMath.sqrt(1.0 / (kh * kw * in_channels)).to_f)
     @b = data[:nobias] ? nil : data[:x_dtype].new(out_channels).rand(-1, 1)
 
     n = 2

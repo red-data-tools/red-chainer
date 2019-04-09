@@ -45,7 +45,7 @@ class TestSoftmaxCrossEntropy < Test::Unit::TestCase
     @ggx = @x.class.new(*@x.shape).rand(-1, 1)
 
     @check_forward_options = { atol: 5e-4, rtol: 5e-3}
-    @check_backward_options = { dtype: Numo::DFloat, atol: 5e-4, rtol: 5e-3}
+    @check_backward_options = { dtype: xm::DFloat, atol: 5e-4, rtol: 5e-3}
     @check_backward_options_dtype = xm::DFloat
 
     if @weight_apply
@@ -196,7 +196,7 @@ class TestElementwiseSoftmaxCrossEntropy < Test::Unit::TestCase
     @g = @dtype.new(@t.shape).rand(-1, 1)
     @ggx = @dtype.new(@x.shape).rand(-1, 1)
     @check_forward_options = {atol: 5e-4, rtol: 5e-3}
-    @check_backward_options = { dtype: Numo::DFloat, atol: 5e-4, rtol: 5e-3}
+    @check_backward_options = { dtype: xm::DFloat, atol: 5e-4, rtol: 5e-3}
     @check_backward_options_dtype = xm::DFloat
 
     if @weight_apply

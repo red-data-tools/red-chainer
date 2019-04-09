@@ -32,7 +32,7 @@ class Chainer::Functions::Array::SelectItemTest < Test::Unit::TestCase
 
     y_exp = x_data.class.zeros(t_data.size)
     t_data.size.times.each do |i|
-      y_exp[i] = x_data[i, t_data[i]]
+      y_exp[i] = x_data[i, t_data[i].to_i]
     end
 
     assert_equal(@dtype, y.data.class)
@@ -60,7 +60,7 @@ class Chainer::Functions::Array::SelectItemTest < Test::Unit::TestCase
       y * y
     end
 
-    Chainer::check_double_backward(func, x_data, gy_data, ggx_data, eps: 0.01, dtype: Numo::DFloat, **@check_backward_options)
+    Chainer::check_double_backward(func, x_data, gy_data, ggx_data, eps: 0.01, dtype: xm::DFloat, **@check_backward_options)
   end
 
   def test_double_backward

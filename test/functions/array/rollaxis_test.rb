@@ -15,7 +15,7 @@ class Chainer::Functions::Array::RollaxisTest < Test::Unit::TestCase
   ], keep: true)
 
   def setup
-    @dtype = Numo::SFloat
+    @dtype = xm::SFloat
 
     @axis = data[:test_case][:axis]
     @start = data[:test_case][:start]
