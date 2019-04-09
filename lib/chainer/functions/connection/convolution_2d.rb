@@ -76,9 +76,12 @@ module Chainer
           kh, kw = w.shape[2..-1]
           col = Chainer::Utils::Conv.im2col(x, kh, kw, @sy, @sx, @ph, @pw, cover_all: @cover_all)
           y = Chainer::Utils::Math.tensordot(col, w, [[1, 2, 3], [1, 2, 3]]).cast_to(x.class)
-          y += b if b
+          y = y.transpose(0, 3, 1, 2) # (N, oC, oH, oW)
+          if !b.nil?
+            y += b.reshape(1, b.size, 1, 1)
+          end
 
-          [y.transpose(0, 3, 1, 2)]
+          [y]
         end
 
         def backward(indexes, grad_outputs)
