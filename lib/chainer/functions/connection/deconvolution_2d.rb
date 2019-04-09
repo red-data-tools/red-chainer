@@ -97,13 +97,6 @@ module Chainer
           kh, kw = w.shape[2..-1]
           _, _, x_h, x_w = x.shape
 
-          gcol = Chainer::Utils::Math.tensordot(w, x, [0, 1]).cast_to(x.class)
-          # - k, m, n: shape of out_channel
-          # - b: number of inputs
-          # - h, w: height and width of kernels
-          # k, m, n, b, h, w -> b, k, m, n, h, w
-          gcol = gcol.transpose(3, 0, 1, 2, 4, 5)
-
           if @outh.nil?
             @outh = Chainer::Utils::Conv.get_deconv_outsize(x_h, kh, @sy, @ph)
             raise TypeError, 'Height in the output should be positive.' if @outh <= 0
@@ -113,11 +106,29 @@ module Chainer
             raise TypeError, 'Width in the output should be positive.' if @outw <= 0
           end
 
+          set_cover_all(x, w)
+          if xm == Cumo and Cumo::CUDA::CUDNN.available? and !@cover_all
+            return _forward_cudnn(x, w, b)
+          end
+
+          gcol = Chainer::Utils::Math.tensordot(w, x, [0, 1]).cast_to(x.class)
+          # - k, m, n: shape of out_channel
+          # - b: number of inputs
+          # - h, w: height and width of kernels
+          # k, m, n, b, h, w -> b, k, m, n, h, w
+          gcol = gcol.transpose(3, 0, 1, 2, 4, 5)
+
           y = Chainer::Utils::Conv.col2im(gcol, @sy, @sx, @ph, @pw, @outh, @outw)
           if !b.nil?
             y += b.reshape(1, b.size, 1, 1)
           end
           [y]
+        end
+
+        private def _forward_cudnn(x, w, b)
+          w = w.cast_to(x.class)
+          b = b.cast_to(x.class) if b
+          [x.conv_transpose(w, b: b, stride: [@sy, @sx], pad: [@ph, @pw], out_size: [@outh, @outw])]
         end
 
         def backward(indexes, grad_outputs)
