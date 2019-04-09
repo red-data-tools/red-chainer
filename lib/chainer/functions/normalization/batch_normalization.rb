@@ -21,6 +21,44 @@ module Chainer
           # TODO: Return broadcasted 0 instead of a zeroed array.
           x.nil? ? dtype.zeros(*shape) : x
         end
+
+        def compute_axis(x_ndim, gamma_ndim=1, axis=nil)
+          if axis.nil?
+            # [0, 2, 3]
+            axis = [0] + ((gamma_ndim + 1) ...  x_ndim).to_a
+          end
+          axis
+        end
+
+        def compute_key_axis(x_ndim, gamma_ndim=1, axis=nil)
+          axis = compute_axis(x_ndim, gamma_ndim, axis)
+          # [1]
+          (0...x_ndim).to_a - axis
+        end
+
+        def reduced_shape(x_shape, axis, keepdims: false)
+          if keepdims
+            reduced_shape = x_shape.dup
+            axis.each {|i| reduced_shape[i] = 1 }
+          else
+            reduced_shape = x_shape.dup
+            axis.reverse.each {|i| reduced_shape.delete_at(i) }
+          end
+          reduced_shape
+        end
+
+        def can_use_cudnn?(axis)
+          # cuDNN restriction
+          return true if (
+            axis.size == 3 and
+            axis[0] == 0 and axis[1] == 2 and axis[2] == 3
+          )
+          return true if (
+            axis.size == 4 and
+            axis[0] == 0 and axis[1] == 2 and axis[2] == 3 and axis[3] == 4
+          )
+          false
+        end
       end
 
       class BatchNormalization < Chainer::FunctionNode
@@ -38,18 +76,17 @@ module Chainer
           @running_mean = mean
           @running_var = var
           @eps = eps
+          # TODO: raise error if eps < CUDNN_BN_MIN_EPSILON
           @decay = decay
+          @use_cudnn = false
         end
 
         def forward(inputs)
           retain_inputs([0, 1])
           x, gamma, beta = inputs
-          xp = Chainer.get_array_module(x)
 
-          if @running_mean.nil?
-            @running_mean = xp::NArray[*gamma].new_zeros
-            @running_var = xp::NArray[*gamma].new_zeros
-          end
+          @axis = compute_axis(x.ndim, gamma.ndim)
+          @key_axis = compute_key_axis(x.ndim, gamma.ndim)
 
           # expander inserts singleton dimensions to gamma and beta so that they
           # can be broadcasted with x.
@@ -61,28 +98,57 @@ module Chainer
             arr.reshape(*shape)
           end
           @expander = expander
-          @axis = [0] + (head_ndim...(x.ndim)).to_a
 
-          gamma = expander.(gamma)
-          beta = expander.(beta)
-          @mean = x.mean(axis: @axis)
+          xp = Chainer.get_array_module(x)
+          @use_cudnn = (xp == Cumo and can_use_cudnn?(@axis))
 
-          # TODO: Numo::Array can not be specified standard deviation
-          var = ((x - x.mean(axis: @axis, keepdims: true)) ** 2).mean(axis: @axis)
+          if @use_cudnn
+            y = _forward_cudnn(x, gamma, beta)
+          else
+            gamma = expander.(gamma)
+            beta = expander.(beta)
+            @mean = x.mean(axis: @axis)
 
-          var += @eps
-          @inv_std = var ** (-0.5)
+            # TODO: Numo::Array can not be specified standard deviation
+            var = ((x - x.mean(axis: @axis, keepdims: true)) ** 2).mean(axis: @axis)
 
-          y = apply_bn_fwd(xp, x, expander.(@mean), expander.(@inv_std), gamma, beta)
-          # Update running statistics
-          m = x.size.div(gamma.size)
-          adjust = m / [m - 1.0, 1.0].max
-          @running_mean *= @decay
-          @running_mean += (1 - @decay) * @mean
-          @running_var *= @decay
-          @running_var += (1 - @decay) * adjust * var
+            var += @eps
+            @inv_std = var ** (-0.5)
+
+            y = apply_bn_fwd(xp, x, expander.(@mean), expander.(@inv_std), gamma, beta)
+            # Update running statistics
+            m = x.size.div(gamma.size)
+            adjust = m / [m - 1.0, 1.0].max
+            if !@running_mean.nil?
+              @running_mean *= @decay
+              @running_mean += (1 - @decay) * @mean
+              @running_var *= @decay
+              @running_var += (1 - @decay) * adjust * var
+            end
+          end
 
           [y]
+        end
+
+        private def _forward_cudnn(x, gamma, beta)
+          # batch_norm allocates NArray memory, not need calling #zeros
+          if @running_mean.nil? # create dummies
+            @running_mean = x.class.new(*gamma.shape)
+            @running_var = x.class.new(*gamma.shape)
+          end
+          @mean = x.class.new(*gamma.shape)
+          @inv_std = x.class.new(*gamma.shape)
+          y = x.batch_norm(
+            gamma,
+            beta,
+            running_mean: @running_mean,
+            running_var: @running_var,
+            mean: @mean,
+            inv_std: @inv_std,
+            eps: @eps,
+            decay: @decay,
+            axis: @axis)
+          y
         end
 
         def backward(indexes, grad_outputs)
@@ -96,7 +162,7 @@ module Chainer
           #gamma.data = gamma.data.class.new(gamma.shape).seq
           #gy.data = gy.data.class.new(gy.shape).seq
 
-          f = BatchNormalizationGrad.new(@eps, @expander, @axis, @mean, @inv_std)
+          f = BatchNormalizationGrad.new(@eps, @use_cudnn, @expander, @axis, @mean, @inv_std)
           f.(x, gamma, gy)
         end
       end
@@ -104,8 +170,9 @@ module Chainer
       class BatchNormalizationGrad < Function
         include Calculation
 
-        def initialize(eps, expander, axis, mean, inv_std)
+        def initialize(eps, use_cudnn, expander, axis, mean, inv_std)
           @eps = eps
+          @use_cudnn = use_cudnn
           @expander = expander
           @axis = axis
           @mean = mean
@@ -115,18 +182,33 @@ module Chainer
         def forward(inputs)
           retain_inputs([0, 1, 2])
           x, gamma, gy = inputs
-          expander = @expander
 
-          inv_m = gamma.class.new.fill(1.0 / x.size.div(gamma.size))
-          xp = Chainer.get_array_module(x)
+          if @use_cudnn
+            gx, ggamma, gbeta = _forward_cudnn(x, gamma, gy)
+          else
+            expander = @expander
 
-          gbeta = gy.sum(axis: @axis)
-          x_hat = x_hat(x, expander.(@mean), expander.(@inv_std))
-          ggamma = (gy * x_hat).sum(axis: @axis)
-          gx = expander.(gamma * @inv_std) * (gy - (x_hat * expander.(ggamma) + expander.(gbeta)) * inv_m)
+            inv_m = gamma.class.new.fill(1.0 / x.size.div(gamma.size))
+            xp = Chainer.get_array_module(x)
+
+            gbeta = gy.sum(axis: @axis)
+            x_hat = x_hat(x, expander.(@mean), expander.(@inv_std))
+            ggamma = (gy * x_hat).sum(axis: @axis)
+            gx = expander.(gamma * @inv_std) * (gy - (x_hat * expander.(ggamma) + expander.(gbeta)) * inv_m)
+          end
 
           retain_outputs([0, 1])
           [gx, ggamma, gbeta]
+        end
+
+        private def _forward_cudnn(x, gamma, gy)
+          return x.batch_norm_backward(
+            gamma,
+            gy,
+            mean: @mean,
+            inv_std: @inv_std,
+            eps: @eps,
+            axis: @axis)
         end
 
         def backward(inputs, grad_outputs)
