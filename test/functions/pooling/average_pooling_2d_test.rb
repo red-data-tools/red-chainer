@@ -21,7 +21,7 @@ class Chainer::Functions::Pooling::AveragePooling2DTest < Test::Unit::TestCase
     2.times.each do |k|
       3.times.each do |c|
         x = @x[k, c, false]
-        expect = xm::DFloat[[x[0...2, 0...2, false].sum, x[0...2, 1...3, false].sum], [x[1...4, 0...2, false].sum, x[1...4, 1...3, false].sum]] / 9
+        expect = xm::DFloat[[x[0...2, 0...2, false].sum.to_f, x[0...2, 1...3, false].sum.to_f], [x[1...4, 0...2, false].sum.to_f, x[1...4, 1...3, false].sum.to_f]] / 9
         Chainer::Testing.assert_allclose(expect, y_data[k, c, false], @check_forward_options)
       end
     end
