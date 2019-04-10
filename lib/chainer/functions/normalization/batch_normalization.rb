@@ -82,7 +82,7 @@ module Chainer
           @expander = expander
 
           xm = Chainer.get_array_module(x)
-          if @use_cudnn = (xm == Cumo and Cumo::CUDA::CUDNN.available? and can_use_cudnn?(@axis))
+          if @use_cudnn = (xm == Cumo and Chainer::CUDA.cudnn_enabled? and can_use_cudnn?(@axis))
             return _forward_cudnn(x, gamma, beta)
           end
 

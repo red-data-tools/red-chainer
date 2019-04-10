@@ -36,5 +36,17 @@ module Chainer
       raise 'CUDA is not available' unless available?(id)
     end
     module_function :check_available
+
+    # Returns whether cuDNN is available and enabled.
+    #
+    # To disable cuDNN feature, set an environment variable `RED_CHAINER_CUDNN` to 0.
+    #
+    # @return [Boolean]
+    def cudnn_enabled?
+      return false unless $chainer_cuda_available
+      return false if Integer(ENV.fetch('RED_CHAINER_CUDNN', '1')) == 0
+      Cumo::CUDA::CUDNN.available?
+    end
+    module_function :cudnn_enabled?
   end
 end

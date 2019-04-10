@@ -25,7 +25,7 @@ module Chainer
           @in_dtype = x[0].class
 
           xm = Chainer.get_array_module(x[0])
-          if @use_cudnn = (xm == Cumo and Cumo::CUDA::CUDNN.available? and !@cover_all)
+          if @use_cudnn = (xm == Cumo and Chainer::CUDA.cudnn_enabled? and !@cover_all)
             return _forward_cudnn(x[0])
           end
 

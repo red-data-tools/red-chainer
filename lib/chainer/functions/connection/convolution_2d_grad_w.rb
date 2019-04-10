@@ -20,7 +20,7 @@ module Chainer
           x, gy = inputs
 
           xm = Chainer.get_array_module(x, gy)
-          if xm == Cumo and Cumo::CUDA::CUDNN.available? and !@cover_all
+          if xm == Cumo and Chainer::CUDA.cudnn_enabled? and !@cover_all
             return _forward_cudnn(x, gy)
           end
 

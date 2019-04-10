@@ -107,7 +107,7 @@ module Chainer
           end
 
           set_cover_all(x, w)
-          if xm == Cumo and Cumo::CUDA::CUDNN.available? and !@cover_all
+          if xm == Cumo and Chainer::CUDA.cudnn_enabled? and !@cover_all
             return _forward_cudnn(x, w, b)
           end
 
