@@ -43,9 +43,13 @@ module Chainer
     #
     # @return [Boolean]
     def cudnn_enabled?
-      return false unless $chainer_cuda_available
-      return false if Integer(ENV.fetch('RED_CHAINER_CUDNN', '1')) == 0
-      Cumo::CUDA.const_defined?(:CUDNN) && Cumo::CUDA::CUDNN.available?
+      return @cudnn_enabled unless @cudnn_enabled.nil?
+      f = -> () do
+        return false unless $chainer_cuda_available
+        return false if Integer(ENV.fetch('RED_CHAINER_CUDNN', '1')) == 0
+        Cumo::CUDA.const_defined?(:CUDNN) && Cumo::CUDA::CUDNN.available?
+      end
+      @cudnn_enabled = f.call
     end
     module_function :cudnn_enabled?
   end
