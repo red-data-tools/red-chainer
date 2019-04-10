@@ -12,15 +12,26 @@ module Chainer
           @pw = conv2d.pw
           @cover_all = conv2d.cover_all
           @w_dtype = w_node.dtype
+          @w_shape = w_node.shape
         end
 
         def forward(inputs)
           retain_inputs([0, 1])
           x, gy = inputs
-          col = Chainer::Utils::Conv.im2col(x, @kh, @kw, @sy, @sx, @ph, @pw, cover_all: @cover_all)
 
+          xm = Chainer.get_array_module(x, gy)
+          if xm == Cumo and Chainer::CUDA.cudnn_enabled? and !@cover_all
+            return _forward_cudnn(x, gy)
+          end
+
+          col = Chainer::Utils::Conv.im2col(x, @kh, @kw, @sy, @sx, @ph, @pw, cover_all: @cover_all)
           gw = Chainer::Utils::Math.tensordot(gy, col, [[0, 2, 3], [0, 4, 5]]).cast_to(@w_dtype)
           [gw]
+        end
+
+        private def _forward_cudnn(x, gy)
+          gy = gy.cast_to(x.class)
+          [x.conv_grad_w(gy, @w_shape, stride: [@sy, @sx], pad: [@ph, @pw])]
         end
 
         def backward(indexes, grad_outputs)
