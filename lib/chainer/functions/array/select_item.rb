@@ -50,10 +50,8 @@ module Chainer
         def forward(inputs)
           gx = @dtype.zeros(*@shape)
 
-          # TODO: gx[six.moves.range(self.t.size), self.t] = inputs[0]
-          @t.size.times.each do |i|
-            gx[i, @t[i].to_i] = inputs[0][i]
-          end
+          # gx[six.moves.range(self.t.size), self.t] = inputs[0]
+          gx.at((0...@t.size).to_a, @t)[true] = inputs[0] unless @t.empty?
 
           [gx]
         end
