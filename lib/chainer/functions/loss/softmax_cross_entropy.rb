@@ -46,7 +46,7 @@ module Chainer
 
           if reduce == "mean"
             count = normalize ? in_use.sum : x.shape.first
-            count = [count, 1.0].max
+            count = [count.to_f, 1.0].max
             loss = loss * (1.0 / count)
             return Chainer::Functions::Math::Sum.sum(loss)
           else
