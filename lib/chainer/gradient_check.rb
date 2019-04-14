@@ -19,6 +19,7 @@ module Chainer
   # @return [Array] Numerical gradient arrays corresponding to +inputs+.
   #
   def numerical_grad(f, inputs, grad_outputs, eps=1e-3)
+    eps = eps.to_f # Convert Rational to float because NArray does not support calc with Rational
     raise unless eps > 0
     inputs = inputs.to_a
     grad_outputs = grad_outputs.to_a
