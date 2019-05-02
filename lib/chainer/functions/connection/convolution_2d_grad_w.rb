@@ -31,7 +31,9 @@ module Chainer
 
         private def _forward_cudnn(x, gy)
           gy = gy.cast_to(x.class)
-          [x.conv_grad_w(gy, @w_shape, stride: [@sy, @sx], pad: [@ph, @pw])]
+          gw = x.conv_grad_w(gy, @w_shape, stride: [@sy, @sx], pad: [@ph, @pw])
+          gw = gw.cast_to(@w_dtype)
+          [gw]
         end
 
         def backward(indexes, grad_outputs)

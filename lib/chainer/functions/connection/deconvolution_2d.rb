@@ -139,8 +139,8 @@ module Chainer
 
           if indexes.include?(0)
             set_cover_all(x, w) if @cover_all.nil?
-            gw = Chainer::Functions::Connection::Convolution2DFunction.convolution_2d(gy, w, stride: [@sy, @sx], pad: [@ph, @pw], cover_all: @cover_all)
-            ret << gw
+            gx = Chainer::Functions::Connection::Convolution2DFunction.convolution_2d(gy, w, stride: [@sy, @sx], pad: [@ph, @pw], cover_all: @cover_all)
+            ret << gx
           end
 
           if indexes.include?(1)

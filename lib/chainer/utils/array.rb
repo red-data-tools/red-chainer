@@ -27,14 +27,15 @@ module Chainer
       end
 
       def self.take(x, indices, axis: nil)
+        xm = Chainer.get_array_module(x)
         if axis
           dimensional_indices = ::Array.new(x.shape.size, true)
 
-          indices_narray = Numo::Int32.cast(indices)
+          indices_narray = xm::Int32.cast(indices)
           if indices_narray.shape.size > 1
             y = x.class.zeros(*indices_narray.shape, *x.shape.drop(axis + 1))
             self.ndindex(indices_narray.shape).each do |ndidx|
-              dimensional_indices[axis] = indices_narray[*ndidx]
+              dimensional_indices[axis] = indices_narray[*ndidx].to_i
               y[*ndidx, *::Array.new(x.shape.size - axis - 1, true)] = x[*dimensional_indices]
             end
             return y
