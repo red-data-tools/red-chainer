@@ -2,25 +2,25 @@ module Chainer
   module Functions
     module Array
       # Reshapes an input array without copy.
-      class Reshape < Function
+      class Reshape < FunctionNode
         def initialize(shape)
-            @shape = shape
+          @shape = shape
         end
 
-        def self.reshape(xs, shape)
-          self.new(shape).(xs)
+        def self.reshape(x, shape)
+          return Chainer::Variable.as_variable(x) if x.shape == shape
+          return self.new(shape).apply([x]).first
         end
 
-        def forward(xs)
-          retain_inputs([])
-
-          input = xs.first
-          @input_shape = input.shape
-          [input.reshape(*@shape)]
+        def forward(inputs)
+          x = inputs.first
+          new_shape = @shape.map { |s| s == -1 ? nil : s }
+          [x.reshape(*new_shape)]
         end
 
-        def backward(xs, grads)
-          [grads.first.reshape(*@input_shape)]
+        def backward(indexes, grad_outputs)
+          gx = grad_outputs.first
+          [Reshape.reshape(gx, @inputs.first.shape)]
         end
       end
     end

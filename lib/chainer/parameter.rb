@@ -10,13 +10,13 @@ module Chainer
       end
 
       if shape.nil?
-        if Chainer.array?(@initializer)
+        if Chainer.array?(initializer)
           super(initializer, name: name)
         else
           super(name: name)
           @initializer = initializer
           dtype = initializer.respond_to?(:dtype) ? initializer.dtype : 'SFloat'
-          @grad_initializer = Chainer::Initializers.nan()
+          @grad_initializer = Chainer::Initializers.nan(dtype: dtype)
         end
       else
         if Chainer.array?(initializer)
@@ -41,8 +41,8 @@ module Chainer
       ginit = @grad_initializer
       grad = ginit.nil? ? nil : Chainer::Initializers.generate_array(ginit, shape)
 
-      @data[0] = data
-      @node.grad = grad
+      self.data = data
+      self.grad = grad
     end
 
     def update

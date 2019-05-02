@@ -39,7 +39,7 @@ iris_table = iris.to_table
 x = iris_table.fetch_values(:sepal_length, :sepal_width, :petal_length, :petal_width).transpose
 
 # target
-y_class = iris_table[:class]
+y_class = iris_table[:label]
 
 # class index array
 # ["Iris-setosa", "Iris-versicolor", "Iris-virginica"]

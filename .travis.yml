@@ -4,9 +4,10 @@ notifications:
 sudo: false
 language: ruby
 rvm:
-  - 2.3.6
   - 2.4.3
   - 2.5.0
   - 2.6.0
 before_install: gem install bundler
-script: ruby test/run_test.rb
+script:
+  - ruby test/run_test.rb
+  - yardoc --fail-on-warning

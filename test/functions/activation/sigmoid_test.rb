@@ -10,11 +10,12 @@ class Chainer::Functions::Activation::SigmoidTest < Test::Unit::TestCase
   def setup
     @shape = data[:shape]
     @dtype = data[:dtype]
-    @dtype.srand(1) # To avoid false of "nearly_eq.all?", Use fixed seed value.
-    @x = @dtype.new(@shape).rand(1) - 0.5
-    @gy = @dtype.new(@shape).rand(0.2) - 0.1
+    @x = @dtype.new(@shape).rand(-0.5, 0.5)
+    @gy = @dtype.new(@shape).rand(-0.1, 0.1)
+    @ggx = @dtype.new(@shape).rand(-1, 1)
     @check_forward_options = {}
     @check_backward_options = {}
+    @check_double_backward_options = {}
   end
 
   def check_forward(x_data, use_cudnn: "always")
@@ -22,7 +23,7 @@ class Chainer::Functions::Activation::SigmoidTest < Test::Unit::TestCase
     y = Chainer::Functions::Activation::Sigmoid.sigmoid(x)
     assert_equal(@dtype, y.data.class)
     y_expect = Chainer::Functions::Activation::Sigmoid.sigmoid(Chainer::Variable.new(@x))
-    assert_true(y.data.nearly_eq(y_expect.data).all?)
+    Chainer::Testing.assert_allclose(y_expect.data, y.data, @check_forward_options)
   end
 
   def test_forward
@@ -35,5 +36,17 @@ class Chainer::Functions::Activation::SigmoidTest < Test::Unit::TestCase
 
   def test_backward
     check_backward(@x.dup, @gy.dup)
+  end
+
+  def check_double_backward(x_data, y_grad, x_grad_grad, use_cudnn: 'always')
+    func = -> (x) do
+      y = Chainer::Functions::Activation::Sigmoid.sigmoid(x)
+      y * y
+    end
+    Chainer::check_double_backward(func, x_data, y_grad, x_grad_grad, @check_backward_options)
+  end
+
+  def test_double_backward
+    check_double_backward(@x, @gy, @ggx)
   end
 end

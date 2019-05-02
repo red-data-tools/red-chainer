@@ -22,8 +22,10 @@ class Chainer::Functions::Activation::LeakyReLUTest < Test::Unit::TestCase
       end
     end
     @gy = @dtype.new(@shape).rand(2) - 1
+    @ggx = @dtype.new(@shape).rand(2) - 1
     @slope = Random.rand
     @check_forward_options = {}
+    @check_backward_options = {}
     @check_backward_options_dtype = xm::DFloat
   end
 
@@ -49,10 +51,26 @@ class Chainer::Functions::Activation::LeakyReLUTest < Test::Unit::TestCase
   end
 
   def check_backward(x_data, y_grad)
-    Chainer::check_backward(Chainer::Functions::Activation::LeakyReLU.new(slope: @slope), x_data, y_grad, dtype: @check_backward_options_dtype)
+    func = -> (x) do
+      Chainer::Functions::Activation::LeakyReLU.leaky_relu(x, slope: @slope)
+    end
+    Chainer::check_backward(func, x_data, y_grad, dtype: @check_backward_options_dtype)
   end
 
   def test_backward
     check_backward(@x.dup, @gy.dup)
+  end
+
+  def check_double_backward(x_data, y_grad, x_grad_grad)
+    func = -> (x) do
+      y = Chainer::Functions::Activation::LeakyReLU.leaky_relu(x, slope: @slope)
+      y * y
+    end
+
+    Chainer::check_double_backward(func, x_data, y_grad, x_grad_grad, @check_backward_options)
+  end
+
+  def test_double_backward
+    check_double_backward(@x, @gy, @ggx)
   end
 end

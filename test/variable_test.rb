@@ -19,6 +19,12 @@ def constant(xs, value)
   return Constant.new(value).(*xs)
 end
 
+class DummyId < Chainer::Functions::Math::Identity
+  def backward(a, b)
+    raise 'backward should not be called on inputs that do not require grads'
+  end
+end
+
 class Chainer::VariableTest < Test::Unit::TestCase
   data({'test1' => {x_shape: [10], c_shape: [2, 5], label: "(2, 5), #{xm}::SFloat"},
         'test2' => {x_shape: [],   c_shape: [1],    label: "(1), #{xm}::SFloat"}},   keep: true)
@@ -126,5 +132,92 @@ class Chainer::VariableTest < Test::Unit::TestCase
     assert_raise(TypeError) {
       a.grad = xm::SFloat.new([2])
     }
+  end
+
+  def check_double_backprop
+    xp = Chainer.get_array_module(@x)
+    x = Chainer::Variable.new(@x)
+    x.grad_var = nil
+
+    y = x * x * x
+    y.grad = y.data.new_ones
+    y.backward(enable_double_backprop: true)
+    gx = x.grad_var
+    x.grad_var = nil  # clear grad
+    gx.grad = x.data.new_ones
+    gx.backward
+    expect = 6 * x
+    Chainer::Testing.assert_allclose(expect.data, x.grad_var.data)
+  end
+
+  def test_double_backprop
+    check_double_backprop
+  end
+
+  def test_backward_no_grad_required
+    x = Chainer::Variable.new(@x)
+    y1, y2 = DummyId.new.apply([x, x])
+    x.node.requires_grad = false
+    y1.backward
+  end
+end
+
+class IdentityFunction < Chainer::Function
+  def forward(inputs)
+    inputs
+  end
+
+  def backward(inputs, grad_outputs)
+    grad_outputs
+  end
+end
+
+class Chainer::TestVariableDoubleBackward < Test::Unit::TestCase
+  def test_default_backward
+    x = Chainer::Variable.new(xm::SFloat.new(1).rand)
+    y = Chainer::Functions::Math::Identity.identity(x)
+    y.backward
+    assert_equal(nil, x.grad_var.creator)
+    x.grad_var.backward
+    assert_equal(nil, y.grad_var.grad_var)
+  end
+
+  def test_raise_double_backprop
+    x = Chainer::Variable.new(xm::SFloat.new(1).rand)
+    y = IdentityFunction.new.(x)
+    y.backward(enable_double_backprop: true)
+    assert_raise(RuntimeError) do
+      x.grad_var.backward
+    end
+  end
+
+  def test_raise_double_backprop_2
+    x = Chainer::Variable.new(xm::SFloat.new(1).rand)
+    z = Chainer::Functions::Math::Identity.identity(x)
+    y = IdentityFunction.new.(z)
+    y.backward(enable_double_backprop: true)
+    assert_raise(RuntimeError) do
+      x.grad_var.backward
+    end
+  end
+end
+
+class Chainer::AsVariableTest < Test::Unit::TestCase
+  def test_to_variable_from_array
+    x = xm::DFloat.new(3).seq
+    y = Chainer::Variable.as_variable(x)
+
+    assert_equal(Chainer::Variable, y.class)
+    assert_equal(x, y.data)
+    assert_equal(false, y.requires_grad)
+  end
+
+  def test_to_variable_from_variable
+    x = xm::DFloat.new(3).seq
+    x = Chainer::Variable.new(x)
+    y = Chainer::Variable.as_variable(x)
+
+    assert_equal(x, y)
+    assert_equal(true, y.requires_grad)
   end
 end

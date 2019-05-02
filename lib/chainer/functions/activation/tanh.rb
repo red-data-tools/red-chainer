@@ -2,7 +2,7 @@ module Chainer
   module Functions
     module Activation
       # Hyperbolic tangent function.
-      class Tanh < Function
+      class Tanh < FunctionNode
         # Elementwise hyperbolic tangent function.
         #
         # $$
@@ -21,21 +21,57 @@ module Chainer
         #   [-0.761594, 0.761594, 0.995055]
         #
         def self.tanh(x)
-          self.new.(x)
+          self.new.apply([x]).first
         end
 
         def forward(x)
           xm = Chainer.get_array_module(x[0])
           y = Utils::Array.force_array(xm::NMath.tanh(x[0]))
-          retain_inputs([])
           retain_outputs([0])
-          return [y]
+          @use_cudnn = false
+          [y]
         end
 
-        def backward(x, gy)
-          y = @output_data[0]
-          one = y.class.cast(1)
-          [Utils::Array.force_array(gy[0] * (one - y * y))]
+        def backward(indexes, grad_outputs)
+          if @use_cudnn
+            x = get_retained_inputs.first.data
+          else
+            x = nil
+          end
+
+          y = get_retained_outputs.first
+          gy = grad_outputs.first
+          TanhGrad.new(x).apply([y, gy])
+        end
+      end
+
+      class TanhGrad < FunctionNode
+        def initialize(x)
+          super()
+
+          # The original input `x` is only required for cuDNN.
+          # If it is None, this class does not use cuDNN.
+          # Note that x must be c-contiguous and it is checked
+          # in Tanh.forward_gpu.
+          @x = x
+        end
+
+        def forward(inputs)
+          retain_inputs([0, 1])
+          y, gy = inputs
+
+          one = y.class.new.fill(1)
+          [Utils::Array.force_array(gy * (one - y * y))]
+        end
+
+        def backward(indexes, grad_outputs)
+          y, gy = get_retained_inputs
+          g = grad_outputs[0]
+
+          y_mul_g = y * g
+          grad_y = -2 * gy * y_mul_g
+          ggy = g - y * y_mul_g
+          [grad_y, ggy]
         end
       end
     end
