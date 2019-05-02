@@ -35,7 +35,7 @@ module Chainer
           if indices_narray.shape.size > 1
             y = x.class.zeros(*indices_narray.shape, *x.shape.drop(axis + 1))
             self.ndindex(indices_narray.shape).each do |ndidx|
-              dimensional_indices[axis] = indices_narray[*ndidx]
+              dimensional_indices[axis] = indices_narray[*ndidx].to_i
               y[*ndidx, *::Array.new(x.shape.size - axis - 1, true)] = x[*dimensional_indices]
             end
             return y
