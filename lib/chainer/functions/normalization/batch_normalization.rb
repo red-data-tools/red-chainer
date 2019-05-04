@@ -259,6 +259,11 @@ module Chainer
           @expander = expander
           @axis = [0] + (head_ndim...(x.ndim)).to_a
 
+          xm = Chainer.get_array_module(x)
+          if xm == Cumo and Chainer::CUDA.cudnn_enabled? and can_use_cudnn?(@axis)
+            return _forward_cudnn(x, gamma, beta, mean, var)
+          end
+
           gamma = expander.(gamma)
           beta = expander.(beta)
           var += @eps
@@ -266,6 +271,17 @@ module Chainer
           @inv_std = xm::NMath.sqrt(@inv_var)
 
           y = apply_bn_fwd(xm, x, expander.(mean), expander.(@inv_std), gamma, beta)
+          [y]
+        end
+
+        private def _forward_cudnn(x, gamma, beta, mean, var)
+          y = x.fixed_batch_norm(
+            gamma,
+            beta,
+            mean,
+            var,
+            eps: @eps,
+            axis: @axis)
           [y]
         end
 
