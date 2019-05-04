@@ -19,17 +19,36 @@ module Chainer
           @in_shape = x[0].shape
           @in_dtype = x[0].class
 
-          col = Chainer::Utils::Conv.im2col(x[0], @kh, @kw, @sy, @sx, @ph, @pw, pval: -Float::INFINITY, cover_all: @cover_all)
-          n, c, kh, kw, out_h, out_w = col.shape
-          col = col.reshape(n , c, kh * kw, out_h, out_w)
+          xm = Chainer.get_array_module(x[0])
+          if @use_cudnn = (xm == Cumo and Cumo::CUDA::CUDNN.available? and !@cover_all)
+            return _forward_cudnn(x[0])
+          end
 
+          col = _im2col(x[0])
+          @indexes = _compute_indexes(col)
+
+          y = col.max(axis: 2)
+          [y]
+        end
+
+        def _im2col(x)
+          col = Chainer::Utils::Conv.im2col(x, @kh, @kw, @sy, @sx, @ph, @pw, pval: -Float::INFINITY, cover_all: @cover_all)
+          n, c, kh, kw, out_h, out_w = col.shape
+          col.reshape(n , c, kh * kw, out_h, out_w)
+        end
+
+        def _compute_indexes(col)
           # TODO: numpy.argmax(axis=2)
           d = col.shape[3..-1].reduce(:*) || 1
           dx = col.shape[2..-1].reduce(:*) || 1
           max_index = col.max_index(2)
-          @indexes = max_index.flatten.map_with_index { |val, idx| (val - (dx * (idx / d))) / d }.reshape(*max_index.shape)
+          max_index.flatten.map_with_index { |val, idx| (val - (dx * (idx / d))) / d }.reshape(*max_index.shape)
+        end
 
-          y = col.max(axis: 2)
+        private def _forward_cudnn(x)
+          retain_inputs([0])
+          y = x.max_pool([@kh, @kw], stride: [@sy, @sx], pad: [@ph, @pw])
+          retain_outputs([0])
           [y]
         end
 
@@ -46,6 +65,7 @@ module Chainer
           @sx = mpool2d.sx
           @ph = mpool2d.ph
           @pw = mpool2d.pw
+          @use_cudnn = mpool2d.use_cudnn
           @cover_all = mpool2d.cover_all
           @indexes = mpool2d.indexes
           @in_shape = mpool2d.in_shape
@@ -54,6 +74,10 @@ module Chainer
         end
 
         def forward(gy)
+          if @use_cudnn
+            return _forward_cudnn(gy[0])
+          end
+
           n, c, out_h, out_w = gy[0].shape
           h, w  = @in_shape[2..-1]
           kh, kw = @kh, @kw
@@ -72,6 +96,13 @@ module Chainer
           [gx]
         end
 
+        private def _forward_cudnn(gy)
+          x = @mpool2d.get_retained_inputs.first.data
+          y = @mpool2d.get_retained_outputs.first.data
+          gx = x.max_pool_backward(y, gy, [@kh, @kw], stride: [@sy, @sx], pad: [@ph, @pw])
+          return [gx]
+        end
+
         def backward(indexes, ggx)
           MaxPooling2DWithIndexes.new(@mpool2d).apply(ggx)
         end
@@ -87,6 +118,8 @@ module Chainer
           @pw = mpool2d.pw
           @cover_all = mpool2d.cover_all
           @indexes = mpool2d.indexes
+          @use_cudnn = mpool2d.use_cudnn
+          @mpool2d = mpool2d
         end
 
         def forward(x)
@@ -95,12 +128,21 @@ module Chainer
           col = col.reshape(n, c, kh * kw, out_h, out_w)
           col = col.transpose(0, 1, 3, 4, 2).reshape(nil, kh * kw)
 
+          if @use_cudnn and @indexes.nil?
+            @indexes = _compute_indexes
+          end
           indexes = @indexes.flatten.dup
 
           # col = col[numpy.arange(len(indexes)), indexes]
           col = col[true, indexes].diagonal.dup
 
           [col.reshape(n, c, out_h, out_w)]
+        end
+
+        private def _compute_indexes
+          x = @mpool2d.get_retained_inputs.first.data
+          col = @mpool2d._im2col(x)
+          @mpool2d._compute_indexes(col)
         end
       end
     end
