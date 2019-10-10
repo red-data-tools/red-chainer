@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>
+  Class: Chainer::Optimizers::MomentumSGD
+  
+    &mdash; Documentation by YARD 0.9.20
+  
+</title>
+
+  <link rel="stylesheet" href="../../css/style.css" type="text/css" charset="utf-8" />
+
+  <link rel="stylesheet" href="../../css/common.css" type="text/css" charset="utf-8" />
+
+<script type="text/javascript" charset="utf-8">
+  pathId = "Chainer::Optimizers::MomentumSGD";
+  relpath = '../../';
+</script>
+
+
+  <script type="text/javascript" charset="utf-8" src="../../js/jquery.js"></script>
+
+  <script type="text/javascript" charset="utf-8" src="../../js/app.js"></script>
+
+
+
+    <!-- Additional settings for MathJax are from here. -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax:{
+          inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+          displayMath: [ ['$$','$$'], ["\\[","\\]"] ]
+        }
+      });
+    </script>
+    <script type="text/javascript"
+      src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.6/MathJax.js?config=TeX-AMS_HTML">
+    </script>
+    <meta http-equiv="X-UA-Compatible" CONTENT="IE=EmulateIE7" />
+    <!-- Additional settings for MathJax are over here. -->
+
+  </head>
+  <body>
+    <div class="nav_wrap">
+      <iframe id="nav" src="../../class_list.html?1"></iframe>
+      <div id="resizer"></div>
+    </div>
+
+    <div id="main" tabindex="-1">
+      <div id="header">
+        <div id="menu">
+  
+    <a href="../../_index.html">Index (M)</a> &raquo;
+    <span class='title'><span class='object_link'><a href="../../Chainer.html" title="Chainer (module)">Chainer</a></span></span> &raquo; <span class='title'><span class='object_link'><a href="../Optimizers.html" title="Chainer::Optimizers (module)">Optimizers</a></span></span>
+     &raquo; 
+    <span class="title">MomentumSGD</span>
+  
+</div>
+
+        <div id="search">
+  
+    <a class="full_list_link" id="class_list_link"
+        href="../../class_list.html">
+
+        <svg width="24" height="24">
+          <rect x="0" y="4" width="24" height="4" rx="1" ry="1"></rect>
+          <rect x="0" y="12" width="24" height="4" rx="1" ry="1"></rect>
+          <rect x="0" y="20" width="24" height="4" rx="1" ry="1"></rect>
+        </svg>
+    </a>
+  
+</div>
+        <div class="clear"></div>
+      </div>
+
+      <div id="content"><h1>Class: Chainer::Optimizers::MomentumSGD
+  
+  
+  
+</h1>
+<div class="box_info">
+  
+  <dl>
+    <dt>Inherits:</dt>
+    <dd>
+      <span class="inheritName"><span class='object_link'><a href="../GradientMethod.html" title="Chainer::GradientMethod (class)">GradientMethod</a></span></span>
+      
+        <ul class="fullTree">
+          <li>Object</li>
+          
+            <li class="next"><span class='object_link'><a href="../Optimizer.html" title="Chainer::Optimizer (class)">Chainer::Optimizer</a></span></li>
+          
+            <li class="next"><span class='object_link'><a href="../GradientMethod.html" title="Chainer::GradientMethod (class)">GradientMethod</a></span></li>
+          
+            <li class="next">Chainer::Optimizers::MomentumSGD</li>
+          
+        </ul>
+        <a href="#" class="inheritanceTree">show all</a>
+      
+    </dd>
+  </dl>
+  
+
+  
+  
+  
+  
+  
+
+  
+
+  
+  <dl>
+    <dt>Defined in:</dt>
+    <dd>lib/chainer/optimizers/momentum_sgd.rb</dd>
+  </dl>
+  
+</div>
+
+<h2>Overview</h2><div class="docstring">
+  <div class="discussion">
+    
+<p>Momentum SGD optimizer</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div>
+
+
+
+  <h2>Instance Attribute Summary <small><a href="#" class="summary_toggle">collapse</a></small></h2>
+  <ul class="summary">
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#lr-instance_method" title="#lr (instance method)">#<strong>lr</strong>  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+    
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Returns the value of attribute lr.</p>
+</div></span>
+  
+</li>
+
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#momentum-instance_method" title="#momentum (instance method)">#<strong>momentum</strong>  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+    
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Returns the value of attribute momentum.</p>
+</div></span>
+  
+</li>
+
+    
+  </ul>
+
+
+
+  
+  
+  <h3 class="inherited">Attributes inherited from <span class='object_link'><a href="../Optimizer.html" title="Chainer::Optimizer (class)">Chainer::Optimizer</a></span></h3>
+  <p class="inherited"><span class='object_link'><a href="../Optimizer.html#target-instance_method" title="Chainer::Optimizer#target (method)">#target</a></span></p>
+
+
+  
+    <h2>
+      Instance Method Summary
+      <small><a href="#" class="summary_toggle">collapse</a></small>
+    </h2>
+
+    <ul class="summary">
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#create_update_rule-instance_method" title="#create_update_rule (instance method)">#<strong>create_update_rule</strong>  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#initialize-instance_method" title="#initialize (instance method)">#<strong>initialize</strong>(lr: nil, momentum: nil)  &#x21d2; MomentumSGD </a>
+    
+
+    
+  </span>
+  
+  
+    <span class="note title constructor">constructor</span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>A new instance of MomentumSGD.</p>
+</div></span>
+  
+</li>
+
+      
+    </ul>
+  
+
+
+  
+  
+  
+  
+  
+  
+  
+  
+  <h3 class="inherited">Methods inherited from <span class='object_link'><a href="../GradientMethod.html" title="Chainer::GradientMethod (class)">GradientMethod</a></span></h3>
+  <p class="inherited"><span class='object_link'><a href="../GradientMethod.html#call_hooks-instance_method" title="Chainer::GradientMethod#call_hooks (method)">#call_hooks</a></span>, <span class='object_link'><a href="../GradientMethod.html#reallocate_cleared_grads-instance_method" title="Chainer::GradientMethod#reallocate_cleared_grads (method)">#reallocate_cleared_grads</a></span>, <span class='object_link'><a href="../GradientMethod.html#setup-instance_method" title="Chainer::GradientMethod#setup (method)">#setup</a></span>, <span class='object_link'><a href="../GradientMethod.html#update-instance_method" title="Chainer::GradientMethod#update (method)">#update</a></span></p>
+
+  
+  
+  
+  
+  
+  
+  
+  
+  <h3 class="inherited">Methods inherited from <span class='object_link'><a href="../Optimizer.html" title="Chainer::Optimizer (class)">Chainer::Optimizer</a></span></h3>
+  <p class="inherited"><span class='object_link'><a href="../Optimizer.html#_call_hook-instance_method" title="Chainer::Optimizer#_call_hook (method)">#_call_hook</a></span>, <span class='object_link'><a href="../Optimizer.html#add_hook-instance_method" title="Chainer::Optimizer#add_hook (method)">#add_hook</a></span>, <span class='object_link'><a href="../Optimizer.html#call_hooks-instance_method" title="Chainer::Optimizer#call_hooks (method)">#call_hooks</a></span>, <span class='object_link'><a href="../Optimizer.html#serialize-instance_method" title="Chainer::Optimizer#serialize (method)">#serialize</a></span>, <span class='object_link'><a href="../Optimizer.html#setup-instance_method" title="Chainer::Optimizer#setup (method)">#setup</a></span></p>
+<div id="constructor_details" class="method_details_list">
+  <h2>Constructor Details</h2>
+  
+    <div class="method_details first">
+  <h3 class="signature first" id="initialize-instance_method">
+  
+    #<strong>initialize</strong>(lr: nil, momentum: nil)  &#x21d2; <tt><span class='object_link'><a href="" title="Chainer::Optimizers::MomentumSGD (class)">MomentumSGD</a></span></tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Returns a new instance of MomentumSGD</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  <p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>lr</span>
+      
+      
+        <span class='type'>(<tt>Float</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Learning rate</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>momentum</span>
+      
+      
+        <span class='type'>(<tt>Float</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Exponential decay rate of the first order moment</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+36
+37
+38
+39
+40
+41
+42</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/chainer/optimizers/momentum_sgd.rb', line 36</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_initialize'>initialize</span><span class='lparen'>(</span><span class='label'>lr:</span> <span class='kw'>nil</span><span class='comma'>,</span> <span class='label'>momentum:</span> <span class='kw'>nil</span><span class='rparen'>)</span>
+  <span class='kw'>super</span><span class='lparen'>(</span><span class='rparen'>)</span>
+  <span class='ivar'>@hyperparam</span><span class='period'>.</span><span class='id identifier rubyid_instance_variable_set'>instance_variable_set</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>@lr</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='id identifier rubyid_lr'>lr</span> <span class='op'>||</span> <span class='float'>0.01</span><span class='rparen'>)</span>
+  <span class='ivar'>@hyperparam</span><span class='period'>.</span><span class='id identifier rubyid_instance_variable_set'>instance_variable_set</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>@momentum</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='id identifier rubyid_momentum'>momentum</span> <span class='op'>||</span> <span class='float'>0.9</span><span class='rparen'>)</span>
+  <span class='const'><span class='object_link'><a href="../../Chainer.html" title="Chainer (module)">Chainer</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="../HyperparameterProxy.html" title="Chainer::HyperparameterProxy (class)">HyperparameterProxy</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new'><span class='object_link'><a href="../HyperparameterProxy.html#initialize-instance_method" title="Chainer::HyperparameterProxy#initialize (method)">new</a></span></span><span class='lparen'>(</span><span class='kw'>self</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>lr</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
+  <span class='const'><span class='object_link'><a href="../../Chainer.html" title="Chainer (module)">Chainer</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="../HyperparameterProxy.html" title="Chainer::HyperparameterProxy (class)">HyperparameterProxy</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new'><span class='object_link'><a href="../HyperparameterProxy.html#initialize-instance_method" title="Chainer::HyperparameterProxy#initialize (method)">new</a></span></span><span class='lparen'>(</span><span class='kw'>self</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>momentum</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+  
+</div>
+
+  <div id="instance_attr_details" class="attr_details">
+    <h2>Instance Attribute Details</h2>
+    
+      
+      <span id="lr=-instance_method"></span>
+      <div class="method_details first">
+  <h3 class="signature first" id="lr-instance_method">
+  
+    #<strong>lr</strong>  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Returns the value of attribute lr</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+33
+34
+35</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/chainer/optimizers/momentum_sgd.rb', line 33</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_lr'>lr</span>
+  <span class='ivar'>@lr</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      
+      <span id="momentum=-instance_method"></span>
+      <div class="method_details ">
+  <h3 class="signature " id="momentum-instance_method">
+  
+    #<strong>momentum</strong>  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Returns the value of attribute momentum</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+33
+34
+35</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/chainer/optimizers/momentum_sgd.rb', line 33</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_momentum'>momentum</span>
+  <span class='ivar'>@momentum</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+  </div>
+
+
+  <div id="instance_method_details" class="method_details_list">
+    <h2>Instance Method Details</h2>
+
+    
+      <div class="method_details first">
+  <h3 class="signature first" id="create_update_rule-instance_method">
+  
+    #<strong>create_update_rule</strong>  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+44
+45
+46</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/chainer/optimizers/momentum_sgd.rb', line 44</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_create_update_rule'>create_update_rule</span>
+  <span class='const'><span class='object_link'><a href="MomentumSGDRule.html" title="Chainer::Optimizers::MomentumSGDRule (class)">MomentumSGDRule</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new'><span class='object_link'><a href="MomentumSGDRule.html#initialize-instance_method" title="Chainer::Optimizers::MomentumSGDRule#initialize (method)">new</a></span></span><span class='lparen'>(</span><span class='label'>parent_hyperparam:</span> <span class='ivar'>@hyperparam</span><span class='rparen'>)</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+  </div>
+
+</div>
+
+      <div id="footer">
+  Generated on Thu Oct 10 04:25:41 2019 by
+  <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
+  0.9.20 (ruby-2.6.3).
+</div>
+
+    </div>
+  </body>
+</html>

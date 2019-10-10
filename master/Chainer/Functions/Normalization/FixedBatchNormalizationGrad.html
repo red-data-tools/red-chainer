@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>
+  Class: Chainer::Functions::Normalization::FixedBatchNormalizationGrad
+  
+    &mdash; Documentation by YARD 0.9.20
+  
+</title>
+
+  <link rel="stylesheet" href="../../../css/style.css" type="text/css" charset="utf-8" />
+
+  <link rel="stylesheet" href="../../../css/common.css" type="text/css" charset="utf-8" />
+
+<script type="text/javascript" charset="utf-8">
+  pathId = "Chainer::Functions::Normalization::FixedBatchNormalizationGrad";
+  relpath = '../../../';
+</script>
+
+
+  <script type="text/javascript" charset="utf-8" src="../../../js/jquery.js"></script>
+
+  <script type="text/javascript" charset="utf-8" src="../../../js/app.js"></script>
+
+
+
+    <!-- Additional settings for MathJax are from here. -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax:{
+          inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+          displayMath: [ ['$$','$$'], ["\\[","\\]"] ]
+        }
+      });
+    </script>
+    <script type="text/javascript"
+      src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.6/MathJax.js?config=TeX-AMS_HTML">
+    </script>
+    <meta http-equiv="X-UA-Compatible" CONTENT="IE=EmulateIE7" />
+    <!-- Additional settings for MathJax are over here. -->
+
+  </head>
+  <body>
+    <div class="nav_wrap">
+      <iframe id="nav" src="../../../class_list.html?1"></iframe>
+      <div id="resizer"></div>
+    </div>
+
+    <div id="main" tabindex="-1">
+      <div id="header">
+        <div id="menu">
+  
+    <a href="../../../_index.html">Index (F)</a> &raquo;
+    <span class='title'><span class='object_link'><a href="../../../Chainer.html" title="Chainer (module)">Chainer</a></span></span> &raquo; <span class='title'><span class='object_link'><a href="../../Functions.html" title="Chainer::Functions (module)">Functions</a></span></span> &raquo; <span class='title'><span class='object_link'><a href="../Normalization.html" title="Chainer::Functions::Normalization (module)">Normalization</a></span></span>
+     &raquo; 
+    <span class="title">FixedBatchNormalizationGrad</span>
+  
+</div>
+
+        <div id="search">
+  
+    <a class="full_list_link" id="class_list_link"
+        href="../../../class_list.html">
+
+        <svg width="24" height="24">
+          <rect x="0" y="4" width="24" height="4" rx="1" ry="1"></rect>
+          <rect x="0" y="12" width="24" height="4" rx="1" ry="1"></rect>
+          <rect x="0" y="20" width="24" height="4" rx="1" ry="1"></rect>
+        </svg>
+    </a>
+  
+</div>
+        <div class="clear"></div>
+      </div>
+
+      <div id="content"><h1>Class: Chainer::Functions::Normalization::FixedBatchNormalizationGrad
+  
+  
+  
+</h1>
+<div class="box_info">
+  
+  <dl>
+    <dt>Inherits:</dt>
+    <dd>
+      <span class="inheritName"><span class='object_link'><a href="../../Function.html" title="Chainer::Function (class)">Chainer::Function</a></span></span>
+      
+        <ul class="fullTree">
+          <li>Object</li>
+          
+            <li class="next"><span class='object_link'><a href="../../Function.html" title="Chainer::Function (class)">Chainer::Function</a></span></li>
+          
+            <li class="next">Chainer::Functions::Normalization::FixedBatchNormalizationGrad</li>
+          
+        </ul>
+        <a href="#" class="inheritanceTree">show all</a>
+      
+    </dd>
+  </dl>
+  
+
+  
+  
+  
+  
+  <dl>
+      <dt>Includes:</dt>
+      <dd><span class='object_link'><a href="Calculation.html" title="Chainer::Functions::Normalization::Calculation (module)">Calculation</a></span></dd>
+  </dl>
+  
+  
+
+  
+
+  
+  <dl>
+    <dt>Defined in:</dt>
+    <dd>lib/chainer/functions/normalization/batch_normalization.rb</dd>
+  </dl>
+  
+</div>
+
+
+
+
+
+
+
+  <h2>Instance Attribute Summary</h2>
+  
+  <h3 class="inherited">Attributes inherited from <span class='object_link'><a href="../../Function.html" title="Chainer::Function (class)">Chainer::Function</a></span></h3>
+  <p class="inherited"><span class='object_link'><a href="../../Function.html#inputs-instance_method" title="Chainer::Function#inputs (method)">#inputs</a></span>, <span class='object_link'><a href="../../Function.html#output_data-instance_method" title="Chainer::Function#output_data (method)">#output_data</a></span>, <span class='object_link'><a href="../../Function.html#outputs-instance_method" title="Chainer::Function#outputs (method)">#outputs</a></span>, <span class='object_link'><a href="../../Function.html#owned_node-instance_method" title="Chainer::Function#owned_node (method)">#owned_node</a></span>, <span class='object_link'><a href="../../Function.html#rank-instance_method" title="Chainer::Function#rank (method)">#rank</a></span>, <span class='object_link'><a href="../../Function.html#retain_after_backward-instance_method" title="Chainer::Function#retain_after_backward (method)">#retain_after_backward</a></span></p>
+
+
+  
+    <h2>
+      Instance Method Summary
+      <small><a href="#" class="summary_toggle">collapse</a></small>
+    </h2>
+
+    <ul class="summary">
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#backward-instance_method" title="#backward (instance method)">#<strong>backward</strong>(inputs, grad_outputs)  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#forward-instance_method" title="#forward (instance method)">#<strong>forward</strong>(inputs)  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#initialize-instance_method" title="#initialize (instance method)">#<strong>initialize</strong>(eps, expander, axis, inv_std, inv_var)  &#x21d2; FixedBatchNormalizationGrad </a>
+    
+
+    
+  </span>
+  
+  
+    <span class="note title constructor">constructor</span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>A new instance of FixedBatchNormalizationGrad.</p>
+</div></span>
+  
+</li>
+
+      
+    </ul>
+  
+
+
+  
+  
+  
+  
+  
+  
+  
+  
+  <h3 class="inherited">Methods included from <span class='object_link'><a href="Calculation.html" title="Chainer::Functions::Normalization::Calculation (module)">Calculation</a></span></h3>
+  <p class="inherited"><span class='object_link'><a href="Calculation.html#apply_bn_fwd-instance_method" title="Chainer::Functions::Normalization::Calculation#apply_bn_fwd (method)">#apply_bn_fwd</a></span>, <span class='object_link'><a href="Calculation.html#can_use_cudnn%3F-instance_method" title="Chainer::Functions::Normalization::Calculation#can_use_cudnn? (method)">#can_use_cudnn?</a></span>, <span class='object_link'><a href="Calculation.html#compute_axis-instance_method" title="Chainer::Functions::Normalization::Calculation#compute_axis (method)">#compute_axis</a></span>, <span class='object_link'><a href="Calculation.html#x_hat-instance_method" title="Chainer::Functions::Normalization::Calculation#x_hat (method)">#x_hat</a></span>, <span class='object_link'><a href="Calculation.html#zero_if_none-instance_method" title="Chainer::Functions::Normalization::Calculation#zero_if_none (method)">#zero_if_none</a></span></p>
+
+  
+  
+  
+  
+  
+  
+  
+  
+  <h3 class="inherited">Methods inherited from <span class='object_link'><a href="../../Function.html" title="Chainer::Function (class)">Chainer::Function</a></span></h3>
+  <p class="inherited"><span class='object_link'><a href="../../Function.html#backward_cpu-instance_method" title="Chainer::Function#backward_cpu (method)">#backward_cpu</a></span>, <span class='object_link'><a href="../../Function.html#backward_gpu-instance_method" title="Chainer::Function#backward_gpu (method)">#backward_gpu</a></span>, <span class='object_link'><a href="../../Function.html#call-instance_method" title="Chainer::Function#call (method)">#call</a></span>, <span class='object_link'><a href="../../Function.html#forward_cpu-instance_method" title="Chainer::Function#forward_cpu (method)">#forward_cpu</a></span>, <span class='object_link'><a href="../../Function.html#forward_gpu-instance_method" title="Chainer::Function#forward_gpu (method)">#forward_gpu</a></span>, <span class='object_link'><a href="../../Function.html#label-instance_method" title="Chainer::Function#label (method)">#label</a></span>, <span class='object_link'><a href="../../Function.html#node-instance_method" title="Chainer::Function#node (method)">#node</a></span>, <span class='object_link'><a href="../../Function.html#retain_inputs-instance_method" title="Chainer::Function#retain_inputs (method)">#retain_inputs</a></span>, <span class='object_link'><a href="../../Function.html#retain_outputs-instance_method" title="Chainer::Function#retain_outputs (method)">#retain_outputs</a></span></p>
+<div id="constructor_details" class="method_details_list">
+  <h2>Constructor Details</h2>
+  
+    <div class="method_details first">
+  <h3 class="signature first" id="initialize-instance_method">
+  
+    #<strong>initialize</strong>(eps, expander, axis, inv_std, inv_var)  &#x21d2; <tt><span class='object_link'><a href="" title="Chainer::Functions::Normalization::FixedBatchNormalizationGrad (class)">FixedBatchNormalizationGrad</a></span></tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Returns a new instance of FixedBatchNormalizationGrad</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+299
+300
+301
+302
+303
+304
+305</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/chainer/functions/normalization/batch_normalization.rb', line 299</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_initialize'>initialize</span><span class='lparen'>(</span><span class='id identifier rubyid_eps'>eps</span><span class='comma'>,</span> <span class='id identifier rubyid_expander'>expander</span><span class='comma'>,</span> <span class='id identifier rubyid_axis'>axis</span><span class='comma'>,</span> <span class='id identifier rubyid_inv_std'>inv_std</span><span class='comma'>,</span> <span class='id identifier rubyid_inv_var'>inv_var</span><span class='rparen'>)</span>
+  <span class='ivar'>@eps</span> <span class='op'>=</span> <span class='id identifier rubyid_eps'>eps</span>
+  <span class='ivar'>@expander</span> <span class='op'>=</span> <span class='id identifier rubyid_expander'>expander</span>
+  <span class='ivar'>@axis</span> <span class='op'>=</span> <span class='id identifier rubyid_axis'>axis</span>
+  <span class='ivar'>@inv_std</span> <span class='op'>=</span> <span class='id identifier rubyid_inv_std'>inv_std</span>
+  <span class='ivar'>@inv_var</span> <span class='op'>=</span> <span class='id identifier rubyid_inv_var'>inv_var</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+  
+</div>
+
+
+  <div id="instance_method_details" class="method_details_list">
+    <h2>Instance Method Details</h2>
+
+    
+      <div class="method_details first">
+  <h3 class="signature first" id="backward-instance_method">
+  
+    #<strong>backward</strong>(inputs, grad_outputs)  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+331
+332
+333
+334
+335
+336
+337
+338
+339
+340
+341
+342
+343
+344
+345
+346
+347
+348
+349
+350
+351
+352
+353
+354
+355
+356
+357
+358
+359
+360
+361
+362
+363
+364</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/chainer/functions/normalization/batch_normalization.rb', line 331</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_backward'>backward</span><span class='lparen'>(</span><span class='id identifier rubyid_inputs'>inputs</span><span class='comma'>,</span> <span class='id identifier rubyid_grad_outputs'>grad_outputs</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_x'>x</span><span class='comma'>,</span> <span class='id identifier rubyid_gamma'>gamma</span><span class='comma'>,</span> <span class='id identifier rubyid_mean'>mean</span><span class='comma'>,</span> <span class='id identifier rubyid__'>_</span><span class='comma'>,</span> <span class='id identifier rubyid_gy'>gy</span> <span class='op'>=</span> <span class='id identifier rubyid_inputs'>inputs</span>
+  <span class='id identifier rubyid_ggx1'>ggx1</span><span class='comma'>,</span> <span class='id identifier rubyid_gggamma1'>gggamma1</span><span class='comma'>,</span> <span class='id identifier rubyid_ggbeta1'>ggbeta1</span><span class='comma'>,</span> <span class='id identifier rubyid_ggmean1'>ggmean1</span><span class='comma'>,</span> <span class='id identifier rubyid_ggvar1'>ggvar1</span> <span class='op'>=</span> <span class='id identifier rubyid_grad_outputs'>grad_outputs</span>
+  <span class='id identifier rubyid_gx1'>gx1</span><span class='comma'>,</span> <span class='id identifier rubyid_ggamma1'>ggamma1</span><span class='comma'>,</span> <span class='id identifier rubyid_gbeta1'>gbeta1</span><span class='comma'>,</span> <span class='id identifier rubyid_gmean1'>gmean1</span><span class='comma'>,</span> <span class='id identifier rubyid_gvar1'>gvar1</span> <span class='op'>=</span> <span class='id identifier rubyid_output_data'>output_data</span>
+
+  <span class='comment'># Handle None in output gradients.
+</span>  <span class='id identifier rubyid_xm'>xm</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="../../../Chainer.html" title="Chainer (module)">Chainer</a></span></span><span class='period'>.</span><span class='id identifier rubyid_get_array_module'><span class='object_link'><a href="../../../Chainer.html#get_array_module-class_method" title="Chainer.get_array_module (method)">get_array_module</a></span></span><span class='lparen'>(</span><span class='id identifier rubyid_x'>x</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_ggx1'>ggx1</span> <span class='op'>=</span> <span class='id identifier rubyid_zero_if_none'>zero_if_none</span><span class='lparen'>(</span><span class='id identifier rubyid_xm'>xm</span><span class='comma'>,</span> <span class='id identifier rubyid_ggx1'>ggx1</span><span class='comma'>,</span> <span class='id identifier rubyid_x'>x</span><span class='period'>.</span><span class='id identifier rubyid_shape'>shape</span><span class='comma'>,</span> <span class='id identifier rubyid_x'>x</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_gggamma1'>gggamma1</span> <span class='op'>=</span> <span class='id identifier rubyid_zero_if_none'>zero_if_none</span><span class='lparen'>(</span><span class='id identifier rubyid_xm'>xm</span><span class='comma'>,</span> <span class='id identifier rubyid_gggamma1'>gggamma1</span><span class='comma'>,</span> <span class='id identifier rubyid_gamma'>gamma</span><span class='period'>.</span><span class='id identifier rubyid_shape'>shape</span><span class='comma'>,</span> <span class='id identifier rubyid_gamma'>gamma</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_ggbeta1'>ggbeta1</span> <span class='op'>=</span> <span class='id identifier rubyid_zero_if_none'>zero_if_none</span><span class='lparen'>(</span><span class='id identifier rubyid_xm'>xm</span><span class='comma'>,</span> <span class='id identifier rubyid_ggbeta1'>ggbeta1</span><span class='comma'>,</span> <span class='id identifier rubyid_gamma'>gamma</span><span class='period'>.</span><span class='id identifier rubyid_shape'>shape</span><span class='comma'>,</span> <span class='id identifier rubyid_gamma'>gamma</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_ggmean1'>ggmean1</span> <span class='op'>=</span> <span class='id identifier rubyid_zero_if_none'>zero_if_none</span><span class='lparen'>(</span><span class='id identifier rubyid_xm'>xm</span><span class='comma'>,</span> <span class='id identifier rubyid_ggmean1'>ggmean1</span><span class='comma'>,</span> <span class='id identifier rubyid_mean'>mean</span><span class='period'>.</span><span class='id identifier rubyid_shape'>shape</span><span class='comma'>,</span> <span class='id identifier rubyid_mean'>mean</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_ggvar1'>ggvar1</span> <span class='op'>=</span> <span class='id identifier rubyid_zero_if_none'>zero_if_none</span><span class='lparen'>(</span><span class='id identifier rubyid_xm'>xm</span><span class='comma'>,</span> <span class='id identifier rubyid_ggvar1'>ggvar1</span><span class='comma'>,</span> <span class='id identifier rubyid_mean'>mean</span><span class='period'>.</span><span class='id identifier rubyid_shape'>shape</span><span class='comma'>,</span> <span class='id identifier rubyid_mean'>mean</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span><span class='rparen'>)</span>
+
+  <span class='id identifier rubyid_expander'>expander</span> <span class='op'>=</span> <span class='ivar'>@expander</span>
+  <span class='id identifier rubyid_x_hat'>x_hat</span> <span class='op'>=</span> <span class='id identifier rubyid_x_hat'>x_hat</span><span class='lparen'>(</span><span class='id identifier rubyid_x'>x</span><span class='comma'>,</span> <span class='id identifier rubyid_expander'>expander</span><span class='period'>.</span><span class='lparen'>(</span><span class='id identifier rubyid_mean'>mean</span><span class='rparen'>)</span><span class='comma'>,</span> <span class='id identifier rubyid_expander'>expander</span><span class='period'>.</span><span class='lparen'>(</span><span class='ivar'>@inv_std</span><span class='rparen'>)</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_tmp'>tmp</span> <span class='op'>=</span> <span class='op'>-</span><span class='float'>0.5</span> <span class='op'>*</span> <span class='id identifier rubyid_ggvar1'>ggvar1</span>
+
+  <span class='id identifier rubyid_gamma_over_var'>gamma_over_var</span> <span class='op'>=</span> <span class='id identifier rubyid_gamma'>gamma</span> <span class='op'>*</span> <span class='ivar'>@inv_var</span>
+  <span class='id identifier rubyid_g_gamma_over_var'>g_gamma_over_var</span> <span class='op'>=</span> <span class='id identifier rubyid_tmp'>tmp</span> <span class='op'>*</span> <span class='id identifier rubyid_ggamma1'>ggamma1</span>
+
+  <span class='id identifier rubyid_gggamma2'>gggamma2</span> <span class='op'>=</span> <span class='id identifier rubyid_gggamma1'>gggamma1</span> <span class='op'>+</span> <span class='id identifier rubyid_tmp'>tmp</span> <span class='op'>*</span> <span class='id identifier rubyid_gamma_over_var'>gamma_over_var</span>
+  <span class='id identifier rubyid_gx_hat'>gx_hat</span> <span class='op'>=</span> <span class='id identifier rubyid_gy'>gy</span> <span class='op'>*</span> <span class='id identifier rubyid_expander'>expander</span><span class='period'>.</span><span class='lparen'>(</span><span class='id identifier rubyid_gggamma2'>gggamma2</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_gx2'>gx2</span> <span class='op'>=</span> <span class='id identifier rubyid_expander'>expander</span><span class='period'>.</span><span class='lparen'>(</span><span class='ivar'>@inv_std</span><span class='rparen'>)</span> <span class='op'>*</span> <span class='id identifier rubyid_gx_hat'>gx_hat</span>
+  <span class='id identifier rubyid_gmean2'>gmean2</span> <span class='op'>=</span> <span class='op'>-</span><span class='ivar'>@inv_std</span> <span class='op'>*</span> <span class='id identifier rubyid_gx_hat'>gx_hat</span><span class='period'>.</span><span class='id identifier rubyid_sum'>sum</span><span class='lparen'>(</span><span class='label'>axis:</span> <span class='ivar'>@axis</span><span class='rparen'>)</span>
+
+  <span class='id identifier rubyid_g_gamma_over_std'>g_gamma_over_std</span> <span class='op'>=</span> <span class='lparen'>(</span><span class='id identifier rubyid_ggx1'>ggx1</span> <span class='op'>*</span> <span class='id identifier rubyid_gy'>gy</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_sum'>sum</span><span class='lparen'>(</span><span class='label'>axis:</span> <span class='ivar'>@axis</span><span class='rparen'>)</span> <span class='op'>-</span> <span class='id identifier rubyid_ggmean1'>ggmean1</span> <span class='op'>*</span> <span class='id identifier rubyid_gbeta1'>gbeta1</span>
+  <span class='id identifier rubyid_ggbeta2'>ggbeta2</span> <span class='op'>=</span> <span class='id identifier rubyid_ggbeta1'>ggbeta1</span> <span class='op'>-</span> <span class='id identifier rubyid_ggmean1'>ggmean1</span> <span class='op'>*</span> <span class='ivar'>@gamma_over_std</span>
+  <span class='id identifier rubyid_ggy2'>ggy2</span> <span class='op'>=</span> <span class='lparen'>(</span><span class='id identifier rubyid_expander'>expander</span><span class='period'>.</span><span class='lparen'>(</span><span class='id identifier rubyid_gggamma2'>gggamma2</span><span class='rparen'>)</span> <span class='op'>*</span> <span class='id identifier rubyid_x_hat'>x_hat</span> <span class='op'>+</span> <span class='id identifier rubyid_expander'>expander</span><span class='period'>.</span><span class='lparen'>(</span><span class='id identifier rubyid_ggbeta2'>ggbeta2</span><span class='rparen'>)</span> <span class='op'>+</span> <span class='id identifier rubyid_expander'>expander</span><span class='period'>.</span><span class='lparen'>(</span><span class='ivar'>@gamma_over_std</span><span class='rparen'>)</span> <span class='op'>*</span> <span class='id identifier rubyid_ggx1'>ggx1</span><span class='rparen'>)</span>
+
+  <span class='id identifier rubyid_ggamma2'>ggamma2</span> <span class='op'>=</span> <span class='lparen'>(</span><span class='ivar'>@inv_var</span> <span class='op'>*</span> <span class='id identifier rubyid_g_gamma_over_var'>g_gamma_over_var</span> <span class='op'>+</span> <span class='ivar'>@inv_std</span> <span class='op'>*</span> <span class='id identifier rubyid_g_gamma_over_std'>g_gamma_over_std</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_gvar2'>gvar2</span> <span class='op'>=</span> <span class='op'>-</span><span class='lparen'>(</span><span class='id identifier rubyid_ggamma2'>ggamma2</span> <span class='op'>*</span> <span class='id identifier rubyid_gamma_over_var'>gamma_over_var</span> <span class='op'>+</span> <span class='float'>0.5</span> <span class='op'>*</span> <span class='ivar'>@inv_var</span> <span class='op'>*</span> <span class='lparen'>(</span><span class='lparen'>(</span><span class='id identifier rubyid_x_hat'>x_hat</span> <span class='op'>*</span> <span class='id identifier rubyid_gx_hat'>gx_hat</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_sum'>sum</span><span class='lparen'>(</span><span class='label'>axis:</span> <span class='ivar'>@axis</span><span class='rparen'>)</span> <span class='op'>-</span> <span class='ivar'>@gamma_over_std</span> <span class='op'>*</span> <span class='id identifier rubyid_g_gamma_over_std'>g_gamma_over_std</span><span class='rparen'>)</span><span class='rparen'>)</span>
+
+  <span class='lbracket'>[</span><span class='id identifier rubyid_gx2'>gx2</span><span class='comma'>,</span> <span class='id identifier rubyid_ggamma2'>ggamma2</span><span class='comma'>,</span> <span class='id identifier rubyid_gmean2'>gmean2</span><span class='comma'>,</span> <span class='id identifier rubyid_gvar2'>gvar2</span><span class='comma'>,</span> <span class='id identifier rubyid_ggy2'>ggy2</span><span class='rbracket'>]</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="forward-instance_method">
+  
+    #<strong>forward</strong>(inputs)  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+307
+308
+309
+310
+311
+312
+313
+314
+315
+316
+317
+318
+319
+320
+321
+322
+323
+324
+325
+326
+327
+328
+329</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/chainer/functions/normalization/batch_normalization.rb', line 307</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_forward'>forward</span><span class='lparen'>(</span><span class='id identifier rubyid_inputs'>inputs</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_retain_inputs'>retain_inputs</span><span class='lparen'>(</span><span class='lbracket'>[</span><span class='int'>0</span><span class='comma'>,</span> <span class='int'>1</span><span class='comma'>,</span> <span class='int'>2</span><span class='comma'>,</span> <span class='int'>4</span><span class='rbracket'>]</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_x'>x</span><span class='comma'>,</span> <span class='id identifier rubyid_gamma'>gamma</span><span class='comma'>,</span> <span class='id identifier rubyid_mean'>mean</span><span class='comma'>,</span> <span class='id identifier rubyid_var'>var</span><span class='comma'>,</span> <span class='id identifier rubyid_gy'>gy</span> <span class='op'>=</span> <span class='id identifier rubyid_inputs'>inputs</span>
+  <span class='id identifier rubyid_expander'>expander</span> <span class='op'>=</span> <span class='ivar'>@expander</span>
+  <span class='id identifier rubyid_xm'>xm</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="../../../Chainer.html" title="Chainer (module)">Chainer</a></span></span><span class='period'>.</span><span class='id identifier rubyid_get_array_module'><span class='object_link'><a href="../../../Chainer.html#get_array_module-class_method" title="Chainer.get_array_module (method)">get_array_module</a></span></span><span class='lparen'>(</span><span class='id identifier rubyid_x'>x</span><span class='rparen'>)</span>
+
+  <span class='kw'>if</span> <span class='ivar'>@inv_std</span><span class='period'>.</span><span class='id identifier rubyid_nil?'>nil?</span> <span class='op'>||</span> <span class='ivar'>@inv_var</span><span class='period'>.</span><span class='id identifier rubyid_nil?'>nil?</span>
+    <span class='ivar'>@inv_var</span> <span class='op'>=</span> <span class='lparen'>(</span><span class='id identifier rubyid_var'>var</span> <span class='op'>+</span> <span class='ivar'>@eps</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_reciprocal'>reciprocal</span>
+    <span class='ivar'>@inv_std</span> <span class='op'>=</span> <span class='id identifier rubyid_xm'>xm</span><span class='op'>::</span><span class='const'>NMath</span><span class='period'>.</span><span class='id identifier rubyid_sqrt'>sqrt</span><span class='lparen'>(</span><span class='ivar'>@inv_var</span><span class='rparen'>)</span>
+  <span class='kw'>end</span>
+
+  <span class='ivar'>@gamma_over_std</span> <span class='op'>=</span> <span class='id identifier rubyid_gamma'>gamma</span> <span class='op'>*</span> <span class='ivar'>@inv_std</span>
+  <span class='id identifier rubyid_x_hat'>x_hat</span> <span class='op'>=</span> <span class='id identifier rubyid_x_hat'>x_hat</span><span class='lparen'>(</span><span class='id identifier rubyid_x'>x</span><span class='comma'>,</span> <span class='id identifier rubyid_expander'>expander</span><span class='period'>.</span><span class='lparen'>(</span><span class='id identifier rubyid_mean'>mean</span><span class='rparen'>)</span><span class='comma'>,</span> <span class='id identifier rubyid_expander'>expander</span><span class='period'>.</span><span class='lparen'>(</span><span class='ivar'>@inv_std</span><span class='rparen'>)</span><span class='rparen'>)</span>
+
+  <span class='id identifier rubyid_gx'>gx</span> <span class='op'>=</span> <span class='id identifier rubyid_expander'>expander</span><span class='period'>.</span><span class='lparen'>(</span><span class='ivar'>@gamma_over_std</span><span class='rparen'>)</span> <span class='op'>*</span> <span class='id identifier rubyid_gy'>gy</span>
+  <span class='id identifier rubyid_gbeta'>gbeta</span> <span class='op'>=</span> <span class='id identifier rubyid_gy'>gy</span><span class='period'>.</span><span class='id identifier rubyid_sum'>sum</span><span class='lparen'>(</span><span class='label'>axis:</span> <span class='ivar'>@axis</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_ggamma'>ggamma</span> <span class='op'>=</span> <span class='lparen'>(</span><span class='id identifier rubyid_x_hat'>x_hat</span> <span class='op'>*</span> <span class='id identifier rubyid_gy'>gy</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_sum'>sum</span><span class='lparen'>(</span><span class='label'>axis:</span> <span class='ivar'>@axis</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_gmean'>gmean</span> <span class='op'>=</span> <span class='op'>-</span><span class='ivar'>@gamma_over_std</span> <span class='op'>*</span> <span class='id identifier rubyid_gbeta'>gbeta</span>
+  <span class='id identifier rubyid_gvar'>gvar</span> <span class='op'>=</span> <span class='op'>-</span><span class='float'>0.5</span> <span class='op'>*</span> <span class='id identifier rubyid_gamma'>gamma</span> <span class='op'>*</span> <span class='ivar'>@inv_var</span> <span class='op'>*</span> <span class='id identifier rubyid_ggamma'>ggamma</span>
+
+  <span class='id identifier rubyid_retain_outputs'>retain_outputs</span><span class='lparen'>(</span><span class='lbracket'>[</span><span class='int'>0</span><span class='comma'>,</span> <span class='int'>1</span><span class='comma'>,</span> <span class='int'>2</span><span class='comma'>,</span> <span class='int'>3</span><span class='comma'>,</span> <span class='int'>4</span><span class='rbracket'>]</span><span class='rparen'>)</span>
+  <span class='lbracket'>[</span><span class='id identifier rubyid_gx'>gx</span><span class='comma'>,</span> <span class='id identifier rubyid_ggamma'>ggamma</span><span class='comma'>,</span> <span class='id identifier rubyid_gbeta'>gbeta</span><span class='comma'>,</span> <span class='id identifier rubyid_gmean'>gmean</span><span class='comma'>,</span> <span class='id identifier rubyid_gvar'>gvar</span><span class='rbracket'>]</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+  </div>
+
+</div>
+
+      <div id="footer">
+  Generated on Thu Oct 10 04:25:43 2019 by
+  <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
+  0.9.20 (ruby-2.6.3).
+</div>
+
+    </div>
+  </body>
+</html>

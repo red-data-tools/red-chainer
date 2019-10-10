@@ -1,0 +1,1694 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>
+  Module: Chainer
+  
+    &mdash; Documentation by YARD 0.9.20
+  
+</title>
+
+  <link rel="stylesheet" href="css/style.css" type="text/css" charset="utf-8" />
+
+  <link rel="stylesheet" href="css/common.css" type="text/css" charset="utf-8" />
+
+<script type="text/javascript" charset="utf-8">
+  pathId = "Chainer";
+  relpath = '';
+</script>
+
+
+  <script type="text/javascript" charset="utf-8" src="js/jquery.js"></script>
+
+  <script type="text/javascript" charset="utf-8" src="js/app.js"></script>
+
+
+
+    <!-- Additional settings for MathJax are from here. -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax:{
+          inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+          displayMath: [ ['$$','$$'], ["\\[","\\]"] ]
+        }
+      });
+    </script>
+    <script type="text/javascript"
+      src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.6/MathJax.js?config=TeX-AMS_HTML">
+    </script>
+    <meta http-equiv="X-UA-Compatible" CONTENT="IE=EmulateIE7" />
+    <!-- Additional settings for MathJax are over here. -->
+
+  </head>
+  <body>
+    <div class="nav_wrap">
+      <iframe id="nav" src="class_list.html?1"></iframe>
+      <div id="resizer"></div>
+    </div>
+
+    <div id="main" tabindex="-1">
+      <div id="header">
+        <div id="menu">
+  
+    <a href="_index.html">Index (C)</a> &raquo;
+    
+    
+    <span class="title">Chainer</span>
+  
+</div>
+
+        <div id="search">
+  
+    <a class="full_list_link" id="class_list_link"
+        href="class_list.html">
+
+        <svg width="24" height="24">
+          <rect x="0" y="4" width="24" height="4" rx="1" ry="1"></rect>
+          <rect x="0" y="12" width="24" height="4" rx="1" ry="1"></rect>
+          <rect x="0" y="20" width="24" height="4" rx="1" ry="1"></rect>
+        </svg>
+    </a>
+  
+</div>
+        <div class="clear"></div>
+      </div>
+
+      <div id="content"><h1>Module: Chainer
+  
+  
+  
+</h1>
+<div class="box_info">
+  
+
+  
+  
+  
+  
+  
+
+  
+
+  
+  <dl>
+    <dt>Defined in:</dt>
+    <dd>lib/chainer/function_node.rb<span class="defines">,<br />
+  lib/chainer.rb,<br /> lib/chainer/cuda.rb,<br /> lib/chainer/link.rb,<br /> lib/chainer/device.rb,<br /> lib/chainer/backend.rb,<br /> lib/chainer/version.rb,<br /> lib/chainer/function.rb,<br /> lib/chainer/reporter.rb,<br /> lib/chainer/variable.rb,<br /> lib/chainer/optimizer.rb,<br /> lib/chainer/parameter.rb,<br /> lib/chainer/serializer.rb,<br /> lib/chainer/utils/conv.rb,<br /> lib/chainer/utils/math.rb,<br /> lib/chainer/initializer.rb,<br /> lib/chainer/utils/array.rb,<br /> lib/chainer/configuration.rb,<br /> lib/chainer/testing/array.rb,<br /> lib/chainer/training/util.rb,<br /> lib/chainer/variable_node.rb,<br /> lib/chainer/datasets/cifar.rb,<br /> lib/chainer/datasets/mnist.rb,<br /> lib/chainer/gradient_check.rb,<br /> lib/chainer/hyperparameter.rb,<br /> lib/chainer/utils/variable.rb,<br /> lib/chainer/dataset/convert.rb,<br /> lib/chainer/gradient_method.rb,<br /> lib/chainer/optimizers/adam.rb,<br /> lib/chainer/dataset/iterator.rb,<br /> lib/chainer/training/trainer.rb,<br /> lib/chainer/training/updater.rb,<br /> lib/chainer/initializers/init.rb,<br /> lib/chainer/utils/initializer.rb,<br /> lib/chainer/functions/math/exp.rb,<br /> lib/chainer/functions/math/sum.rb,<br /> lib/chainer/training/extension.rb,<br /> lib/chainer/initializers/normal.rb,<br /> lib/chainer/serializers/marshal.rb,<br /> lib/chainer/functions/array/cast.rb,<br /> lib/chainer/initializers/uniform.rb,<br /> lib/chainer/initializers/constant.rb,<br /> lib/chainer/datasets/tuple_dataset.rb,<br /> lib/chainer/links/model/classifier.rb,<br /> lib/chainer/functions/array/reshape.rb,<br /> lib/chainer/functions/array/squeeze.rb,<br /> lib/chainer/functions/math/identity.rb,<br /> lib/chainer/functions/noise/dropout.rb,<br /> lib/chainer/links/connection/linear.rb,<br /> lib/chainer/optimizers/momentum_sgd.rb,<br /> lib/chainer/functions/array/rollaxis.rb,<br /> lib/chainer/functions/activation/relu.rb,<br /> lib/chainer/functions/activation/tanh.rb,<br /> lib/chainer/functions/array/transpose.rb,<br /> lib/chainer/functions/math/basic_math.rb,<br /> lib/chainer/iterators/serial_iterator.rb,<br /> lib/chainer/links/connection/embed_id.rb,<br /> lib/chainer/training/standard_updater.rb,<br /> lib/chainer/training/triggers/interval.rb,<br /> lib/chainer/functions/array/select_item.rb,<br /> lib/chainer/functions/connection/linear.rb,<br /> lib/chainer/functions/activation/sigmoid.rb,<br /> lib/chainer/functions/array/broadcast_to.rb,<br /> lib/chainer/functions/pooling/pooling_2d.rb,<br /> lib/chainer/training/extensions/snapshot.rb,<br /> lib/chainer/functions/connection/embed_id.rb,<br /> lib/chainer/functions/evaluation/accuracy.rb,<br /> lib/chainer/training/extensions/evaluator.rb,<br /> lib/chainer/training/extensions/log_report.rb,<br /> lib/chainer/functions/activation/leaky_relu.rb,<br /> lib/chainer/functions/activation/relu_grad2.rb,<br /> lib/chainer/links/connection/convolution_2d.rb,<br /> lib/chainer/functions/activation/log_softmax.rb,<br /> lib/chainer/functions/pooling/max_pooling_2d.rb,<br /> lib/chainer/training/extensions/print_report.rb,<br /> lib/chainer/training/extensions/progress_bar.rb,<br /> lib/chainer/functions/activation/sigmoid_grad.rb,<br /> lib/chainer/functions/loss/mean_squared_error.rb,<br /> lib/chainer/functions/connection/convolution_2d.rb,<br /> lib/chainer/functions/loss/softmax_cross_entropy.rb,<br /> lib/chainer/functions/pooling/average_pooling_2d.rb,<br /> lib/chainer/functions/connection/deconvolution_2d.rb,<br /> lib/chainer/training/extensions/exponential_shift.rb,<br /> lib/chainer/links/normalization/batch_normalization.rb,<br /> lib/chainer/functions/connection/convolution_2d_grad_w.rb,<br /> lib/chainer/functions/normalization/batch_normalization.rb</span>
+</dd>
+  </dl>
+  
+</div>
+
+<h2>Overview</h2><div class="docstring">
+  <div class="discussion">
+    
+<p>Function node of the computational graph. FunctionNode is a class representing a node in a computational graph. The node corresponds to an application of a differentiable function to input variables. When a differentiable function is applied to `Chainer::Variable` objects, it creates an instance of FunctionNode implementation and calls its `apply` method. The `apply` method basically does the following three things.</p>
+
+<pre class="code ruby"><code class="ruby">1. Adding an edge from the function node to the variable node corresponding to each input.
+   The node of each input is extracted by `Chainer::`Variable.node`.
+2. Computing the output arrays of the function.
+3. Creating a :class:`Variable` object for each output array and
+   adding an edge from the node of the variable to the function node.
+</code></pre>
+
+<p>The output variables are then returned.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><h2>Defined Under Namespace</h2>
+<p class="children">
+  
+    
+      <strong class="modules">Modules:</strong> <span class='object_link'><a href="Chainer/CUDA.html" title="Chainer::CUDA (module)">CUDA</a></span>, <span class='object_link'><a href="Chainer/Dataset.html" title="Chainer::Dataset (module)">Dataset</a></span>, <span class='object_link'><a href="Chainer/Datasets.html" title="Chainer::Datasets (module)">Datasets</a></span>, <span class='object_link'><a href="Chainer/Device.html" title="Chainer::Device (module)">Device</a></span>, <span class='object_link'><a href="Chainer/Functions.html" title="Chainer::Functions (module)">Functions</a></span>, <span class='object_link'><a href="Chainer/Initializers.html" title="Chainer::Initializers (module)">Initializers</a></span>, <span class='object_link'><a href="Chainer/Iterators.html" title="Chainer::Iterators (module)">Iterators</a></span>, <span class='object_link'><a href="Chainer/Links.html" title="Chainer::Links (module)">Links</a></span>, <span class='object_link'><a href="Chainer/Optimizers.html" title="Chainer::Optimizers (module)">Optimizers</a></span>, <span class='object_link'><a href="Chainer/ReportService.html" title="Chainer::ReportService (module)">ReportService</a></span>, <span class='object_link'><a href="Chainer/Serializers.html" title="Chainer::Serializers (module)">Serializers</a></span>, <span class='object_link'><a href="Chainer/Testing.html" title="Chainer::Testing (module)">Testing</a></span>, <span class='object_link'><a href="Chainer/Training.html" title="Chainer::Training (module)">Training</a></span>, <span class='object_link'><a href="Chainer/Utils.html" title="Chainer::Utils (module)">Utils</a></span>
+    
+  
+    
+      <strong class="classes">Classes:</strong> <span class='object_link'><a href="Chainer/AbstractDevice.html" title="Chainer::AbstractDevice (class)">AbstractDevice</a></span>, <span class='object_link'><a href="Chainer/AbstractSerializer.html" title="Chainer::AbstractSerializer (class)">AbstractSerializer</a></span>, <span class='object_link'><a href="Chainer/Chain.html" title="Chainer::Chain (class)">Chain</a></span>, <span class='object_link'><a href="Chainer/ChainList.html" title="Chainer::ChainList (class)">ChainList</a></span>, <span class='object_link'><a href="Chainer/Configuration.html" title="Chainer::Configuration (class)">Configuration</a></span>, <span class='object_link'><a href="Chainer/CpuDevice.html" title="Chainer::CpuDevice (class)">CpuDevice</a></span>, <span class='object_link'><a href="Chainer/Deserializer.html" title="Chainer::Deserializer (class)">Deserializer</a></span>, <span class='object_link'><a href="Chainer/DictSummary.html" title="Chainer::DictSummary (class)">DictSummary</a></span>, <span class='object_link'><a href="Chainer/Function.html" title="Chainer::Function (class)">Function</a></span>, <span class='object_link'><a href="Chainer/FunctionAdapter.html" title="Chainer::FunctionAdapter (class)">FunctionAdapter</a></span>, <span class='object_link'><a href="Chainer/FunctionNode.html" title="Chainer::FunctionNode (class)">FunctionNode</a></span>, <span class='object_link'><a href="Chainer/GpuDevice.html" title="Chainer::GpuDevice (class)">GpuDevice</a></span>, <span class='object_link'><a href="Chainer/GradientMethod.html" title="Chainer::GradientMethod (class)">GradientMethod</a></span>, <span class='object_link'><a href="Chainer/Hyperparameter.html" title="Chainer::Hyperparameter (class)">Hyperparameter</a></span>, <span class='object_link'><a href="Chainer/HyperparameterProxy.html" title="Chainer::HyperparameterProxy (class)">HyperparameterProxy</a></span>, <span class='object_link'><a href="Chainer/Initializer.html" title="Chainer::Initializer (class)">Initializer</a></span>, <span class='object_link'><a href="Chainer/Link.html" title="Chainer::Link (class)">Link</a></span>, <span class='object_link'><a href="Chainer/Optimizer.html" title="Chainer::Optimizer (class)">Optimizer</a></span>, <span class='object_link'><a href="Chainer/Parameter.html" title="Chainer::Parameter (class)">Parameter</a></span>, <span class='object_link'><a href="Chainer/Reporter.html" title="Chainer::Reporter (class)">Reporter</a></span>, <span class='object_link'><a href="Chainer/Serializer.html" title="Chainer::Serializer (class)">Serializer</a></span>, <span class='object_link'><a href="Chainer/Summary.html" title="Chainer::Summary (class)">Summary</a></span>, <span class='object_link'><a href="Chainer/UpdateRule.html" title="Chainer::UpdateRule (class)">UpdateRule</a></span>, <span class='object_link'><a href="Chainer/Variable.html" title="Chainer::Variable (class)">Variable</a></span>, <span class='object_link'><a href="Chainer/VariableNode.html" title="Chainer::VariableNode (class)">VariableNode</a></span>, <span class='object_link'><a href="Chainer/WeightDecay.html" title="Chainer::WeightDecay (class)">WeightDecay</a></span>
+    
+  
+</p>
+
+  
+    <h2>
+      Constant Summary
+      <small><a href="#" class="constants_summary_toggle">collapse</a></small>
+    </h2>
+
+    <dl class="constants">
+      
+        <dt id="VERSION-constant" class="">VERSION =
+          
+        </dt>
+        <dd><pre class="code"><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>0.4.1</span><span class='tstring_end'>&quot;</span></span></pre></dd>
+      
+    </dl>
+  
+
+
+
+
+
+
+
+  
+    <h2>
+      Class Method Summary
+      <small><a href="#" class="summary_toggle">collapse</a></small>
+    </h2>
+
+    <ul class="summary">
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#_as_tuple-class_method" title="_as_tuple (class method)">.<strong>_as_tuple</strong>(x)  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#_copy_arrays-class_method" title="_copy_arrays (class method)">.<strong>_copy_arrays</strong>(xs)  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#array%3F-class_method" title="array? (class method)">.<strong>array?</strong>(obj)  &#x21d2; Boolean </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Returns true if the argument is either of <code>Numo::NArray</code> or <code>Cumo::NArray</code>.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#check_backward-class_method" title="check_backward (class method)">.<strong>check_backward</strong>(func, x_data, y_grad, params = [], eps: 0.001, atol: 1e-5, rtol: 1e-4, no_grads: nil, dtype: nil)  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Test backward procedure of a given function.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#check_double_backward-class_method" title="check_double_backward (class method)">.<strong>check_double_backward</strong>(func, x_data, y_grad, x_grad_grad, params = [], params_grad_grad = [], eps: 1e-3, atol: 1e-4, rtol: 1e-3, no_grads: nil, dtype: nil)  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#configuration-class_method" title="configuration (class method)">.<strong>configuration</strong>  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#configure-class_method" title="configure (class method)">.<strong>configure</strong> {|configuration| ... } &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#get_array_module-class_method" title="get_array_module (class method)">.<strong>get_array_module</strong>(*args)  &#x21d2; Class </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Gets an appropriate one from <code>Numo::NArray</code> or <code>Cumo::NArray</code> from given arrays.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#grad-class_method" title="grad (class method)">.<strong>grad</strong>(outputs, inputs, grad_outputs: nil, grad_inputs: nil, set_grad: false, retain_grad: false, enable_double_backprop: false)  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#numerical_grad-class_method" title="numerical_grad (class method)">.<strong>numerical_grad</strong>(f, inputs, grad_outputs, eps = 1e-3)  &#x21d2; Array </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Computes numerical gradient by finite differences.</p>
+</div></span>
+  
+</li>
+
+      
+    </ul>
+  
+
+
+
+  <div id="class_method_details" class="method_details_list">
+    <h2>Class Method Details</h2>
+
+    
+      <div class="method_details first">
+  <h3 class="signature first" id="_as_tuple-class_method">
+  
+    .<strong>_as_tuple</strong>(x)  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+54
+55
+56
+57
+58
+59
+60</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/chainer/gradient_check.rb', line 54</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid__as_tuple'>_as_tuple</span><span class='lparen'>(</span><span class='id identifier rubyid_x'>x</span><span class='rparen'>)</span>
+  <span class='kw'>if</span> <span class='id identifier rubyid_x'>x</span><span class='period'>.</span><span class='id identifier rubyid_is_a?'>is_a?</span> <span class='const'>Array</span>
+    <span class='kw'>return</span> <span class='id identifier rubyid_x'>x</span>
+  <span class='kw'>else</span>
+    <span class='kw'>return</span> <span class='lbracket'>[</span><span class='id identifier rubyid_x'>x</span><span class='rbracket'>]</span>
+  <span class='kw'>end</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="_copy_arrays-class_method">
+  
+    .<strong>_copy_arrays</strong>(xs)  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+2
+3
+4</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/chainer/gradient_check.rb', line 2</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid__copy_arrays'>_copy_arrays</span><span class='lparen'>(</span><span class='id identifier rubyid_xs'>xs</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_xs'>xs</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span><span class='lbrace'>{</span><span class='op'>|</span><span class='id identifier rubyid_x'>x</span><span class='op'>|</span> <span class='const'><span class='object_link'><a href="" title="Chainer (module)">Chainer</a></span></span><span class='period'>.</span><span class='id identifier rubyid_array?'><span class='object_link'><a href="#array%3F-class_method" title="Chainer.array? (method)">array?</a></span></span><span class='lparen'>(</span><span class='id identifier rubyid_x'>x</span><span class='rparen'>)</span> <span class='op'>?</span> <span class='id identifier rubyid_x'>x</span><span class='period'>.</span><span class='id identifier rubyid_dup'>dup</span> <span class='op'>:</span> <span class='id identifier rubyid_x'>x</span><span class='rbrace'>}</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="array?-class_method">
+  
+    .<strong>array?</strong>(obj)  &#x21d2; <tt>Boolean</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Returns true if the argument is either of <code>Numo::NArray</code> or <code>Cumo::NArray</code>.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  <p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>obj</span>
+      
+      
+        <span class='type'>(<tt>Object</tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>Boolean</tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+19
+20
+21
+22
+23
+24
+25</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/chainer/backend.rb', line 19</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_array?'>array?</span><span class='lparen'>(</span><span class='id identifier rubyid_obj'>obj</span><span class='rparen'>)</span>
+  <span class='kw'>if</span> <span class='const'><span class='object_link'><a href="Chainer/CUDA.html" title="Chainer::CUDA (module)">CUDA</a></span></span><span class='period'>.</span><span class='id identifier rubyid_available?'><span class='object_link'><a href="Chainer/CUDA.html#available%3F-class_method" title="Chainer::CUDA.available? (method)">available?</a></span></span>
+    <span class='kw'>return</span> <span class='kw'>true</span> <span class='kw'>if</span> <span class='id identifier rubyid_obj'>obj</span><span class='period'>.</span><span class='id identifier rubyid_kind_of?'>kind_of?</span><span class='lparen'>(</span><span class='const'>Cumo</span><span class='op'>::</span><span class='const'>NArray</span><span class='rparen'>)</span>
+  <span class='kw'>end</span>
+  <span class='kw'>return</span> <span class='kw'>true</span> <span class='kw'>if</span> <span class='id identifier rubyid_obj'>obj</span><span class='period'>.</span><span class='id identifier rubyid_kind_of?'>kind_of?</span><span class='lparen'>(</span><span class='const'>Numo</span><span class='op'>::</span><span class='const'>NArray</span><span class='rparen'>)</span>
+  <span class='kw'>false</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="check_backward-class_method">
+  
+    .<strong>check_backward</strong>(func, x_data, y_grad, params = [], eps: 0.001, atol: 1e-5, rtol: 1e-4, no_grads: nil, dtype: nil)  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+  <div class="note notetag">
+    <strong>Note:</strong>
+    <div class='inline'>
+<p><code>func</code> is called many times to get numerical gradients for all inputs. This function doesn&#39;t work correctly when <code>func</code> behaves randomly as it gets different gradients.</p>
+</div>
+  </div>
+
+
+<p>Test backward procedure of a given function.</p>
+
+<p>This function automatically check backward-process of given function. For example, when you have a <code>Chainer::Function</code> class <code>MyFunc</code>, that gets two arguments and returns one value, you can make its test like this:</p>
+
+<pre class="code ruby"><code class="ruby">def test_my_func(self):
+  func = MyFunc()
+  x1_data = Numo::NArray[...]
+  x2_data = Numo::NArray[...]
+  gy_data = Numo::NArray[...]
+  check_backward(func, [x1_data, x2_data], gy_data)
+</code></pre>
+
+<p>This method creates <code>Chainer::Variable</code> objects with <code>x_data</code> and calls <code>func</code> with the <code>Chainer::Variable</code> s to get its result as <code>Chainer::Variable</code>. Then, it sets <code>y_grad</code> array to <code>grad</code> attribute of the result and calls <code>backward</code> method to get gradients of the inputs. To check correctness of the gradients, the function calls <code>numerical_grad</code> to calculate numerically the gradients and compares the types of gradients with <code>Chainer::Testing.assert_allclose</code>. If input objects (<code>x1_data</code> or/and <code>x2_data</code> in this example) represent integer variables, their gradients are ignored.</p>
+
+<p>You can simplify a test when <code>MyFunc</code> gets only one argument:</p>
+
+<pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_check_backward'>check_backward</span><span class='lparen'>(</span><span class='id identifier rubyid_func'>func</span><span class='comma'>,</span> <span class='id identifier rubyid_x1_data'>x1_data</span><span class='comma'>,</span> <span class='id identifier rubyid_gy_data'>gy_data</span><span class='rparen'>)</span>
+</code></pre>
+
+<p>If <code>MyFunc</code> is a loss function which returns a zero-dimensional array, pass <code>nil</code> to <code>gy_data</code>. In this case, it sets <code>1</code> to <code>grad</code> attribute of the result:</p>
+
+<pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_check_backward'>check_backward</span><span class='lparen'>(</span><span class='id identifier rubyid_my_loss_func'>my_loss_func</span><span class='comma'>,</span> <span class='lbracket'>[</span><span class='id identifier rubyid_x1_data'>x1_data</span><span class='comma'>,</span> <span class='id identifier rubyid_x2_data'>x2_data</span><span class='rbracket'>]</span><span class='comma'>,</span> <span class='kw'>nil</span><span class='rparen'>)</span>
+</code></pre>
+
+<p>If <code>MyFunc</code> returns multiple outputs, pass all gradients for outputs as a Array:</p>
+
+<pre class="code ruby"><code class="ruby">gy1_data = Numo::NArray[...]
+gy2_data = Numo::NArray[...]
+check_backward(func, x1_data, [gy1_data, gy2_data])
+</code></pre>
+
+<p>You can also test a <code>Chainer::Link</code>. To check gradients of parameters of the link, set a Array of the parameters to <code>params</code> arguments:</p>
+
+<pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_check_backward'>check_backward</span><span class='lparen'>(</span><span class='id identifier rubyid_my_link'>my_link</span><span class='comma'>,</span> <span class='lbracket'>[</span><span class='id identifier rubyid_x1_data'>x1_data</span><span class='comma'>,</span> <span class='id identifier rubyid_x2_data'>x2_data</span><span class='rbracket'>]</span><span class='comma'>,</span> <span class='id identifier rubyid_gy_data'>gy_data</span><span class='comma'>,</span> <span class='lbracket'>[</span><span class='id identifier rubyid_my_link'>my_link</span><span class='period'>.</span><span class='const'>W</span><span class='comma'>,</span> <span class='id identifier rubyid_my_link'>my_link</span><span class='period'>.</span><span class='id identifier rubyid_b'>b</span><span class='rbracket'>]</span><span class='rparen'>)</span>
+</code></pre>
+
+<p>Note that <code>params</code> are not <code>Numo::NArray</code> s, but <code>Chainer::Variables</code> s.</p>
+
+<p>Function objects are acceptable as <code>func</code> argument:</p>
+
+<pre class="code ruby"><code class="ruby">check_backward(lambda{|x1, x1| f(x1, x2)}, [x1_data, x2_data], gy_data)
+</code></pre>
+
+
+  </div>
+</div>
+<div class="tags">
+  <p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>func</span>
+      
+      
+        <span class='type'>(<tt>Method</tt>, <tt>Proc</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>A function which gets <code>Chainer::Variable</code> s and returns <code>Chainer::Variable</code> s. <code>func</code> must returns a Array of <code>Chainer::Variable</code> s or one <code>Chainer::Variable</code>. You can use <code>Chainer::Function</code> object, <code>Chainer::Link</code> object or a function satisfying the condition.</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>x_data</span>
+      
+      
+        <span class='type'>(<tt>Numo::NArray or Array&lt;Numo::NArray&gt;</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>A set of <code>Numo::NArray</code> s to be passed to <code>func</code>. If <code>x_data</code> is one <code>Numo::NArray</code> object, it is treated as <tt>(x_data,)</tt>.</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>y_grad</span>
+      
+      
+        <span class='type'>(<tt>Numo::NArray or Array&lt;Numo::NArray&gt; or nil</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>A set of <code>Numo::NArray</code> s representing gradients of return-values of <code>func</code>. If <code>y_grad</code> is one <code>Numo::NArray</code> object, it is treated as <tt>(y_grad,)</tt>. If <code>func</code> is a loss-function, <code>y_grad</code> should be set to <code>nil</code>.</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>params</span>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="Chainer/Variable.html" title="Chainer::Variable (class)">Chainer::Variable</a></span> or Array&lt;Chainder::Variable&gt;</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>[]</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>A set of <code>Chainer::Variable</code> s whose gradients are checked. When <code>func</code> is a <code>Chainer::Link</code> object, set its parameters as <code>params</code>. If <code>params</code> is one <code>Chainer::Variable</code> object, it is treated as <tt>(params,)</tt>.</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>eps</span>
+      
+      
+        <span class='type'>(<tt>Float</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Epsilon value to be passed to <code>numerical_grad</code>.</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>atol</span>
+      
+      
+        <span class='type'>(<tt>Float</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Absolute tolerance to be passed to <code>Chainer::Testing.assert_allclose</code>.</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>rtol</span>
+      
+      
+        <span class='type'>(<tt>Float</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Relative tolerance to be passed to <code>Chainer::Testing.assert_allclose</code>.</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>no_grads</span>
+      
+      
+        <span class='type'>(<tt>Array&lt;Boolean&gt;</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Flag to skip variable for gradient assertion. It should be same length as <code>x_data</code>.</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>dtype</span>
+      
+      
+        <span class='type'>(<tt>Numo::NArray.class</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p><code>x_data</code> and <code>y_grad</code> are casted to this dtype when calculating numerical gradients. Only float types and <code>nil</code> are allowed.</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+
+  <p class="tag_title">See Also:</p>
+  <ul class="see">
+    
+      <li><span class='object_link'><a href="#numerical_grad-class_method" title="Chainer.numerical_grad (method)">numerical_grad</a></span></li>
+    
+  </ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+148
+149
+150
+151
+152
+153
+154
+155
+156
+157
+158
+159
+160
+161
+162
+163
+164
+165
+166
+167
+168
+169
+170
+171
+172
+173
+174
+175
+176
+177
+178
+179
+180
+181
+182
+183
+184
+185
+186
+187
+188
+189
+190
+191
+192
+193
+194
+195
+196
+197
+198
+199
+200
+201
+202
+203
+204
+205
+206
+207
+208
+209
+210
+211
+212
+213
+214
+215
+216
+217
+218
+219
+220
+221
+222
+223
+224
+225
+226
+227
+228
+229
+230
+231
+232
+233
+234
+235
+236
+237
+238
+239
+240
+241
+242
+243
+244
+245
+246
+247
+248
+249
+250
+251
+252
+253
+254
+255
+256
+257
+258
+259
+260
+261
+262
+263
+264
+265
+266
+267
+268
+269</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/chainer/gradient_check.rb', line 148</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_check_backward'>check_backward</span><span class='lparen'>(</span><span class='id identifier rubyid_func'>func</span><span class='comma'>,</span> <span class='id identifier rubyid_x_data'>x_data</span><span class='comma'>,</span> <span class='id identifier rubyid_y_grad'>y_grad</span><span class='comma'>,</span> <span class='id identifier rubyid_params'>params</span><span class='op'>=</span><span class='lbracket'>[</span><span class='rbracket'>]</span><span class='comma'>,</span> <span class='label'>eps:</span> <span class='float'>0.001</span><span class='comma'>,</span> <span class='label'>atol:</span> <span class='float'>1e-5</span><span class='comma'>,</span> <span class='label'>rtol:</span> <span class='float'>1e-4</span><span class='comma'>,</span> <span class='label'>no_grads:</span> <span class='kw'>nil</span><span class='comma'>,</span> <span class='label'>dtype:</span> <span class='kw'>nil</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_x_data'>x_data</span> <span class='op'>=</span> <span class='id identifier rubyid__as_tuple'>_as_tuple</span><span class='lparen'>(</span><span class='id identifier rubyid_x_data'>x_data</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_xm'>xm</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="" title="Chainer (module)">Chainer</a></span></span><span class='period'>.</span><span class='id identifier rubyid_get_array_module'><span class='object_link'><a href="#get_array_module-class_method" title="Chainer.get_array_module (method)">get_array_module</a></span></span><span class='lparen'>(</span><span class='op'>*</span><span class='id identifier rubyid_x_data'>x_data</span><span class='rparen'>)</span>
+  <span class='kw'>if</span> <span class='op'>!</span><span class='id identifier rubyid_y_grad'>y_grad</span><span class='period'>.</span><span class='id identifier rubyid_nil?'>nil?</span>
+    <span class='id identifier rubyid_y_grad'>y_grad</span> <span class='op'>=</span> <span class='id identifier rubyid__as_tuple'>_as_tuple</span><span class='lparen'>(</span><span class='id identifier rubyid_y_grad'>y_grad</span><span class='rparen'>)</span>
+  <span class='kw'>end</span>
+
+  <span class='id identifier rubyid_params'>params</span> <span class='op'>=</span> <span class='id identifier rubyid__as_tuple'>_as_tuple</span><span class='lparen'>(</span><span class='id identifier rubyid_params'>params</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_xs'>xs</span> <span class='op'>=</span> <span class='id identifier rubyid_x_data'>x_data</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span><span class='lbrace'>{</span><span class='op'>|</span><span class='id identifier rubyid_x'>x</span><span class='op'>|</span> <span class='const'><span class='object_link'><a href="" title="Chainer (module)">Chainer</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="Chainer/Variable.html" title="Chainer::Variable (class)">Variable</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new'><span class='object_link'><a href="Chainer/Variable.html#initialize-instance_method" title="Chainer::Variable#initialize (method)">new</a></span></span><span class='lparen'>(</span><span class='id identifier rubyid_x'>x</span><span class='rparen'>)</span><span class='rbrace'>}</span>
+  <span class='id identifier rubyid_y'>y</span> <span class='op'>=</span> <span class='id identifier rubyid_func'>func</span><span class='period'>.</span><span class='lparen'>(</span><span class='op'>*</span><span class='id identifier rubyid_xs'>xs</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_y'>y</span> <span class='op'>=</span> <span class='id identifier rubyid__as_tuple'>_as_tuple</span><span class='lparen'>(</span><span class='id identifier rubyid_y'>y</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_y'>y</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="" title="Chainer (module)">Chainer</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="Chainer/Functions.html" title="Chainer::Functions (module)">Functions</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="Chainer/Functions/Math.html" title="Chainer::Functions::Math (module)">Math</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="Chainer/Functions/Math/Identity.html" title="Chainer::Functions::Math::Identity (class)">Identity</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new'><span class='object_link'><a href="Chainer/FunctionNode.html#initialize-instance_method" title="Chainer::FunctionNode#initialize (method)">new</a></span></span><span class='period'>.</span><span class='id identifier rubyid_apply'><span class='object_link'><a href="Chainer/FunctionNode.html#apply-instance_method" title="Chainer::FunctionNode#apply (method)">apply</a></span></span><span class='lparen'>(</span><span class='id identifier rubyid_y'>y</span><span class='rparen'>)</span>
+
+  <span class='id identifier rubyid_y_grad'>y_grad</span> <span class='op'>=</span> <span class='id identifier rubyid_set_y_grad'>set_y_grad</span><span class='lparen'>(</span><span class='id identifier rubyid_y'>y</span><span class='comma'>,</span> <span class='id identifier rubyid_y_grad'>y_grad</span><span class='rparen'>)</span>
+
+  <span class='comment'># Clear gradients which may exist if func calls backward inside of itself.
+</span>  <span class='id identifier rubyid_clear_grads'>clear_grads</span><span class='lparen'>(</span><span class='id identifier rubyid_xs'>xs</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_clear_grads'>clear_grads</span><span class='lparen'>(</span><span class='id identifier rubyid_params'>params</span><span class='rparen'>)</span>
+
+  <span class='comment'># We only need to call `backward` for one result `Chainer::Variable`.
+</span>  <span class='comment'># `Chainer::Variable.backward` method calls `Chainer::Function.backward` of its creator.
+</span>  <span class='id identifier rubyid_y'>y</span><span class='lbracket'>[</span><span class='int'>0</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_backward'>backward</span><span class='lparen'>(</span><span class='rparen'>)</span>
+
+  <span class='id identifier rubyid_param_data'>param_data</span> <span class='op'>=</span> <span class='id identifier rubyid_params'>params</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span> <span class='lbrace'>{</span> <span class='op'>|</span><span class='id identifier rubyid_p'>p</span><span class='op'>|</span> <span class='id identifier rubyid_p'>p</span><span class='period'>.</span><span class='id identifier rubyid_data'>data</span> <span class='rbrace'>}</span>
+  <span class='kw'>if</span> <span class='id identifier rubyid_dtype'>dtype</span><span class='period'>.</span><span class='id identifier rubyid_nil?'>nil?</span>
+    <span class='id identifier rubyid_casted_xs'>casted_xs</span> <span class='op'>=</span> <span class='id identifier rubyid_x_data'>x_data</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span> <span class='lbrace'>{</span> <span class='op'>|</span><span class='id identifier rubyid_x'>x</span><span class='op'>|</span> <span class='const'><span class='object_link'><a href="" title="Chainer (module)">Chainer</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="Chainer/Variable.html" title="Chainer::Variable (class)">Variable</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new'><span class='object_link'><a href="Chainer/Variable.html#initialize-instance_method" title="Chainer::Variable#initialize (method)">new</a></span></span><span class='lparen'>(</span><span class='id identifier rubyid_x'>x</span><span class='rparen'>)</span> <span class='rbrace'>}</span>
+  <span class='kw'>else</span>
+    <span class='id identifier rubyid_raise'>raise</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>`dtype` is allowed only float type</span><span class='tstring_end'>&#39;</span></span> <span class='kw'>if</span> <span class='id identifier rubyid_dtype'>dtype</span> <span class='op'>!=</span> <span class='id identifier rubyid_xm'>xm</span><span class='op'>::</span><span class='const'>DFloat</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_dtype'>dtype</span> <span class='op'>!=</span> <span class='id identifier rubyid_xm'>xm</span><span class='op'>::</span><span class='const'>SFloat</span>
+    <span class='id identifier rubyid_casted_xs'>casted_xs</span> <span class='op'>=</span> <span class='id identifier rubyid_x_data'>x_data</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span> <span class='lbrace'>{</span> <span class='op'>|</span><span class='id identifier rubyid_x'>x</span><span class='op'>|</span> <span class='id identifier rubyid_x'>x</span><span class='period'>.</span><span class='id identifier rubyid_is_a?'>is_a?</span><span class='lparen'>(</span><span class='id identifier rubyid_xm'>xm</span><span class='op'>::</span><span class='const'>NArray</span><span class='rparen'>)</span> <span class='op'>?</span> <span class='const'><span class='object_link'><a href="" title="Chainer (module)">Chainer</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="Chainer/Variable.html" title="Chainer::Variable (class)">Variable</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new'><span class='object_link'><a href="Chainer/Variable.html#initialize-instance_method" title="Chainer::Variable#initialize (method)">new</a></span></span><span class='lparen'>(</span><span class='id identifier rubyid_x'>x</span><span class='period'>.</span><span class='id identifier rubyid_cast_to'>cast_to</span><span class='lparen'>(</span><span class='id identifier rubyid_dtype'>dtype</span><span class='rparen'>)</span><span class='rparen'>)</span> <span class='op'>:</span> <span class='id identifier rubyid_x'>x</span>  <span class='rbrace'>}</span>
+  <span class='kw'>end</span>
+
+  <span class='kw'>if</span> <span class='id identifier rubyid_no_grads'>no_grads</span><span class='period'>.</span><span class='id identifier rubyid_nil?'>nil?</span>
+    <span class='id identifier rubyid_no_grads'>no_grads</span> <span class='op'>=</span> <span class='id identifier rubyid_xs'>xs</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span> <span class='lbrace'>{</span> <span class='op'>|</span><span class='id identifier rubyid_x'>x</span><span class='op'>|</span> <span class='id identifier rubyid_x'>x</span><span class='period'>.</span><span class='id identifier rubyid_dtype'>dtype</span> <span class='op'>!=</span> <span class='id identifier rubyid_xm'>xm</span><span class='op'>::</span><span class='const'>SFloat</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_x'>x</span><span class='period'>.</span><span class='id identifier rubyid_dtype'>dtype</span> <span class='op'>!=</span> <span class='id identifier rubyid_xm'>xm</span><span class='op'>::</span><span class='const'>DFloat</span> <span class='rbrace'>}</span>
+  <span class='kw'>else</span>
+    <span class='id identifier rubyid_raise'>raise</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Length of no_grads param and xs should be same.</span><span class='tstring_end'>&quot;</span></span> <span class='kw'>if</span> <span class='id identifier rubyid_no_grads'>no_grads</span><span class='period'>.</span><span class='id identifier rubyid_size'>size</span> <span class='op'>!=</span> <span class='id identifier rubyid_xs'>xs</span><span class='period'>.</span><span class='id identifier rubyid_size'>size</span>
+  <span class='kw'>end</span>
+
+  <span class='id identifier rubyid_casted_data'>casted_data</span> <span class='op'>=</span> <span class='id identifier rubyid_casted_xs'>casted_xs</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span> <span class='lbrace'>{</span> <span class='op'>|</span><span class='id identifier rubyid_x'>x</span><span class='op'>|</span> <span class='id identifier rubyid_x'>x</span><span class='period'>.</span><span class='id identifier rubyid_data'>data</span><span class='period'>.</span><span class='id identifier rubyid_dup'>dup</span> <span class='rbrace'>}</span>
+
+  <span class='id identifier rubyid_no_grads'>no_grads</span><span class='period'>.</span><span class='id identifier rubyid_zip'>zip</span><span class='lparen'>(</span><span class='id identifier rubyid_xs'>xs</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_each'>each</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_skip'>skip</span><span class='comma'>,</span> <span class='id identifier rubyid_x'>x</span><span class='op'>|</span>
+    <span class='kw'>if</span> <span class='id identifier rubyid_skip'>skip</span>
+      <span class='id identifier rubyid_raise'>raise</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>x.grad is not nil</span><span class='tstring_end'>&quot;</span></span> <span class='kw'>if</span>  <span class='id identifier rubyid_x'>x</span><span class='period'>.</span><span class='id identifier rubyid_grad'>grad</span> <span class='op'>!=</span> <span class='kw'>nil</span>
+    <span class='kw'>else</span>
+      <span class='id identifier rubyid_raise'>raise</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>gradients of some arguments are not calculated</span><span class='tstring_end'>&#39;</span></span> <span class='kw'>if</span> <span class='id identifier rubyid_x'>x</span><span class='period'>.</span><span class='id identifier rubyid_grad'>grad</span><span class='period'>.</span><span class='id identifier rubyid_nil?'>nil?</span>
+    <span class='kw'>end</span>
+  <span class='kw'>end</span>
+
+  <span class='comment'># Keep the gradient arrays of params which may be overwritten by func
+</span>  <span class='id identifier rubyid_params_grad'>params_grad</span> <span class='op'>=</span> <span class='id identifier rubyid_params'>params</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span><span class='lparen'>(</span><span class='op'>&amp;</span><span class='symbol'>:grad</span><span class='rparen'>)</span>
+
+  <span class='kw'>if</span> <span class='id identifier rubyid_dtype'>dtype</span><span class='period'>.</span><span class='id identifier rubyid_nil?'>nil?</span>
+    <span class='id identifier rubyid_one'>one</span> <span class='op'>=</span> <span class='id identifier rubyid_xm'>xm</span><span class='op'>::</span><span class='const'>DFloat</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_fill'>fill</span><span class='lparen'>(</span><span class='float'>1.0</span><span class='rparen'>)</span>
+  <span class='kw'>else</span>
+    <span class='id identifier rubyid_one'>one</span> <span class='op'>=</span> <span class='id identifier rubyid_dtype'>dtype</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_fill'>fill</span><span class='lparen'>(</span><span class='float'>1.0</span><span class='rparen'>)</span>
+  <span class='kw'>end</span>
+
+  <span class='id identifier rubyid_g'>g</span> <span class='op'>=</span> <span class='id identifier rubyid_lambda'>lambda</span> <span class='kw'>do</span>
+    <span class='comment'># This functions is called twice in `numerical_grad`.
+</span>    <span class='comment'># `one` is `1 + epsilon` or `1 - epsilon` in these calls.
+</span>    <span class='comment'># See the document of `numerical_grad`.
+</span>    <span class='id identifier rubyid_no_grads'>no_grads</span><span class='period'>.</span><span class='id identifier rubyid_zip'>zip</span><span class='lparen'>(</span><span class='id identifier rubyid_casted_xs'>casted_xs</span><span class='comma'>,</span> <span class='id identifier rubyid_casted_data'>casted_data</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_each'>each</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_skip'>skip</span><span class='comma'>,</span> <span class='id identifier rubyid_cx'>cx</span><span class='comma'>,</span> <span class='id identifier rubyid_data'>data</span><span class='op'>|</span>
+      <span class='kw'>next</span> <span class='kw'>if</span> <span class='id identifier rubyid_skip'>skip</span> <span class='op'>||</span> <span class='id identifier rubyid_cx'>cx</span><span class='period'>.</span><span class='id identifier rubyid_data'>data</span><span class='period'>.</span><span class='id identifier rubyid_empty?'>empty?</span>
+      <span class='comment'># astype is require to store data with the given type
+</span>      <span class='id identifier rubyid_data'>data</span> <span class='op'>=</span> <span class='lparen'>(</span><span class='id identifier rubyid_one'>one</span> <span class='op'>*</span> <span class='id identifier rubyid_data'>data</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_cast_to'>cast_to</span><span class='lparen'>(</span><span class='id identifier rubyid_data'>data</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span><span class='rparen'>)</span>
+      <span class='id identifier rubyid_cx'>cx</span><span class='period'>.</span><span class='id identifier rubyid_data'>data</span> <span class='op'>=</span> <span class='id identifier rubyid_data'>data</span>
+    <span class='kw'>end</span>
+
+    <span class='id identifier rubyid_params'>params</span><span class='period'>.</span><span class='id identifier rubyid_zip'>zip</span><span class='lparen'>(</span><span class='id identifier rubyid_param_data'>param_data</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_each'>each</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_param'>param</span><span class='comma'>,</span> <span class='id identifier rubyid_data'>data</span><span class='op'>|</span>
+      <span class='kw'>if</span> <span class='op'>!</span><span class='id identifier rubyid_dtype'>dtype</span><span class='period'>.</span><span class='id identifier rubyid_nil?'>nil?</span>
+        <span class='id identifier rubyid_param_dtype'>param_dtype</span> <span class='op'>=</span> <span class='id identifier rubyid_dtype'>dtype</span>
+      <span class='kw'>else</span>
+        <span class='id identifier rubyid_param_dtype'>param_dtype</span> <span class='op'>=</span> <span class='id identifier rubyid_param'>param</span><span class='period'>.</span><span class='id identifier rubyid_dtype'>dtype</span>
+      <span class='kw'>end</span>
+      <span class='comment'># The inner astype is required to calculates __mul__ in
+</span>      <span class='comment'># `param_type` when data is low accuracy float.
+</span>      <span class='comment'># The outer one is require to store data with the given type.
+</span>      <span class='id identifier rubyid_param'>param</span><span class='period'>.</span><span class='id identifier rubyid_data'>data</span> <span class='op'>=</span> <span class='lparen'>(</span><span class='id identifier rubyid_one'>one</span> <span class='op'>*</span> <span class='id identifier rubyid_data'>data</span><span class='period'>.</span><span class='id identifier rubyid_cast_to'>cast_to</span><span class='lparen'>(</span><span class='id identifier rubyid_param_dtype'>param_dtype</span><span class='rparen'>)</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_cast_to'>cast_to</span><span class='lparen'>(</span><span class='id identifier rubyid_param_dtype'>param_dtype</span><span class='rparen'>)</span>
+    <span class='kw'>end</span>
+
+    <span class='comment'># Clear gradients to support func that calls backward inside of itself.
+</span>    <span class='id identifier rubyid_clear_grads'>clear_grads</span><span class='lparen'>(</span><span class='id identifier rubyid_casted_xs'>casted_xs</span><span class='rparen'>)</span>
+    <span class='id identifier rubyid_clear_grads'>clear_grads</span><span class='lparen'>(</span><span class='id identifier rubyid_params'>params</span><span class='rparen'>)</span>
+
+    <span class='id identifier rubyid_ys'>ys</span> <span class='op'>=</span> <span class='id identifier rubyid_func'>func</span><span class='period'>.</span><span class='lparen'>(</span><span class='op'>*</span><span class='id identifier rubyid_casted_xs'>casted_xs</span><span class='rparen'>)</span>
+    <span class='id identifier rubyid_ys'>ys</span> <span class='op'>=</span> <span class='id identifier rubyid__as_tuple'>_as_tuple</span><span class='lparen'>(</span><span class='id identifier rubyid_ys'>ys</span><span class='rparen'>)</span>
+    <span class='id identifier rubyid_ys_data'>ys_data</span> <span class='op'>=</span> <span class='id identifier rubyid_ys'>ys</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span> <span class='lbrace'>{</span> <span class='op'>|</span><span class='id identifier rubyid_y'>y</span><span class='op'>|</span> <span class='id identifier rubyid_y'>y</span><span class='period'>.</span><span class='id identifier rubyid_data'>data</span> <span class='rbrace'>}</span>
+    <span class='id identifier rubyid_no_grads'>no_grads</span><span class='period'>.</span><span class='id identifier rubyid_zip'>zip</span><span class='lparen'>(</span><span class='id identifier rubyid_casted_xs'>casted_xs</span><span class='comma'>,</span> <span class='id identifier rubyid_casted_data'>casted_data</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_each'>each</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_skip'>skip</span><span class='comma'>,</span> <span class='id identifier rubyid_cx'>cx</span><span class='comma'>,</span> <span class='id identifier rubyid_data'>data</span><span class='op'>|</span>
+      <span class='kw'>next</span> <span class='kw'>if</span> <span class='id identifier rubyid_skip'>skip</span>
+      <span class='id identifier rubyid_cx'>cx</span><span class='period'>.</span><span class='id identifier rubyid_data'>data</span> <span class='op'>=</span> <span class='id identifier rubyid_data'>data</span>
+    <span class='kw'>end</span>
+    <span class='id identifier rubyid_params'>params</span><span class='period'>.</span><span class='id identifier rubyid_zip'>zip</span><span class='lparen'>(</span><span class='id identifier rubyid_param_data'>param_data</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_each'>each</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_param'>param</span><span class='comma'>,</span> <span class='id identifier rubyid_data'>data</span><span class='op'>|</span>
+      <span class='id identifier rubyid_param'>param</span><span class='period'>.</span><span class='id identifier rubyid_data'>data</span> <span class='op'>=</span> <span class='id identifier rubyid_data'>data</span>
+    <span class='kw'>end</span>
+    <span class='id identifier rubyid_ys_data'>ys_data</span>
+  <span class='kw'>end</span>
+
+  <span class='id identifier rubyid_gx'>gx</span><span class='comma'>,</span> <span class='op'>=</span> <span class='id identifier rubyid_numerical_grad'>numerical_grad</span><span class='lparen'>(</span><span class='id identifier rubyid_g'>g</span><span class='comma'>,</span> <span class='lbracket'>[</span><span class='id identifier rubyid_one'>one</span><span class='rbracket'>]</span><span class='comma'>,</span> <span class='id identifier rubyid_y_grad'>y_grad</span><span class='comma'>,</span> <span class='id identifier rubyid_eps'>eps</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_gx_accum'>gx_accum</span> <span class='op'>=</span> <span class='int'>0</span>
+
+  <span class='id identifier rubyid_no_grads'>no_grads</span><span class='period'>.</span><span class='id identifier rubyid_zip'>zip</span><span class='lparen'>(</span><span class='id identifier rubyid_xs'>xs</span><span class='comma'>,</span> <span class='id identifier rubyid_casted_xs'>casted_xs</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_each'>each</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_skip'>skip</span><span class='comma'>,</span> <span class='id identifier rubyid_x'>x</span><span class='comma'>,</span> <span class='id identifier rubyid_cx'>cx</span><span class='op'>|</span>
+    <span class='kw'>next</span> <span class='kw'>if</span> <span class='id identifier rubyid_skip'>skip</span>
+    <span class='id identifier rubyid_gxi'>gxi</span> <span class='op'>=</span> <span class='id identifier rubyid_x'>x</span><span class='period'>.</span><span class='id identifier rubyid_grad'>grad</span><span class='period'>.</span><span class='id identifier rubyid_flatten'>flatten</span><span class='period'>.</span><span class='id identifier rubyid_dup'>dup</span>
+    <span class='id identifier rubyid_cxi'>cxi</span> <span class='op'>=</span> <span class='id identifier rubyid_cx'>cx</span><span class='period'>.</span><span class='id identifier rubyid_data'>data</span><span class='period'>.</span><span class='id identifier rubyid_flatten'>flatten</span><span class='period'>.</span><span class='id identifier rubyid_dup'>dup</span>
+    <span class='kw'>unless</span> <span class='id identifier rubyid_dtype'>dtype</span><span class='period'>.</span><span class='id identifier rubyid_nil?'>nil?</span>
+      <span class='id identifier rubyid_gxi'>gxi</span> <span class='op'>=</span> <span class='id identifier rubyid_gxi'>gxi</span><span class='period'>.</span><span class='id identifier rubyid_cast_to'>cast_to</span><span class='lparen'>(</span><span class='id identifier rubyid_dtype'>dtype</span><span class='rparen'>)</span>
+      <span class='id identifier rubyid_cxi'>cxi</span> <span class='op'>=</span> <span class='id identifier rubyid_cxi'>cxi</span><span class='period'>.</span><span class='id identifier rubyid_cast_to'>cast_to</span><span class='lparen'>(</span><span class='id identifier rubyid_dtype'>dtype</span><span class='rparen'>)</span>
+    <span class='kw'>end</span>
+    <span class='id identifier rubyid_gx_accum'>gx_accum</span> <span class='op'>+=</span> <span class='id identifier rubyid_gxi'>gxi</span><span class='period'>.</span><span class='id identifier rubyid_empty?'>empty?</span> <span class='op'>?</span> <span class='int'>0</span> <span class='op'>:</span> <span class='id identifier rubyid_gxi'>gxi</span><span class='period'>.</span><span class='id identifier rubyid_dot'>dot</span><span class='lparen'>(</span><span class='id identifier rubyid_cxi'>cxi</span><span class='rparen'>)</span>
+  <span class='kw'>end</span>
+
+  <span class='id identifier rubyid_params'>params</span><span class='period'>.</span><span class='id identifier rubyid_zip'>zip</span><span class='lparen'>(</span><span class='id identifier rubyid_params_grad'>params_grad</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_each'>each</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_p'>p</span><span class='comma'>,</span> <span class='id identifier rubyid_gpi'>gpi</span><span class='op'>|</span>
+    <span class='id identifier rubyid_gpi'>gpi</span> <span class='op'>=</span><span class='id identifier rubyid_gpi'>gpi</span><span class='period'>.</span><span class='id identifier rubyid_flatten'>flatten</span><span class='period'>.</span><span class='id identifier rubyid_dup'>dup</span>
+    <span class='id identifier rubyid_pi'>pi</span> <span class='op'>=</span> <span class='id identifier rubyid_p'>p</span><span class='period'>.</span><span class='id identifier rubyid_data'>data</span><span class='period'>.</span><span class='id identifier rubyid_flatten'>flatten</span><span class='period'>.</span><span class='id identifier rubyid_dup'>dup</span>
+    <span class='kw'>unless</span> <span class='id identifier rubyid_dtype'>dtype</span><span class='period'>.</span><span class='id identifier rubyid_nil?'>nil?</span>
+      <span class='id identifier rubyid_gpi'>gpi</span> <span class='op'>=</span> <span class='id identifier rubyid_gpi'>gpi</span><span class='period'>.</span><span class='id identifier rubyid_cast_to'>cast_to</span><span class='lparen'>(</span><span class='id identifier rubyid_dtype'>dtype</span><span class='rparen'>)</span>
+      <span class='id identifier rubyid_pi'>pi</span> <span class='op'>=</span> <span class='id identifier rubyid_pi'>pi</span><span class='period'>.</span><span class='id identifier rubyid_cast_to'>cast_to</span><span class='lparen'>(</span><span class='id identifier rubyid_dtype'>dtype</span><span class='rparen'>)</span>
+    <span class='kw'>end</span>
+    <span class='id identifier rubyid_gx_accum'>gx_accum</span> <span class='op'>+=</span> <span class='id identifier rubyid_gpi'>gpi</span><span class='period'>.</span><span class='id identifier rubyid_dot'>dot</span><span class='lparen'>(</span><span class='id identifier rubyid_pi'>pi</span><span class='rparen'>)</span>
+  <span class='kw'>end</span>
+
+  <span class='const'><span class='object_link'><a href="" title="Chainer (module)">Chainer</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="Chainer/Testing.html" title="Chainer::Testing (module)">Testing</a></span></span><span class='period'>.</span><span class='id identifier rubyid_assert_allclose'><span class='object_link'><a href="Chainer/Testing.html#assert_allclose-class_method" title="Chainer::Testing.assert_allclose (method)">assert_allclose</a></span></span><span class='lparen'>(</span><span class='id identifier rubyid_gx'>gx</span><span class='comma'>,</span> <span class='id identifier rubyid_gx_accum'>gx_accum</span><span class='comma'>,</span> <span class='label'>atol:</span> <span class='id identifier rubyid_atol'>atol</span><span class='comma'>,</span> <span class='label'>rtol:</span> <span class='id identifier rubyid_rtol'>rtol</span><span class='rparen'>)</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="check_double_backward-class_method">
+  
+    .<strong>check_double_backward</strong>(func, x_data, y_grad, x_grad_grad, params = [], params_grad_grad = [], eps: 1e-3, atol: 1e-4, rtol: 1e-3, no_grads: nil, dtype: nil)  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+271
+272
+273
+274
+275
+276
+277
+278
+279
+280
+281
+282
+283
+284
+285
+286
+287
+288
+289
+290
+291
+292
+293</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/chainer/gradient_check.rb', line 271</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_check_double_backward'>check_double_backward</span><span class='lparen'>(</span><span class='id identifier rubyid_func'>func</span><span class='comma'>,</span> <span class='id identifier rubyid_x_data'>x_data</span><span class='comma'>,</span> <span class='id identifier rubyid_y_grad'>y_grad</span><span class='comma'>,</span> <span class='id identifier rubyid_x_grad_grad'>x_grad_grad</span><span class='comma'>,</span> <span class='id identifier rubyid_params'>params</span><span class='op'>=</span><span class='lbracket'>[</span><span class='rbracket'>]</span><span class='comma'>,</span> <span class='id identifier rubyid_params_grad_grad'>params_grad_grad</span><span class='op'>=</span><span class='lbracket'>[</span><span class='rbracket'>]</span><span class='comma'>,</span> <span class='label'>eps:</span> <span class='float'>1e-3</span><span class='comma'>,</span> <span class='label'>atol:</span> <span class='float'>1e-4</span><span class='comma'>,</span> <span class='label'>rtol:</span> <span class='float'>1e-3</span><span class='comma'>,</span> <span class='label'>no_grads:</span> <span class='kw'>nil</span><span class='comma'>,</span> <span class='label'>dtype:</span> <span class='kw'>nil</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_x_data'>x_data</span> <span class='op'>=</span> <span class='id identifier rubyid__as_tuple'>_as_tuple</span><span class='lparen'>(</span><span class='id identifier rubyid_x_data'>x_data</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_params'>params</span> <span class='op'>=</span> <span class='id identifier rubyid__as_tuple'>_as_tuple</span><span class='lparen'>(</span><span class='id identifier rubyid_params'>params</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_n_x'>n_x</span> <span class='op'>=</span> <span class='id identifier rubyid_x_data'>x_data</span><span class='period'>.</span><span class='id identifier rubyid_size'>size</span>
+
+  <span class='id identifier rubyid_first_order_grad'>first_order_grad</span> <span class='op'>=</span> <span class='tlambda'>-&gt;</span> <span class='op'>*</span><span class='id identifier rubyid_inputs'>inputs</span> <span class='kw'>do</span>
+    <span class='id identifier rubyid_xs'>xs</span> <span class='op'>=</span> <span class='id identifier rubyid_inputs'>inputs</span><span class='lbracket'>[</span><span class='int'>0</span><span class='op'>...</span><span class='id identifier rubyid_n_x'>n_x</span><span class='rbracket'>]</span>
+    <span class='id identifier rubyid_gys'>gys</span> <span class='op'>=</span> <span class='id identifier rubyid_inputs'>inputs</span><span class='lbracket'>[</span><span class='id identifier rubyid_n_x'>n_x</span><span class='op'>..</span><span class='op'>-</span><span class='int'>1</span><span class='rbracket'>]</span>
+
+    <span class='id identifier rubyid_y'>y</span> <span class='op'>=</span> <span class='id identifier rubyid__as_tuple'>_as_tuple</span><span class='lparen'>(</span><span class='id identifier rubyid_func'>func</span><span class='period'>.</span><span class='lparen'>(</span><span class='op'>*</span><span class='id identifier rubyid_xs'>xs</span><span class='rparen'>)</span><span class='rparen'>)</span>
+    <span class='comment'># Let all elements of y share the same creator.
+</span>    <span class='comment'># See the comment in check_backward.
+</span>    <span class='id identifier rubyid_y'>y</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="" title="Chainer (module)">Chainer</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="Chainer/Functions.html" title="Chainer::Functions (module)">Functions</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="Chainer/Functions/Math.html" title="Chainer::Functions::Math (module)">Math</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="Chainer/Functions/Math/Identity.html" title="Chainer::Functions::Math::Identity (class)">Identity</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new'><span class='object_link'><a href="Chainer/FunctionNode.html#initialize-instance_method" title="Chainer::FunctionNode#initialize (method)">new</a></span></span><span class='period'>.</span><span class='id identifier rubyid_apply'><span class='object_link'><a href="Chainer/FunctionNode.html#apply-instance_method" title="Chainer::FunctionNode#apply (method)">apply</a></span></span><span class='lparen'>(</span><span class='id identifier rubyid_y'>y</span><span class='rparen'>)</span>
+    <span class='id identifier rubyid_set_y_grad'>set_y_grad</span><span class='lparen'>(</span><span class='id identifier rubyid_y'>y</span><span class='comma'>,</span> <span class='id identifier rubyid_gys'>gys</span><span class='rparen'>)</span>
+    <span class='id identifier rubyid_y'>y</span><span class='lbracket'>[</span><span class='int'>0</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_backward'>backward</span><span class='lparen'>(</span><span class='label'>enable_double_backprop:</span> <span class='kw'>true</span><span class='rparen'>)</span>
+
+    <span class='id identifier rubyid_xs'>xs</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span><span class='lparen'>(</span><span class='op'>&amp;</span><span class='symbol'>:grad_var</span><span class='rparen'>)</span> <span class='op'>+</span> <span class='id identifier rubyid_params'>params</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span><span class='lparen'>(</span><span class='op'>&amp;</span><span class='symbol'>:grad_var</span><span class='rparen'>)</span>
+  <span class='kw'>end</span>
+
+  <span class='id identifier rubyid_inputs'>inputs</span> <span class='op'>=</span> <span class='id identifier rubyid_x_data'>x_data</span> <span class='op'>+</span> <span class='id identifier rubyid__as_tuple'>_as_tuple</span><span class='lparen'>(</span><span class='id identifier rubyid_y_grad'>y_grad</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_grad_grad'>grad_grad</span> <span class='op'>=</span> <span class='id identifier rubyid__as_tuple'>_as_tuple</span><span class='lparen'>(</span><span class='id identifier rubyid_x_grad_grad'>x_grad_grad</span><span class='rparen'>)</span> <span class='op'>+</span> <span class='id identifier rubyid__as_tuple'>_as_tuple</span><span class='lparen'>(</span><span class='id identifier rubyid_params_grad_grad'>params_grad_grad</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_check_backward'>check_backward</span><span class='lparen'>(</span><span class='id identifier rubyid_first_order_grad'>first_order_grad</span><span class='comma'>,</span> <span class='id identifier rubyid_inputs'>inputs</span><span class='comma'>,</span> <span class='id identifier rubyid_grad_grad'>grad_grad</span><span class='comma'>,</span> <span class='id identifier rubyid_params'>params</span><span class='op'>=</span><span class='id identifier rubyid_params'>params</span><span class='comma'>,</span> <span class='label'>eps:</span> <span class='id identifier rubyid_eps'>eps</span><span class='comma'>,</span> <span class='label'>atol:</span> <span class='id identifier rubyid_atol'>atol</span><span class='comma'>,</span> <span class='label'>rtol:</span> <span class='id identifier rubyid_rtol'>rtol</span><span class='comma'>,</span> <span class='label'>no_grads:</span> <span class='id identifier rubyid_no_grads'>no_grads</span><span class='comma'>,</span> <span class='label'>dtype:</span> <span class='id identifier rubyid_dtype'>dtype</span><span class='rparen'>)</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="configuration-class_method">
+  
+    .<strong>configuration</strong>  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+97
+98
+99</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/chainer.rb', line 97</span>
+
+<span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_configuration'>configuration</span>
+  <span class='ivar'>@configuration</span> <span class='op'>||=</span> <span class='const'><span class='object_link'><a href="Chainer/Configuration.html" title="Chainer::Configuration (class)">Configuration</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new'><span class='object_link'><a href="Chainer/Configuration.html#initialize-instance_method" title="Chainer::Configuration#initialize (method)">new</a></span></span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="configure-class_method">
+  
+    .<strong>configure</strong> {|configuration| ... } &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Yields:</p>
+<ul class="yield">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="#configuration-class_method" title="Chainer.configuration (method)">configuration</a></span></tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+93
+94
+95</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/chainer.rb', line 93</span>
+
+<span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_configure'>configure</span>
+  <span class='kw'>yield</span><span class='lparen'>(</span><span class='id identifier rubyid_configuration'>configuration</span><span class='rparen'>)</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="get_array_module-class_method">
+  
+    .<strong>get_array_module</strong>(*args)  &#x21d2; <tt>Class</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Gets an appropriate one from <code>Numo::NArray</code> or <code>Cumo::NArray</code> from given arrays.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  <p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>args</span>
+      
+      
+        <span class='type'>(<tt>Array&lt;<span class='object_link'><a href="Chainer/Variable.html" title="Chainer::Variable (class)">Chainer::Variable</a></span>&gt; or Array&lt;Numo::NArray&gt; or Array&lt;Cumo::NArray&gt;</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Values to determine whether Numo or Cumo should be used.</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>Class</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p><code>Cumo::NArray</code> or <code>Numo::NArray</code> is returned based on the types of the arguments.</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+6
+7
+8
+9
+10
+11
+12</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/chainer/backend.rb', line 6</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_get_array_module'>get_array_module</span><span class='lparen'>(</span><span class='op'>*</span><span class='id identifier rubyid_args'>args</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_arrays'>arrays</span> <span class='op'>=</span> <span class='id identifier rubyid_args'>args</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span> <span class='lbrace'>{</span><span class='op'>|</span><span class='id identifier rubyid_v'>v</span><span class='op'>|</span> <span class='id identifier rubyid_v'>v</span><span class='period'>.</span><span class='id identifier rubyid_kind_of?'>kind_of?</span><span class='lparen'>(</span><span class='const'><span class='object_link'><a href="" title="Chainer (module)">Chainer</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="Chainer/Variable.html" title="Chainer::Variable (class)">Variable</a></span></span><span class='rparen'>)</span> <span class='op'>?</span> <span class='id identifier rubyid_v'>v</span><span class='period'>.</span><span class='id identifier rubyid_data'>data</span> <span class='op'>:</span> <span class='id identifier rubyid_v'>v</span> <span class='rbrace'>}</span>
+  <span class='kw'>if</span> <span class='const'><span class='object_link'><a href="Chainer/CUDA.html" title="Chainer::CUDA (module)">CUDA</a></span></span><span class='period'>.</span><span class='id identifier rubyid_available?'><span class='object_link'><a href="Chainer/CUDA.html#available%3F-class_method" title="Chainer::CUDA.available? (method)">available?</a></span></span>
+    <span class='kw'>return</span> <span class='const'>Cumo</span> <span class='kw'>if</span> <span class='id identifier rubyid_arrays'>arrays</span><span class='period'>.</span><span class='id identifier rubyid_any?'>any?</span> <span class='lbrace'>{</span><span class='op'>|</span><span class='id identifier rubyid_a'>a</span><span class='op'>|</span> <span class='id identifier rubyid_a'>a</span><span class='period'>.</span><span class='id identifier rubyid_kind_of?'>kind_of?</span><span class='lparen'>(</span><span class='const'>Cumo</span><span class='op'>::</span><span class='const'>NArray</span><span class='rparen'>)</span> <span class='rbrace'>}</span>
+  <span class='kw'>end</span>
+  <span class='kw'>return</span> <span class='const'>Numo</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="grad-class_method">
+  
+    .<strong>grad</strong>(outputs, inputs, grad_outputs: nil, grad_inputs: nil, set_grad: false, retain_grad: false, enable_double_backprop: false)  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+248
+249
+250
+251
+252
+253
+254
+255
+256
+257
+258
+259
+260
+261
+262
+263
+264
+265
+266
+267
+268
+269
+270
+271
+272
+273
+274
+275
+276
+277
+278
+279
+280
+281
+282
+283
+284
+285
+286
+287
+288
+289
+290
+291
+292
+293
+294
+295
+296
+297
+298
+299
+300
+301
+302
+303
+304
+305
+306
+307
+308
+309
+310
+311
+312
+313
+314
+315
+316
+317
+318
+319
+320
+321
+322
+323
+324
+325
+326
+327
+328
+329
+330
+331
+332
+333
+334
+335
+336
+337
+338
+339
+340
+341
+342
+343
+344
+345</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/chainer/function_node.rb', line 248</span>
+
+<span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_grad'>grad</span><span class='lparen'>(</span><span class='id identifier rubyid_outputs'>outputs</span><span class='comma'>,</span> <span class='id identifier rubyid_inputs'>inputs</span><span class='comma'>,</span> <span class='label'>grad_outputs:</span> <span class='kw'>nil</span><span class='comma'>,</span> <span class='label'>grad_inputs:</span> <span class='kw'>nil</span><span class='comma'>,</span> <span class='label'>set_grad:</span> <span class='kw'>false</span><span class='comma'>,</span> <span class='label'>retain_grad:</span> <span class='kw'>false</span><span class='comma'>,</span> <span class='label'>enable_double_backprop:</span> <span class='kw'>false</span><span class='rparen'>)</span>
+  <span class='comment'># The implementation consists of three steps.
+</span>
+  <span class='kw'>if</span> <span class='op'>!</span><span class='id identifier rubyid_outputs'>outputs</span><span class='period'>.</span><span class='id identifier rubyid_is_a?'>is_a?</span><span class='lparen'>(</span><span class='const'>Array</span><span class='rparen'>)</span>
+    <span class='id identifier rubyid_raise'>raise</span> <span class='const'>TypeError</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>outputs must be Array, not </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_outputs'>outputs</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span>
+  <span class='kw'>end</span>
+  <span class='kw'>if</span> <span class='op'>!</span><span class='id identifier rubyid_inputs'>inputs</span><span class='period'>.</span><span class='id identifier rubyid_is_a?'>is_a?</span><span class='lparen'>(</span><span class='const'>Array</span><span class='rparen'>)</span>
+    <span class='id identifier rubyid_raise'>raise</span> <span class='const'>TypeError</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>inputs must be Array, not </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_inputs'>inputs</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span>
+  <span class='kw'>end</span>
+  <span class='kw'>if</span> <span class='op'>!</span><span class='id identifier rubyid_grad_outputs'>grad_outputs</span><span class='period'>.</span><span class='id identifier rubyid_nil?'>nil?</span> <span class='op'>&amp;&amp;</span> <span class='op'>!</span><span class='id identifier rubyid_grad_outputs'>grad_outputs</span><span class='period'>.</span><span class='id identifier rubyid_is_a?'>is_a?</span><span class='lparen'>(</span><span class='const'>Array</span><span class='rparen'>)</span>
+    <span class='id identifier rubyid_raise'>raise</span> <span class='const'>TypeError</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>grad_outputs must be Array, not </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_grad_outputs'>grad_outputs</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span>
+  <span class='kw'>end</span>
+  <span class='kw'>if</span> <span class='op'>!</span><span class='id identifier rubyid_grad_inputs'>grad_inputs</span><span class='period'>.</span><span class='id identifier rubyid_nil?'>nil?</span> <span class='op'>&amp;&amp;</span> <span class='op'>!</span><span class='id identifier rubyid_grad_inputs'>grad_inputs</span><span class='period'>.</span><span class='id identifier rubyid_is_a?'>is_a?</span><span class='lparen'>(</span><span class='const'>Array</span><span class='rparen'>)</span>
+    <span class='id identifier rubyid_raise'>raise</span> <span class='const'>TypeError</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>grad_inputs must be Array, not </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_grad_inputs'>grad_inputs</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span>
+  <span class='kw'>end</span>
+
+  <span class='comment'># 1. Backward enumeration: all the nodes reachable backward from the output
+</span>  <span class='comment'>#    nodes are enumerated. The forward direction links are collected in
+</span>  <span class='comment'>#    this step. Note that the variable nodes whose requires_grad is false
+</span>  <span class='comment'>#    are ignored and their creators are not searched.
+</span>  <span class='id identifier rubyid_candidate_funcs'>candidate_funcs</span> <span class='op'>=</span> <span class='id identifier rubyid_outputs'>outputs</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span><span class='lparen'>(</span><span class='op'>&amp;</span><span class='symbol'>:creator_node</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_compact'>compact</span>
+  <span class='id identifier rubyid_visited_funcs'>visited_funcs</span> <span class='op'>=</span> <span class='const'>Set</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span>
+  <span class='id identifier rubyid_forward_graph'>forward_graph</span> <span class='op'>=</span> <span class='lbrace'>{</span><span class='rbrace'>}</span>
+
+  <span class='kw'>while</span> <span class='id identifier rubyid_func'>func</span> <span class='op'>=</span> <span class='id identifier rubyid_candidate_funcs'>candidate_funcs</span><span class='period'>.</span><span class='id identifier rubyid_pop'>pop</span>
+    <span class='kw'>next</span> <span class='kw'>if</span> <span class='id identifier rubyid_visited_funcs'>visited_funcs</span><span class='period'>.</span><span class='id identifier rubyid_include?'>include?</span><span class='lparen'>(</span><span class='id identifier rubyid_func'>func</span><span class='rparen'>)</span>
+    <span class='id identifier rubyid_visited_funcs'>visited_funcs</span><span class='period'>.</span><span class='id identifier rubyid_add'>add</span><span class='lparen'>(</span><span class='id identifier rubyid_func'>func</span><span class='rparen'>)</span>
+
+    <span class='id identifier rubyid_func'>func</span><span class='period'>.</span><span class='id identifier rubyid_inputs'>inputs</span><span class='period'>.</span><span class='id identifier rubyid_each'>each</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_x'>x</span><span class='op'>|</span>
+      <span class='kw'>next</span> <span class='kw'>unless</span> <span class='id identifier rubyid_x'>x</span><span class='period'>.</span><span class='id identifier rubyid_requires_grad'>requires_grad</span>
+      <span class='id identifier rubyid_forward_graph'>forward_graph</span><span class='lbracket'>[</span><span class='id identifier rubyid_x'>x</span><span class='rbracket'>]</span> <span class='op'>=</span> <span class='lbracket'>[</span><span class='rbracket'>]</span> <span class='kw'>if</span> <span class='id identifier rubyid_forward_graph'>forward_graph</span><span class='lbracket'>[</span><span class='id identifier rubyid_x'>x</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_nil?'>nil?</span>
+      <span class='id identifier rubyid_forward_graph'>forward_graph</span><span class='lbracket'>[</span><span class='id identifier rubyid_x'>x</span><span class='rbracket'>]</span> <span class='op'>&lt;&lt;</span> <span class='id identifier rubyid_func'>func</span>
+      <span class='id identifier rubyid_creator'>creator</span> <span class='op'>=</span> <span class='id identifier rubyid_x'>x</span><span class='period'>.</span><span class='id identifier rubyid_creator_node'>creator_node</span>
+      <span class='kw'>if</span> <span class='id identifier rubyid_creator'>creator</span> <span class='op'>&amp;&amp;</span> <span class='op'>!</span><span class='id identifier rubyid_visited_funcs'>visited_funcs</span><span class='period'>.</span><span class='id identifier rubyid_include?'>include?</span><span class='lparen'>(</span><span class='id identifier rubyid_creator'>creator</span><span class='rparen'>)</span>
+        <span class='id identifier rubyid_candidate_funcs'>candidate_funcs</span> <span class='op'>&lt;&lt;</span> <span class='id identifier rubyid_creator'>creator</span>
+      <span class='kw'>end</span>
+    <span class='kw'>end</span>
+  <span class='kw'>end</span>
+
+  <span class='comment'># 2. Forward enumeration: all the nodes in the subgraph reachable from the
+</span>  <span class='comment'>#    input nodes are enumerated. The extracted (sub-)subgraph is the union
+</span>  <span class='comment'>#    of all paths that backpropagation will visit.
+</span>  <span class='id identifier rubyid_candidate_vars'>candidate_vars</span> <span class='op'>=</span> <span class='id identifier rubyid_inputs'>inputs</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span><span class='lparen'>(</span><span class='op'>&amp;</span><span class='symbol'>:node</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_visited_funcs'>visited_funcs</span> <span class='op'>=</span> <span class='const'>Set</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span>
+  <span class='id identifier rubyid_grad_required'>grad_required</span> <span class='op'>=</span> <span class='const'>Set</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span>
+  <span class='kw'>while</span> <span class='id identifier rubyid_x'>x</span> <span class='op'>=</span> <span class='id identifier rubyid_candidate_vars'>candidate_vars</span><span class='period'>.</span><span class='id identifier rubyid_pop'>pop</span>
+    <span class='id identifier rubyid_grad_required'>grad_required</span><span class='period'>.</span><span class='id identifier rubyid_add'>add</span><span class='lparen'>(</span><span class='id identifier rubyid_x'>x</span><span class='rparen'>)</span>
+    <span class='id identifier rubyid_forward_graph'>forward_graph</span><span class='lbracket'>[</span><span class='id identifier rubyid_x'>x</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_each'>each</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_func'>func</span><span class='op'>|</span>
+      <span class='kw'>next</span> <span class='kw'>if</span> <span class='id identifier rubyid_visited_funcs'>visited_funcs</span><span class='period'>.</span><span class='id identifier rubyid_include?'>include?</span><span class='lparen'>(</span><span class='id identifier rubyid_func'>func</span><span class='rparen'>)</span>
+      <span class='id identifier rubyid_visited_funcs'>visited_funcs</span><span class='period'>.</span><span class='id identifier rubyid_add'>add</span><span class='lparen'>(</span><span class='id identifier rubyid_func'>func</span><span class='rparen'>)</span>
+      <span class='id identifier rubyid_func'>func</span><span class='period'>.</span><span class='id identifier rubyid_outputs'>outputs</span><span class='period'>.</span><span class='id identifier rubyid_each'>each</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_y_ref'>y_ref</span><span class='op'>|</span>
+        <span class='id identifier rubyid_y'>y</span> <span class='op'>=</span> <span class='id identifier rubyid_y_ref'>y_ref</span><span class='period'>.</span><span class='id identifier rubyid___getobj__'>__getobj__</span>
+        <span class='kw'>if</span> <span class='id identifier rubyid_y'>y</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_forward_graph'>forward_graph</span><span class='lbracket'>[</span><span class='id identifier rubyid_y'>y</span><span class='rbracket'>]</span>
+          <span class='id identifier rubyid_candidate_vars'>candidate_vars</span> <span class='op'>&lt;&lt;</span> <span class='id identifier rubyid_y'>y</span>
+        <span class='kw'>end</span>
+      <span class='kw'>end</span>
+    <span class='kw'>end</span>
+  <span class='kw'>end</span>
+
+  <span class='comment'># 3. Backpropagation: the backpropagation is executed along the
+</span>  <span class='comment'>#    (sub-)subgraph. It uses the topological order of the subgraph which is
+</span>  <span class='comment'>#    induced by the reversed order of function applications (&quot;rank&quot;).
+</span>  <span class='id identifier rubyid_grads'>grads</span> <span class='op'>=</span> <span class='lbrace'>{</span><span class='rbrace'>}</span>  <span class='comment'># mapping from variable nodes to their gradients
+</span>
+  <span class='comment'># Initialize the gradient mapping.
+</span>  <span class='id identifier rubyid_grad_outputs'>grad_outputs</span> <span class='op'>=</span> <span class='lbracket'>[</span><span class='kw'>nil</span><span class='rbracket'>]</span> <span class='op'>*</span> <span class='id identifier rubyid_outputs'>outputs</span><span class='period'>.</span><span class='id identifier rubyid_size'>size</span> <span class='kw'>if</span> <span class='id identifier rubyid_grad_outputs'>grad_outputs</span><span class='period'>.</span><span class='id identifier rubyid_nil?'>nil?</span>
+  <span class='id identifier rubyid_outputs'>outputs</span><span class='period'>.</span><span class='id identifier rubyid_zip'>zip</span><span class='lparen'>(</span><span class='id identifier rubyid_grad_outputs'>grad_outputs</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_each'>each</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_y'>y</span><span class='comma'>,</span> <span class='id identifier rubyid_gy'>gy</span><span class='op'>|</span>
+    <span class='kw'>if</span> <span class='id identifier rubyid_gy'>gy</span><span class='period'>.</span><span class='id identifier rubyid_nil?'>nil?</span>
+      <span class='id identifier rubyid_gy_data'>gy_data</span> <span class='op'>=</span> <span class='id identifier rubyid_y'>y</span><span class='period'>.</span><span class='id identifier rubyid_data'>data</span><span class='period'>.</span><span class='id identifier rubyid_new_ones'>new_ones</span>
+      <span class='id identifier rubyid_gy'>gy</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="" title="Chainer (module)">Chainer</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="Chainer/Variable.html" title="Chainer::Variable (class)">Variable</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new'><span class='object_link'><a href="Chainer/Variable.html#initialize-instance_method" title="Chainer::Variable#initialize (method)">new</a></span></span><span class='lparen'>(</span><span class='id identifier rubyid_gy_data'>gy_data</span><span class='comma'>,</span> <span class='label'>requires_grad:</span> <span class='kw'>false</span><span class='rparen'>)</span>
+    <span class='kw'>end</span>
+
+    <span class='id identifier rubyid_grads'>grads</span><span class='lbracket'>[</span><span class='id identifier rubyid_y'>y</span><span class='period'>.</span><span class='id identifier rubyid_node'>node</span><span class='rbracket'>]</span> <span class='op'>=</span> <span class='id identifier rubyid_gy'>gy</span>
+  <span class='kw'>end</span>
+
+  <span class='kw'>unless</span> <span class='id identifier rubyid_grad_inputs'>grad_inputs</span><span class='period'>.</span><span class='id identifier rubyid_nil?'>nil?</span>
+    <span class='id identifier rubyid_inputs'>inputs</span><span class='period'>.</span><span class='id identifier rubyid_zip'>zip</span><span class='lparen'>(</span><span class='id identifier rubyid_grad_inputs'>grad_inputs</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_each'>each</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_x'>x</span><span class='comma'>,</span> <span class='id identifier rubyid_gx'>gx</span><span class='op'>|</span>
+      <span class='id identifier rubyid_grads'>grads</span><span class='lbracket'>[</span><span class='id identifier rubyid_x'>x</span><span class='period'>.</span><span class='id identifier rubyid_node'>node</span><span class='rbracket'>]</span> <span class='op'>=</span> <span class='id identifier rubyid_gx'>gx</span> <span class='kw'>unless</span> <span class='id identifier rubyid_gx'>gx</span><span class='period'>.</span><span class='id identifier rubyid_nil?'>nil?</span>
+    <span class='kw'>end</span>
+  <span class='kw'>end</span>
+
+  <span class='comment'># Backprop implementation. It edits grads which will only contain the
+</span>  <span class='comment'># gradients w.r.t. the inputs.
+</span>  <span class='id identifier rubyid_old_enable_backprop'>old_enable_backprop</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="" title="Chainer (module)">Chainer</a></span></span><span class='period'>.</span><span class='id identifier rubyid_configuration'><span class='object_link'><a href="#configuration-class_method" title="Chainer.configuration (method)">configuration</a></span></span><span class='period'>.</span><span class='id identifier rubyid_enable_backprop'>enable_backprop</span>
+  <span class='const'><span class='object_link'><a href="" title="Chainer (module)">Chainer</a></span></span><span class='period'>.</span><span class='id identifier rubyid_configuration'><span class='object_link'><a href="#configuration-class_method" title="Chainer.configuration (method)">configuration</a></span></span><span class='period'>.</span><span class='id identifier rubyid_enable_backprop'>enable_backprop</span> <span class='op'>=</span> <span class='id identifier rubyid_enable_double_backprop'>enable_double_backprop</span>
+  <span class='id identifier rubyid_backprop'>backprop</span><span class='lparen'>(</span><span class='id identifier rubyid_outputs'>outputs</span><span class='comma'>,</span> <span class='id identifier rubyid_inputs'>inputs</span><span class='comma'>,</span> <span class='id identifier rubyid_grad_required'>grad_required</span><span class='comma'>,</span> <span class='id identifier rubyid_retain_grad'>retain_grad</span><span class='comma'>,</span> <span class='id identifier rubyid_grads'>grads</span><span class='rparen'>)</span>
+  <span class='const'><span class='object_link'><a href="" title="Chainer (module)">Chainer</a></span></span><span class='period'>.</span><span class='id identifier rubyid_configuration'><span class='object_link'><a href="#configuration-class_method" title="Chainer.configuration (method)">configuration</a></span></span><span class='period'>.</span><span class='id identifier rubyid_enable_backprop'>enable_backprop</span> <span class='op'>=</span> <span class='id identifier rubyid_old_enable_backprop'>old_enable_backprop</span>
+
+  <span class='comment'># Extract the gradients w.r.t. the inputs and return them.
+</span>  <span class='id identifier rubyid_ret'>ret</span> <span class='op'>=</span> <span class='id identifier rubyid_inputs'>inputs</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span> <span class='lbrace'>{</span> <span class='op'>|</span><span class='id identifier rubyid_x'>x</span><span class='op'>|</span> <span class='id identifier rubyid_grads'>grads</span><span class='lbracket'>[</span><span class='id identifier rubyid_x'>x</span><span class='period'>.</span><span class='id identifier rubyid_node'>node</span><span class='rbracket'>]</span> <span class='rbrace'>}</span>
+  <span class='kw'>if</span> <span class='id identifier rubyid_set_grad'>set_grad</span>
+    <span class='id identifier rubyid_inputs'>inputs</span><span class='period'>.</span><span class='id identifier rubyid_zip'>zip</span><span class='lparen'>(</span><span class='id identifier rubyid_ret'>ret</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_each'>each</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_x'>x</span><span class='comma'>,</span> <span class='id identifier rubyid_gx'>gx</span><span class='op'>|</span>
+      <span class='id identifier rubyid_x'>x</span><span class='period'>.</span><span class='id identifier rubyid_grad_var'>grad_var</span> <span class='op'>=</span> <span class='id identifier rubyid_gx'>gx</span>
+    <span class='kw'>end</span>
+  <span class='kw'>end</span>
+
+  <span class='id identifier rubyid_ret'>ret</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="numerical_grad-class_method">
+  
+    .<strong>numerical_grad</strong>(f, inputs, grad_outputs, eps = 1e-3)  &#x21d2; <tt>Array</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Computes numerical gradient by finite differences.</p>
+
+<p>This function is used to implement gradient check. For usage example, see unit tests of Chainer::Functions.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  <p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>f</span>
+      
+      
+        <span class='type'>(<tt>function</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Ruby function with no arguments that runs forward computation and returns the result.</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>inputs</span>
+      
+      
+        <span class='type'>(<tt>Array&lt;Arrays&gt;</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Array of arrays that should be treated as inputs. Each element of them is slightly modified to realize numerical gradient by finite differences.</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>grad_outputs</span>
+      
+      
+        <span class='type'>(<tt>Array&lt;Arrays&gt;</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Array of arrays that are treated as output gradients.</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>eps</span>
+      
+      
+        <span class='type'>(<tt>Float</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>1e-3</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Epsilon value of finite differences.</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>Array</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Numerical gradient arrays corresponding to <code>inputs</code>.</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/chainer/gradient_check.rb', line 21</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_numerical_grad'>numerical_grad</span><span class='lparen'>(</span><span class='id identifier rubyid_f'>f</span><span class='comma'>,</span> <span class='id identifier rubyid_inputs'>inputs</span><span class='comma'>,</span> <span class='id identifier rubyid_grad_outputs'>grad_outputs</span><span class='comma'>,</span> <span class='id identifier rubyid_eps'>eps</span><span class='op'>=</span><span class='float'>1e-3</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_eps'>eps</span> <span class='op'>=</span> <span class='id identifier rubyid_eps'>eps</span><span class='period'>.</span><span class='id identifier rubyid_to_f'>to_f</span> <span class='comment'># Convert Rational to float because NArray does not support calc with Rational
+</span>  <span class='id identifier rubyid_raise'>raise</span> <span class='kw'>unless</span> <span class='id identifier rubyid_eps'>eps</span> <span class='op'>&gt;</span> <span class='int'>0</span>
+  <span class='id identifier rubyid_inputs'>inputs</span> <span class='op'>=</span> <span class='id identifier rubyid_inputs'>inputs</span><span class='period'>.</span><span class='id identifier rubyid_to_a'>to_a</span>
+  <span class='id identifier rubyid_grad_outputs'>grad_outputs</span> <span class='op'>=</span> <span class='id identifier rubyid_grad_outputs'>grad_outputs</span><span class='period'>.</span><span class='id identifier rubyid_to_a'>to_a</span>
+  <span class='id identifier rubyid_grads'>grads</span> <span class='op'>=</span> <span class='id identifier rubyid_inputs'>inputs</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span><span class='lbrace'>{</span><span class='op'>|</span><span class='id identifier rubyid_x'>x</span><span class='op'>|</span> <span class='id identifier rubyid_x'>x</span><span class='period'>.</span><span class='id identifier rubyid_new_zeros'>new_zeros</span><span class='lparen'>(</span><span class='rparen'>)</span><span class='rbrace'>}</span>
+
+  <span class='id identifier rubyid_inputs'>inputs</span><span class='period'>.</span><span class='id identifier rubyid_zip'>zip</span><span class='lparen'>(</span><span class='id identifier rubyid_grads'>grads</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_each'>each</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_x'>x</span><span class='comma'>,</span> <span class='id identifier rubyid_gx'>gx</span><span class='op'>|</span>
+    <span class='id identifier rubyid_orig_x'>orig_x</span> <span class='op'>=</span> <span class='id identifier rubyid_x'>x</span><span class='period'>.</span><span class='id identifier rubyid_dup'>dup</span> <span class='comment'># hold original value
+</span>    <span class='id identifier rubyid_x'>x</span><span class='period'>.</span><span class='id identifier rubyid_each_with_index'>each_with_index</span><span class='lbrace'>{</span><span class='op'>|</span><span class='id identifier rubyid__'>_</span><span class='comma'>,</span> <span class='op'>*</span><span class='id identifier rubyid_i'>i</span><span class='op'>|</span>
+      <span class='id identifier rubyid_orig'>orig</span> <span class='op'>=</span> <span class='id identifier rubyid_orig_x'>orig_x</span><span class='lbracket'>[</span><span class='op'>*</span><span class='id identifier rubyid_i'>i</span><span class='rbracket'>]</span>
+      <span class='id identifier rubyid_x'>x</span><span class='lbracket'>[</span><span class='op'>*</span><span class='id identifier rubyid_i'>i</span><span class='rbracket'>]</span> <span class='op'>=</span> <span class='id identifier rubyid_orig'>orig</span> <span class='op'>+</span> <span class='id identifier rubyid_eps'>eps</span>
+      <span class='id identifier rubyid_ys1'>ys1</span> <span class='op'>=</span> <span class='id identifier rubyid__copy_arrays'>_copy_arrays</span><span class='lparen'>(</span><span class='id identifier rubyid_f'>f</span><span class='period'>.</span><span class='lparen'>(</span><span class='rparen'>)</span><span class='rparen'>)</span>
+      <span class='id identifier rubyid_x'>x</span><span class='lbracket'>[</span><span class='op'>*</span><span class='id identifier rubyid_i'>i</span><span class='rbracket'>]</span> <span class='op'>=</span> <span class='id identifier rubyid_orig'>orig</span> <span class='op'>-</span> <span class='id identifier rubyid_eps'>eps</span>
+      <span class='id identifier rubyid_ys2'>ys2</span> <span class='op'>=</span> <span class='id identifier rubyid__copy_arrays'>_copy_arrays</span><span class='lparen'>(</span><span class='id identifier rubyid_f'>f</span><span class='period'>.</span><span class='lparen'>(</span><span class='rparen'>)</span><span class='rparen'>)</span>
+      <span class='id identifier rubyid_x'>x</span><span class='lbracket'>[</span><span class='op'>*</span><span class='id identifier rubyid_i'>i</span><span class='rbracket'>]</span> <span class='op'>=</span> <span class='id identifier rubyid_orig'>orig</span>
+
+      <span class='id identifier rubyid_ys1'>ys1</span><span class='period'>.</span><span class='id identifier rubyid_zip'>zip</span><span class='lparen'>(</span><span class='id identifier rubyid_ys2'>ys2</span><span class='comma'>,</span> <span class='id identifier rubyid_grad_outputs'>grad_outputs</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_each'>each</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_y1'>y1</span><span class='comma'>,</span> <span class='id identifier rubyid_y2'>y2</span><span class='comma'>,</span> <span class='id identifier rubyid_gy'>gy</span><span class='op'>|</span>
+        <span class='kw'>next</span> <span class='kw'>if</span> <span class='id identifier rubyid_gy'>gy</span><span class='period'>.</span><span class='id identifier rubyid_nil?'>nil?</span>
+        <span class='id identifier rubyid_diff'>diff</span> <span class='op'>=</span> <span class='id identifier rubyid_y1'>y1</span> <span class='op'>-</span> <span class='id identifier rubyid_y2'>y2</span>
+        <span class='kw'>if</span> <span class='const'><span class='object_link'><a href="" title="Chainer (module)">Chainer</a></span></span><span class='period'>.</span><span class='id identifier rubyid_array?'><span class='object_link'><a href="#array%3F-class_method" title="Chainer.array? (method)">array?</a></span></span><span class='lparen'>(</span><span class='id identifier rubyid_diff'>diff</span><span class='rparen'>)</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_diff'>diff</span><span class='period'>.</span><span class='id identifier rubyid_empty?'>empty?</span>
+          <span class='id identifier rubyid_dot'>dot</span> <span class='op'>=</span> <span class='int'>0</span>
+        <span class='kw'>else</span>
+          <span class='id identifier rubyid_dot'>dot</span> <span class='op'>=</span> <span class='lparen'>(</span><span class='id identifier rubyid_diff'>diff</span> <span class='op'>*</span> <span class='id identifier rubyid_gy'>gy</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_sum'>sum</span>
+        <span class='kw'>end</span>
+        <span class='id identifier rubyid_gx'>gx</span><span class='lbracket'>[</span><span class='op'>*</span><span class='id identifier rubyid_i'>i</span><span class='rbracket'>]</span> <span class='op'>+=</span> <span class='id identifier rubyid_dot'>dot</span> <span class='op'>/</span> <span class='lparen'>(</span><span class='int'>2</span> <span class='op'>*</span> <span class='id identifier rubyid_eps'>eps</span><span class='rparen'>)</span>
+      <span class='kw'>end</span>
+    <span class='rbrace'>}</span>
+  <span class='kw'>end</span>
+
+  <span class='kw'>return</span> <span class='id identifier rubyid_grads'>grads</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+  </div>
+
+</div>
+
+      <div id="footer">
+  Generated on Thu Oct 10 04:25:39 2019 by
+  <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
+  0.9.20 (ruby-2.6.3).
+</div>
+
+    </div>
+  </body>
+</html>

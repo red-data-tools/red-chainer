@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>
+  File: README
+  
+    &mdash; Documentation by YARD 0.9.20
+  
+</title>
+
+  <link rel="stylesheet" href="css/style.css" type="text/css" charset="utf-8" />
+
+  <link rel="stylesheet" href="css/common.css" type="text/css" charset="utf-8" />
+
+<script type="text/javascript" charset="utf-8">
+  pathId = "README";
+  relpath = '';
+</script>
+
+
+  <script type="text/javascript" charset="utf-8" src="js/jquery.js"></script>
+
+  <script type="text/javascript" charset="utf-8" src="js/app.js"></script>
+
+
+
+    <!-- Additional settings for MathJax are from here. -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax:{
+          inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+          displayMath: [ ['$$','$$'], ["\\[","\\]"] ]
+        }
+      });
+    </script>
+    <script type="text/javascript"
+      src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.6/MathJax.js?config=TeX-AMS_HTML">
+    </script>
+    <meta http-equiv="X-UA-Compatible" CONTENT="IE=EmulateIE7" />
+    <!-- Additional settings for MathJax are over here. -->
+
+  </head>
+  <body>
+    <div class="nav_wrap">
+      <iframe id="nav" src="class_list.html?1"></iframe>
+      <div id="resizer"></div>
+    </div>
+
+    <div id="main" tabindex="-1">
+      <div id="header">
+        <div id="menu">
+  
+    <a href="_index.html">Index</a> &raquo; 
+    <span class="title">File: README</span>
+  
+</div>
+
+        <div id="search">
+  
+    <a class="full_list_link" id="class_list_link"
+        href="class_list.html">
+
+        <svg width="24" height="24">
+          <rect x="0" y="4" width="24" height="4" rx="1" ry="1"></rect>
+          <rect x="0" y="12" width="24" height="4" rx="1" ry="1"></rect>
+          <rect x="0" y="20" width="24" height="4" rx="1" ry="1"></rect>
+        </svg>
+    </a>
+  
+</div>
+        <div class="clear"></div>
+      </div>
+
+      <div id="content"><div id='filecontents'>
+<h1 id="label-Red+Chainer+-3A+A+deep+learning+framework">Red Chainer : A deep learning framework</h1>
+
+<p>A flexible framework for neural network for Ruby</p>
+
+<h2 id="label-Description">Description</h2>
+
+<p>It ported python&#39;s <a href="https://github.com/chainer/chainer">Chainer</a> with Ruby.</p>
+
+<h2 id="label-Requirements">Requirements</h2>
+<ul><li>
+<p>Ruby 2.4 or later</p>
+</li></ul>
+
+<h2 id="label-Installation">Installation</h2>
+
+<p>Add this line to your application&#39;s Gemfile:</p>
+
+<pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_gem'>gem</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>red-chainer</span><span class='tstring_end'>&#39;</span></span>
+</code></pre>
+
+<p>And then execute:</p>
+
+<pre class="code ruby"><code class="ruby">$ bundle
+</code></pre>
+
+<p>Or install it yourself as:</p>
+
+<pre class="code ruby"><code class="ruby">$ gem install red-chainer
+</code></pre>
+
+<h2 id="label-Usage">Usage</h2>
+
+<h3 id="label-Run+MNIST+example">Run MNIST example</h3>
+
+<p>MNIST sample program is <a href="./examples/mnist/mnist.rb">here</a></p>
+
+<pre class="code ruby"><code class="ruby"># when install Gemfile
+$ bundle exec ruby examples/mnist/mnist.rb
+# when install yourself
+$ ruby examples/mnist/mnist.rb
+</code></pre>
+
+<h3 id="label-Run+MNIST+example+with+GPU">Run MNIST example with GPU</h3>
+
+<p>On GPU machine, add <code>gem &#39;cumo&#39;</code> on <strong>Gemfile.local</strong> and do <code>bundle install</code>.</p>
+
+<p>Run the example with <code>--gpu</code> option whose value indicates GPU device ID such as:</p>
+
+<pre class="code ruby"><code class="ruby">$ bundle exec ruby examples/mnist/mnist.rb --gpu 0
+</code></pre>
+
+<h2 id="label-Development">Development</h2>
+
+<h3 id="label-Run+tests">Run tests</h3>
+
+<pre class="code ruby"><code class="ruby">$ bundle exec ruby test/run_test.rb
+</code></pre>
+
+<h3 id="label-Run+tests+with+Cumo">Run tests with Cumo</h3>
+
+<p>On GPU machine, add <code>gem &#39;cumo&#39;</code> on <strong>Gemfile.local</strong> and do <code>bundle install</code>.</p>
+
+<p>Run tests with <code>RED_CHAINER_GPU</code> environment variable whose value indicates GPU device ID such as:</p>
+
+<pre class="code ruby"><code class="ruby">$ bundle exec env RED_CHAINER_GPU=0 ruby test/run_test.rb
+</code></pre>
+
+<h2 id="label-License">License</h2>
+
+<p>The MIT license. See <a href="./LICENSE.txt">LICENSE.txt</a> for details.</p>
+
+<h2 id="label-Red+Chainer+implementation+status">Red Chainer implementation status</h2>
+
+<p>| | Chainer 2.0<br>(Initial ported version) | Red Chainer (0.3.1) | example | | —- | —- | —- | —- | | <a href="https://github.com/red-data-tools/red-chainer/tree/master/lib/chainer/functions/activation">activation</a> | 15 | 5 | LogSoftmax, ReLU, LeakyReLU, Sigmoid, Tanh | | <a href="https://github.com/red-data-tools/red-chainer/tree/master/lib/chainer/functions/loss">loss</a> | 17 | 2 | SoftMax, MeanSquaredError | | <a href="https://github.com/red-data-tools/red-chainer/tree/master/lib/chainer/optimizers">optimizer</a> | 9 | 2 | Adam, MomentumSGDRule | | <a href="https://github.com/red-data-tools/red-chainer/tree/master/lib/chainer/functions/connection">connection</a> | 12 | 2 | Linear, Convolution2D | | <a href="https://github.com/red-data-tools/red-chainer/tree/master/lib/chainer/functions/pooling">pooling</a> | 14 | 3 | Pooling2D, MaxPooling2D, AveragePooling2D | | <a href="https://github.com/red-data-tools/red-chainer/tree/master/examples">example</a> | 31 | 3 | MNIST, Iris, CIFAR | | GPU | use CuPy | use <a href="https://github.com/sonots/cumo">Cumo</a> ||</p>
+</div></div>
+
+      <div id="footer">
+  Generated on Thu Oct 10 04:25:38 2019 by
+  <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
+  0.9.20 (ruby-2.6.3).
+</div>
+
+    </div>
+  </body>
+</html>

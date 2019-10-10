@@ -1,0 +1,1817 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>
+  Class: Chainer::FunctionNode
+  
+    &mdash; Documentation by YARD 0.9.20
+  
+</title>
+
+  <link rel="stylesheet" href="../css/style.css" type="text/css" charset="utf-8" />
+
+  <link rel="stylesheet" href="../css/common.css" type="text/css" charset="utf-8" />
+
+<script type="text/javascript" charset="utf-8">
+  pathId = "Chainer::FunctionNode";
+  relpath = '../';
+</script>
+
+
+  <script type="text/javascript" charset="utf-8" src="../js/jquery.js"></script>
+
+  <script type="text/javascript" charset="utf-8" src="../js/app.js"></script>
+
+
+
+    <!-- Additional settings for MathJax are from here. -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax:{
+          inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+          displayMath: [ ['$$','$$'], ["\\[","\\]"] ]
+        }
+      });
+    </script>
+    <script type="text/javascript"
+      src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.6/MathJax.js?config=TeX-AMS_HTML">
+    </script>
+    <meta http-equiv="X-UA-Compatible" CONTENT="IE=EmulateIE7" />
+    <!-- Additional settings for MathJax are over here. -->
+
+  </head>
+  <body>
+    <div class="nav_wrap">
+      <iframe id="nav" src="../class_list.html?1"></iframe>
+      <div id="resizer"></div>
+    </div>
+
+    <div id="main" tabindex="-1">
+      <div id="header">
+        <div id="menu">
+  
+    <a href="../_index.html">Index (F)</a> &raquo;
+    <span class='title'><span class='object_link'><a href="../Chainer.html" title="Chainer (module)">Chainer</a></span></span>
+     &raquo; 
+    <span class="title">FunctionNode</span>
+  
+</div>
+
+        <div id="search">
+  
+    <a class="full_list_link" id="class_list_link"
+        href="../class_list.html">
+
+        <svg width="24" height="24">
+          <rect x="0" y="4" width="24" height="4" rx="1" ry="1"></rect>
+          <rect x="0" y="12" width="24" height="4" rx="1" ry="1"></rect>
+          <rect x="0" y="20" width="24" height="4" rx="1" ry="1"></rect>
+        </svg>
+    </a>
+  
+</div>
+        <div class="clear"></div>
+      </div>
+
+      <div id="content"><h1>Class: Chainer::FunctionNode
+  
+  
+  
+</h1>
+<div class="box_info">
+  
+  <dl>
+    <dt>Inherits:</dt>
+    <dd>
+      <span class="inheritName">Object</span>
+      
+        <ul class="fullTree">
+          <li>Object</li>
+          
+            <li class="next">Chainer::FunctionNode</li>
+          
+        </ul>
+        <a href="#" class="inheritanceTree">show all</a>
+      
+    </dd>
+  </dl>
+  
+
+  
+  
+  
+  
+  
+
+  
+
+  
+  <dl>
+    <dt>Defined in:</dt>
+    <dd>lib/chainer/function_node.rb</dd>
+  </dl>
+  
+</div>
+
+<div id="subclasses">
+  <h2>Direct Known Subclasses</h2>
+  <p class="children"><span class='object_link'><a href="FunctionAdapter.html" title="Chainer::FunctionAdapter (class)">FunctionAdapter</a></span>, <span class='object_link'><a href="Functions/Activation/LeakyReLU.html" title="Chainer::Functions::Activation::LeakyReLU (class)">Chainer::Functions::Activation::LeakyReLU</a></span>, <span class='object_link'><a href="Functions/Activation/LeakyReLUGrad.html" title="Chainer::Functions::Activation::LeakyReLUGrad (class)">Chainer::Functions::Activation::LeakyReLUGrad</a></span>, <span class='object_link'><a href="Functions/Activation/LogSoftmax.html" title="Chainer::Functions::Activation::LogSoftmax (class)">Chainer::Functions::Activation::LogSoftmax</a></span>, <span class='object_link'><a href="Functions/Activation/LogSoftmaxGrad.html" title="Chainer::Functions::Activation::LogSoftmaxGrad (class)">Chainer::Functions::Activation::LogSoftmaxGrad</a></span>, <span class='object_link'><a href="Functions/Activation/ReLUGrad2.html" title="Chainer::Functions::Activation::ReLUGrad2 (class)">Chainer::Functions::Activation::ReLUGrad2</a></span>, <span class='object_link'><a href="Functions/Activation/Relu.html" title="Chainer::Functions::Activation::Relu (class)">Chainer::Functions::Activation::Relu</a></span>, <span class='object_link'><a href="Functions/Activation/Sigmoid.html" title="Chainer::Functions::Activation::Sigmoid (class)">Chainer::Functions::Activation::Sigmoid</a></span>, <span class='object_link'><a href="Functions/Activation/SigmoidGrad.html" title="Chainer::Functions::Activation::SigmoidGrad (class)">Chainer::Functions::Activation::SigmoidGrad</a></span>, <span class='object_link'><a href="Functions/Activation/Tanh.html" title="Chainer::Functions::Activation::Tanh (class)">Chainer::Functions::Activation::Tanh</a></span>, <span class='object_link'><a href="Functions/Activation/TanhGrad.html" title="Chainer::Functions::Activation::TanhGrad (class)">Chainer::Functions::Activation::TanhGrad</a></span>, <span class='object_link'><a href="Functions/Array/Assign.html" title="Chainer::Functions::Array::Assign (class)">Chainer::Functions::Array::Assign</a></span>, <span class='object_link'><a href="Functions/Array/BroadcastTo.html" title="Chainer::Functions::Array::BroadcastTo (class)">Chainer::Functions::Array::BroadcastTo</a></span>, <span class='object_link'><a href="Functions/Array/Cast.html" title="Chainer::Functions::Array::Cast (class)">Chainer::Functions::Array::Cast</a></span>, <span class='object_link'><a href="Functions/Array/Reshape.html" title="Chainer::Functions::Array::Reshape (class)">Chainer::Functions::Array::Reshape</a></span>, <span class='object_link'><a href="Functions/Array/Rollaxis.html" title="Chainer::Functions::Array::Rollaxis (class)">Chainer::Functions::Array::Rollaxis</a></span>, <span class='object_link'><a href="Functions/Array/SelectItem.html" title="Chainer::Functions::Array::SelectItem (class)">Chainer::Functions::Array::SelectItem</a></span>, <span class='object_link'><a href="Functions/Array/Squeeze.html" title="Chainer::Functions::Array::Squeeze (class)">Chainer::Functions::Array::Squeeze</a></span>, <span class='object_link'><a href="Functions/Array/Transpose.html" title="Chainer::Functions::Array::Transpose (class)">Chainer::Functions::Array::Transpose</a></span>, <span class='object_link'><a href="Functions/Connection/Convolution2DFunction.html" title="Chainer::Functions::Connection::Convolution2DFunction (class)">Chainer::Functions::Connection::Convolution2DFunction</a></span>, <span class='object_link'><a href="Functions/Connection/Convolution2DGradW.html" title="Chainer::Functions::Connection::Convolution2DGradW (class)">Chainer::Functions::Connection::Convolution2DGradW</a></span>, <span class='object_link'><a href="Functions/Connection/Deconvolution2DFunction.html" title="Chainer::Functions::Connection::Deconvolution2DFunction (class)">Chainer::Functions::Connection::Deconvolution2DFunction</a></span>, <span class='object_link'><a href="Functions/Connection/LinearFunction.html" title="Chainer::Functions::Connection::LinearFunction (class)">Chainer::Functions::Connection::LinearFunction</a></span>, <span class='object_link'><a href="Functions/Loss/MeanSquaredError.html" title="Chainer::Functions::Loss::MeanSquaredError (class)">Chainer::Functions::Loss::MeanSquaredError</a></span>, <span class='object_link'><a href="Functions/Math/Add.html" title="Chainer::Functions::Math::Add (class)">Chainer::Functions::Math::Add</a></span>, <span class='object_link'><a href="Functions/Math/AddConstant.html" title="Chainer::Functions::Math::AddConstant (class)">Chainer::Functions::Math::AddConstant</a></span>, <span class='object_link'><a href="Functions/Math/Div.html" title="Chainer::Functions::Math::Div (class)">Chainer::Functions::Math::Div</a></span>, <span class='object_link'><a href="Functions/Math/Exp.html" title="Chainer::Functions::Math::Exp (class)">Chainer::Functions::Math::Exp</a></span>, <span class='object_link'><a href="Functions/Math/Identity.html" title="Chainer::Functions::Math::Identity (class)">Chainer::Functions::Math::Identity</a></span>, <span class='object_link'><a href="Functions/Math/Mul.html" title="Chainer::Functions::Math::Mul (class)">Chainer::Functions::Math::Mul</a></span>, <span class='object_link'><a href="Functions/Math/MulConstant.html" title="Chainer::Functions::Math::MulConstant (class)">Chainer::Functions::Math::MulConstant</a></span>, <span class='object_link'><a href="Functions/Math/Neg.html" title="Chainer::Functions::Math::Neg (class)">Chainer::Functions::Math::Neg</a></span>, <span class='object_link'><a href="Functions/Math/PowVarConst.html" title="Chainer::Functions::Math::PowVarConst (class)">Chainer::Functions::Math::PowVarConst</a></span>, <span class='object_link'><a href="Functions/Math/PowVarVar.html" title="Chainer::Functions::Math::PowVarVar (class)">Chainer::Functions::Math::PowVarVar</a></span>, <span class='object_link'><a href="Functions/Math/Sub.html" title="Chainer::Functions::Math::Sub (class)">Chainer::Functions::Math::Sub</a></span>, <span class='object_link'><a href="Functions/Math/Sum.html" title="Chainer::Functions::Math::Sum (class)">Chainer::Functions::Math::Sum</a></span>, <span class='object_link'><a href="Functions/Noise/Dropout.html" title="Chainer::Functions::Noise::Dropout (class)">Chainer::Functions::Noise::Dropout</a></span>, <span class='object_link'><a href="Functions/Noise/DropoutGrad.html" title="Chainer::Functions::Noise::DropoutGrad (class)">Chainer::Functions::Noise::DropoutGrad</a></span>, <span class='object_link'><a href="Functions/Normalization/BatchNormalization.html" title="Chainer::Functions::Normalization::BatchNormalization (class)">Chainer::Functions::Normalization::BatchNormalization</a></span>, <span class='object_link'><a href="Functions/Normalization/FixedBatchNormalization.html" title="Chainer::Functions::Normalization::FixedBatchNormalization (class)">Chainer::Functions::Normalization::FixedBatchNormalization</a></span>, <span class='object_link'><a href="Functions/Pooling/AveragePooling2DGrad.html" title="Chainer::Functions::Pooling::AveragePooling2DGrad (class)">Chainer::Functions::Pooling::AveragePooling2DGrad</a></span>, <span class='object_link'><a href="Functions/Pooling/MaxPooling2DGrad.html" title="Chainer::Functions::Pooling::MaxPooling2DGrad (class)">Chainer::Functions::Pooling::MaxPooling2DGrad</a></span>, <span class='object_link'><a href="Functions/Pooling/MaxPooling2DWithIndexes.html" title="Chainer::Functions::Pooling::MaxPooling2DWithIndexes (class)">Chainer::Functions::Pooling::MaxPooling2DWithIndexes</a></span>, <span class='object_link'><a href="Functions/Pooling/Pooling2D.html" title="Chainer::Functions::Pooling::Pooling2D (class)">Chainer::Functions::Pooling::Pooling2D</a></span></p>
+</div>
+
+
+
+
+  <h2>Instance Attribute Summary <small><a href="#" class="summary_toggle">collapse</a></small></h2>
+  <ul class="summary">
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#inputs-instance_method" title="#inputs (instance method)">#<strong>inputs</strong>  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+    
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Returns the value of attribute inputs.</p>
+</div></span>
+  
+</li>
+
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#outputs-instance_method" title="#outputs (instance method)">#<strong>outputs</strong>  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+    
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Returns the value of attribute outputs.</p>
+</div></span>
+  
+</li>
+
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#rank-instance_method" title="#rank (instance method)">#<strong>rank</strong>  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+    
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Returns the value of attribute rank.</p>
+</div></span>
+  
+</li>
+
+    
+  </ul>
+
+
+
+
+  
+    <h2>
+      Instance Method Summary
+      <small><a href="#" class="summary_toggle">collapse</a></small>
+    </h2>
+
+    <ul class="summary">
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#apply-instance_method" title="#apply (instance method)">#<strong>apply</strong>(inputs)  &#x21d2; Array&lt;Chainer::Variable&gt; </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Computes output variables and grows the computational graph.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#backward-instance_method" title="#backward (instance method)">#<strong>backward</strong>(target_indexes, grad_outputs)  &#x21d2; Array&lt;Chainer::Variable&gt; </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Computes gradients w.r.t.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#backward_accumulate-instance_method" title="#backward_accumulate (instance method)">#<strong>backward_accumulate</strong>(target_input_indexes, grad_outputs, grad_inputs)  &#x21d2; Array&lt;Chainer::Variable&gt; </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Computes gradients w.r.t.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#forward-instance_method" title="#forward (instance method)">#<strong>forward</strong>(inputs)  &#x21d2; Array </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Computes the output arrays from the input arrays.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#forward_cpu-instance_method" title="#forward_cpu (instance method)">#<strong>forward_cpu</strong>(inputs)  &#x21d2; Array&lt;Numo::NArray&gt; </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Computes the output arrays from the input Numo::NArray.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#get_retained_inputs-instance_method" title="#get_retained_inputs (instance method)">#<strong>get_retained_inputs</strong>  &#x21d2; Array </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Returns a Array of retained input variables.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#get_retained_outputs-instance_method" title="#get_retained_outputs (instance method)">#<strong>get_retained_outputs</strong>  &#x21d2; Array </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Returns a Array of retained output variables.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#initialize-instance_method" title="#initialize (instance method)">#<strong>initialize</strong>  &#x21d2; FunctionNode </a>
+    
+
+    
+  </span>
+  
+  
+    <span class="note title constructor">constructor</span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>A new instance of FunctionNode.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#label-instance_method" title="#label (instance method)">#<strong>label</strong>  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Short text that represents the function.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#output_data-instance_method" title="#output_data (instance method)">#<strong>output_data</strong>  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>A tuple of the retained output arrays.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#retain_inputs-instance_method" title="#retain_inputs (instance method)">#<strong>retain_inputs</strong>(indexes)  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Lets specified input variable nodes keep data arrays.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#retain_outputs-instance_method" title="#retain_outputs (instance method)">#<strong>retain_outputs</strong>(indexes)  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Lets specified output variable nodes keep data arrays.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#unchain-instance_method" title="#unchain (instance method)">#<strong>unchain</strong>  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Purges in/out nodes and this function node itself from the graph.</p>
+</div></span>
+  
+</li>
+
+      
+    </ul>
+  
+
+<div id="constructor_details" class="method_details_list">
+  <h2>Constructor Details</h2>
+  
+    <div class="method_details first">
+  <h3 class="signature first" id="initialize-instance_method">
+  
+    #<strong>initialize</strong>  &#x21d2; <tt><span class='object_link'><a href="" title="Chainer::FunctionNode (class)">FunctionNode</a></span></tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Returns a new instance of FunctionNode</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+17
+18
+19
+20
+21
+22
+23
+24
+25</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/chainer/function_node.rb', line 17</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_initialize'>initialize</span>
+  <span class='ivar'>@rank</span> <span class='op'>=</span> <span class='int'>0</span>
+  <span class='ivar'>@inputs</span> <span class='op'>=</span> <span class='kw'>nil</span>
+  <span class='ivar'>@outputs</span> <span class='op'>=</span> <span class='kw'>nil</span>
+
+  <span class='ivar'>@retained_output_data</span> <span class='op'>=</span> <span class='kw'>nil</span>
+  <span class='ivar'>@input_indexes_to_retain</span> <span class='op'>=</span> <span class='kw'>nil</span>
+  <span class='ivar'>@output_indexes_to_retain</span> <span class='op'>=</span> <span class='kw'>nil</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+  
+</div>
+
+  <div id="instance_attr_details" class="attr_details">
+    <h2>Instance Attribute Details</h2>
+    
+      
+      <span id="inputs=-instance_method"></span>
+      <div class="method_details first">
+  <h3 class="signature first" id="inputs-instance_method">
+  
+    #<strong>inputs</strong>  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Returns the value of attribute inputs</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+15
+16
+17</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/chainer/function_node.rb', line 15</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_inputs'>inputs</span>
+  <span class='ivar'>@inputs</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      
+      <span id="outputs=-instance_method"></span>
+      <div class="method_details ">
+  <h3 class="signature " id="outputs-instance_method">
+  
+    #<strong>outputs</strong>  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Returns the value of attribute outputs</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+15
+16
+17</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/chainer/function_node.rb', line 15</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_outputs'>outputs</span>
+  <span class='ivar'>@outputs</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      
+      <span id="rank=-instance_method"></span>
+      <div class="method_details ">
+  <h3 class="signature " id="rank-instance_method">
+  
+    #<strong>rank</strong>  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Returns the value of attribute rank</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+15
+16
+17</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/chainer/function_node.rb', line 15</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_rank'>rank</span>
+  <span class='ivar'>@rank</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+  </div>
+
+
+  <div id="instance_method_details" class="method_details_list">
+    <h2>Instance Method Details</h2>
+
+    
+      <div class="method_details first">
+  <h3 class="signature first" id="apply-instance_method">
+  
+    #<strong>apply</strong>(inputs)  &#x21d2; <tt>Array&lt;<span class='object_link'><a href="Variable.html" title="Chainer::Variable (class)">Chainer::Variable</a></span>&gt;</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Computes output variables and grows the computational graph.</p>
+
+<p>Basic behavior is expressed in the documentation of `FunctionNode`.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  <p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>inputs</span>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="Variable.html" title="Chainer::Variable (class)">Chainer::Variable</a></span></tt>, <tt>Numo::NArray</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>If the element is an Numo::NArray, it is automatically wrapped with `Chainer::Variable`.</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>Array&lt;<span class='object_link'><a href="Variable.html" title="Chainer::Variable (class)">Chainer::Variable</a></span>&gt;</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>A tuple of output `Chainer::Variable` objectts.</p>
+</div>
+      
+    </li>
+  
+</ul>
+<p class="tag_title">Raises:</p>
+<ul class="raise">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>TypeError</tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/chainer/function_node.rb', line 53</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_apply'>apply</span><span class='lparen'>(</span><span class='id identifier rubyid_inputs'>inputs</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_input_vars'>input_vars</span> <span class='op'>=</span> <span class='id identifier rubyid_inputs'>inputs</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span> <span class='lbrace'>{</span> <span class='op'>|</span><span class='id identifier rubyid_x'>x</span><span class='op'>|</span> <span class='const'><span class='object_link'><a href="../Chainer.html" title="Chainer (module)">Chainer</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="Variable.html" title="Chainer::Variable (class)">Variable</a></span></span><span class='period'>.</span><span class='id identifier rubyid_as_variable'><span class='object_link'><a href="Variable.html#as_variable-class_method" title="Chainer::Variable.as_variable (method)">as_variable</a></span></span><span class='lparen'>(</span><span class='id identifier rubyid_x'>x</span><span class='rparen'>)</span> <span class='rbrace'>}</span>
+  <span class='id identifier rubyid_in_data'>in_data</span> <span class='op'>=</span> <span class='id identifier rubyid_input_vars'>input_vars</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span><span class='lparen'>(</span><span class='op'>&amp;</span><span class='symbol'>:data</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_requires_grad'>requires_grad</span> <span class='op'>=</span> <span class='id identifier rubyid_input_vars'>input_vars</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span><span class='lparen'>(</span><span class='op'>&amp;</span><span class='symbol'>:requires_grad</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_any?'>any?</span>
+
+  <span class='comment'># Forward propagation
+</span>  <span class='ivar'>@input_indexes_to_retain</span> <span class='op'>=</span> <span class='kw'>nil</span>
+  <span class='ivar'>@output_indexes_to_retain</span> <span class='op'>=</span> <span class='kw'>nil</span>
+  <span class='id identifier rubyid_outputs'>outputs</span> <span class='op'>=</span> <span class='id identifier rubyid_forward'>forward</span><span class='lparen'>(</span><span class='id identifier rubyid_in_data'>in_data</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_raise'>raise</span> <span class='const'>TypeError</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_outputs'>outputs</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span><span class='embexpr_end'>}</span><span class='tstring_content'> not Array</span><span class='tstring_end'>&quot;</span></span> <span class='kw'>unless</span> <span class='id identifier rubyid_outputs'>outputs</span><span class='period'>.</span><span class='id identifier rubyid_is_a?'>is_a?</span><span class='lparen'>(</span><span class='const'>Array</span><span class='rparen'>)</span>
+
+  <span class='id identifier rubyid_ret'>ret</span> <span class='op'>=</span> <span class='id identifier rubyid_outputs'>outputs</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span> <span class='lbrace'>{</span> <span class='op'>|</span><span class='id identifier rubyid_y'>y</span><span class='op'>|</span> <span class='const'><span class='object_link'><a href="../Chainer.html" title="Chainer (module)">Chainer</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="Variable.html" title="Chainer::Variable (class)">Variable</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new'><span class='object_link'><a href="Variable.html#initialize-instance_method" title="Chainer::Variable#initialize (method)">new</a></span></span><span class='lparen'>(</span><span class='id identifier rubyid_y'>y</span><span class='comma'>,</span> <span class='label'>requires_grad:</span> <span class='id identifier rubyid_requires_grad'>requires_grad</span><span class='rparen'>)</span> <span class='rbrace'>}</span>
+
+  <span class='kw'>if</span> <span class='const'><span class='object_link'><a href="../Chainer.html" title="Chainer (module)">Chainer</a></span></span><span class='period'>.</span><span class='id identifier rubyid_configuration'><span class='object_link'><a href="../Chainer.html#configuration-class_method" title="Chainer.configuration (method)">configuration</a></span></span><span class='period'>.</span><span class='id identifier rubyid_enable_backprop'>enable_backprop</span>
+    <span class='comment'># Topological ordering
+</span>    <span class='ivar'>@rank</span> <span class='op'>=</span> <span class='id identifier rubyid_input_vars'>input_vars</span><span class='period'>.</span><span class='id identifier rubyid_size'>size</span> <span class='op'>&gt;</span> <span class='int'>0</span> <span class='op'>?</span> <span class='id identifier rubyid_input_vars'>input_vars</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span><span class='lparen'>(</span><span class='op'>&amp;</span><span class='symbol'>:rank</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_max'>max</span> <span class='op'>:</span> <span class='int'>0</span>
+
+    <span class='comment'># Add backward edges
+</span>    <span class='id identifier rubyid_ret'>ret</span><span class='period'>.</span><span class='id identifier rubyid_each'>each</span> <span class='lbrace'>{</span> <span class='op'>|</span><span class='id identifier rubyid_y'>y</span><span class='op'>|</span> <span class='id identifier rubyid_y'>y</span><span class='period'>.</span><span class='id identifier rubyid_creator_node'>creator_node</span> <span class='op'>=</span> <span class='kw'>self</span> <span class='rbrace'>}</span>
+    <span class='ivar'>@inputs</span> <span class='op'>=</span> <span class='id identifier rubyid_input_vars'>input_vars</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span><span class='lparen'>(</span><span class='op'>&amp;</span><span class='symbol'>:node</span><span class='rparen'>)</span>
+    <span class='comment'># Add forward edges (must be weak references)
+</span>    <span class='ivar'>@outputs</span> <span class='op'>=</span> <span class='id identifier rubyid_ret'>ret</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span> <span class='lbrace'>{</span> <span class='op'>|</span><span class='id identifier rubyid_y'>y</span><span class='op'>|</span> <span class='const'>WeakRef</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='id identifier rubyid_y'>y</span><span class='period'>.</span><span class='id identifier rubyid_node'>node</span><span class='rparen'>)</span> <span class='rbrace'>}</span>
+
+    <span class='kw'>unless</span> <span class='ivar'>@input_indexes_to_retain</span><span class='period'>.</span><span class='id identifier rubyid_nil?'>nil?</span>
+      <span class='ivar'>@input_indexes_to_retain</span><span class='period'>.</span><span class='id identifier rubyid_each'>each</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_index'>index</span><span class='op'>|</span>
+        <span class='id identifier rubyid_input_vars'>input_vars</span><span class='lbracket'>[</span><span class='id identifier rubyid_index'>index</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_retain_data'>retain_data</span>
+      <span class='kw'>end</span>
+    <span class='kw'>end</span>
+
+    <span class='kw'>unless</span> <span class='ivar'>@output_indexes_to_retain</span><span class='period'>.</span><span class='id identifier rubyid_nil?'>nil?</span>
+      <span class='id identifier rubyid_retained_data'>retained_data</span> <span class='op'>=</span> <span class='lbracket'>[</span><span class='rbracket'>]</span>
+      <span class='ivar'>@output_indexes_to_retain</span><span class='period'>.</span><span class='id identifier rubyid_each'>each</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_index'>index</span><span class='op'>|</span>
+        <span class='id identifier rubyid_ret'>ret</span><span class='lbracket'>[</span><span class='id identifier rubyid_index'>index</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_retain_data'>retain_data</span>
+        <span class='id identifier rubyid_retained_data'>retained_data</span> <span class='op'>&lt;&lt;</span> <span class='id identifier rubyid_outputs'>outputs</span><span class='lbracket'>[</span><span class='id identifier rubyid_index'>index</span><span class='rbracket'>]</span>
+      <span class='kw'>end</span>
+      <span class='ivar'>@retained_output_data</span> <span class='op'>=</span> <span class='const'>Array</span><span class='lparen'>(</span><span class='id identifier rubyid_retained_data'>retained_data</span><span class='rparen'>)</span>
+    <span class='kw'>end</span>
+  <span class='kw'>end</span>
+
+  <span class='id identifier rubyid_ret'>ret</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="backward-instance_method">
+  
+    #<strong>backward</strong>(target_indexes, grad_outputs)  &#x21d2; <tt>Array&lt;<span class='object_link'><a href="Variable.html" title="Chainer::Variable (class)">Chainer::Variable</a></span>&gt;</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Computes gradients w.r.t. specified inputs given output gradients.</p>
+
+<p>This method is used to compute one step of the backpropagation corresponding to the forward computation of this function node. Given the gradients w.r.t. output variables, this method computes the gradients w.r.t. specified input variables. Note that this method does not need to compute any input gradients not specified by `target_input_indexes` It enables the function node to return the input gradients with the full computational history,</p>
+
+<pre class="code ruby"><code class="ruby">in which case it supports *differentiable backpropagation* or *higher-order differentiation*.
+</code></pre>
+
+
+  </div>
+</div>
+<div class="tags">
+  <p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>target_indexes</span>
+      
+      
+        <span class='type'>(<tt>Array&lt;Integer&gt;</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Indices of the input variables w.r.t. which the gradients are required. It is guaranteed that this tuple contains at least one element.</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>grad_outputs</span>
+      
+      
+        <span class='type'>(<tt>Array&lt;<span class='object_link'><a href="Variable.html" title="Chainer::Variable (class)">Chainer::Variable</a></span>&gt;</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Gradients w.r.t. the output variables. If the gradient w.r.t. an output variable is not given, the corresponding element is `None`.</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>Array&lt;<span class='object_link'><a href="Variable.html" title="Chainer::Variable (class)">Chainer::Variable</a></span>&gt;</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Array of Chainer::Variable that represent the gradients.</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+148
+149
+150</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/chainer/function_node.rb', line 148</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_backward'>backward</span><span class='lparen'>(</span><span class='id identifier rubyid_target_indexes'>target_indexes</span><span class='comma'>,</span> <span class='id identifier rubyid_grad_outputs'>grad_outputs</span><span class='rparen'>)</span>
+  <span class='lbracket'>[</span><span class='kw'>nil</span><span class='rbracket'>]</span> <span class='op'>*</span> <span class='id identifier rubyid_target_indexes'>target_indexes</span><span class='period'>.</span><span class='id identifier rubyid_size'>size</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="backward_accumulate-instance_method">
+  
+    #<strong>backward_accumulate</strong>(target_input_indexes, grad_outputs, grad_inputs)  &#x21d2; <tt>Array&lt;<span class='object_link'><a href="Variable.html" title="Chainer::Variable (class)">Chainer::Variable</a></span>&gt;</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Computes gradients w.r.t. specified inputs and accumulates them.</p>
+
+<p>This method provides a way to fuse the backward computation and the gradient accumulations</p>
+
+<pre class="code ruby"><code class="ruby">in the case that the multiple functions are applied to the same variable.
+</code></pre>
+
+<p>Users have to override either of this method or `backward`. It is often simpler to implement `backward` and is recommended if you do not need to provide efficient gradient accumulation.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  <p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>target_input_indexes</span>
+      
+      
+        <span class='type'>(<tt>Array&lt;Integer&gt;</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Indices of the input variables w.r.t. which the gradients are required. It is guaranteed that this tuple contains at least one element.</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>grad_outputs</span>
+      
+      
+        <span class='type'>(<tt>Array&lt;<span class='object_link'><a href="Variable.html" title="Chainer::Variable (class)">Chainer::Variable</a></span>&gt;</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Gradients w.r.t. the output variables. If the gradient w.r.t. an output variable is not given, the corresponding element is `None`.</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>grad_inputs</span>
+      
+      
+        <span class='type'>(<tt>Array&lt;<span class='object_link'><a href="Variable.html" title="Chainer::Variable (class)">Chainer::Variable</a></span>&gt;</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Gradients w.r.t. the input variables specified by `target_input_indexes`. These values are computed by other computation paths. If there is no gradient value existing for the variable, the corresponding element is “None“.</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>Array&lt;<span class='object_link'><a href="Variable.html" title="Chainer::Variable (class)">Chainer::Variable</a></span>&gt;</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Array of variables that represent the gradients w.r.t. specified input variables.</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+167
+168
+169
+170
+171
+172
+173
+174
+175
+176
+177
+178
+179
+180
+181
+182
+183
+184
+185
+186</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/chainer/function_node.rb', line 167</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_backward_accumulate'>backward_accumulate</span><span class='lparen'>(</span><span class='id identifier rubyid_target_input_indexes'>target_input_indexes</span><span class='comma'>,</span> <span class='id identifier rubyid_grad_outputs'>grad_outputs</span><span class='comma'>,</span> <span class='id identifier rubyid_grad_inputs'>grad_inputs</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_gxs'>gxs</span> <span class='op'>=</span> <span class='id identifier rubyid_backward'>backward</span><span class='lparen'>(</span><span class='id identifier rubyid_target_input_indexes'>target_input_indexes</span><span class='comma'>,</span> <span class='id identifier rubyid_grad_outputs'>grad_outputs</span><span class='rparen'>)</span>
+
+  <span class='id identifier rubyid_len_gxs'>len_gxs</span> <span class='op'>=</span> <span class='id identifier rubyid_gxs'>gxs</span><span class='period'>.</span><span class='id identifier rubyid_size'>size</span>
+  <span class='kw'>if</span> <span class='id identifier rubyid_len_gxs'>len_gxs</span> <span class='op'>==</span> <span class='ivar'>@inputs</span><span class='period'>.</span><span class='id identifier rubyid_size'>size</span>
+    <span class='id identifier rubyid_gxs'>gxs</span> <span class='op'>=</span> <span class='id identifier rubyid_target_input_indexes'>target_input_indexes</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span> <span class='lbrace'>{</span> <span class='op'>|</span><span class='id identifier rubyid_i'>i</span><span class='op'>|</span> <span class='id identifier rubyid_gxs'>gxs</span><span class='lbracket'>[</span><span class='id identifier rubyid_i'>i</span><span class='rbracket'>]</span> <span class='rbrace'>}</span>
+  <span class='kw'>elsif</span> <span class='id identifier rubyid_len_gxs'>len_gxs</span> <span class='op'>!=</span> <span class='id identifier rubyid_target_input_indexes'>target_input_indexes</span><span class='period'>.</span><span class='id identifier rubyid_size'>size</span>
+    <span class='id identifier rubyid_raise'>raise</span> <span class='const'>ArgumentError</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>number of gradients returned by </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_impl_name'>impl_name</span><span class='embexpr_end'>}</span><span class='tstring_content'> (</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_label'>label</span><span class='embexpr_end'>}</span><span class='tstring_content'>) is incorrect.</span><span class='tstring_end'>&quot;</span></span>
+  <span class='kw'>end</span>
+
+  <span class='id identifier rubyid_gxs'>gxs</span><span class='period'>.</span><span class='id identifier rubyid_zip'>zip</span><span class='lparen'>(</span><span class='id identifier rubyid_grad_inputs'>grad_inputs</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_gx'>gx</span><span class='comma'>,</span> <span class='id identifier rubyid_g_input'>g_input</span><span class='op'>|</span>
+    <span class='kw'>if</span> <span class='id identifier rubyid_g_input'>g_input</span><span class='period'>.</span><span class='id identifier rubyid_nil?'>nil?</span>
+      <span class='id identifier rubyid_gx'>gx</span>
+    <span class='kw'>elsif</span> <span class='id identifier rubyid_gx'>gx</span><span class='period'>.</span><span class='id identifier rubyid_nil?'>nil?</span>
+      <span class='id identifier rubyid_g_input'>g_input</span>
+    <span class='kw'>else</span>
+      <span class='id identifier rubyid_gx'>gx</span> <span class='op'>+</span> <span class='id identifier rubyid_g_input'>g_input</span>
+    <span class='kw'>end</span>
+  <span class='kw'>end</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="forward-instance_method">
+  
+    #<strong>forward</strong>(inputs)  &#x21d2; <tt>Array</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Computes the output arrays from the input arrays.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  <p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>inputs</span>
+      
+      
+        <span class='type'>(<tt>Array</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>input array(s)</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>Array</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>output array(s)</p>
+</div>
+      
+    </li>
+  
+</ul>
+<p class="tag_title">Raises:</p>
+<ul class="raise">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>TypeError</tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+99
+100
+101
+102
+103</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/chainer/function_node.rb', line 99</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_forward'>forward</span><span class='lparen'>(</span><span class='id identifier rubyid_inputs'>inputs</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_raise'>raise</span> <span class='const'>TypeError</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>mustt inputs &gt; 0, inputs size is </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_inputs'>inputs</span><span class='period'>.</span><span class='id identifier rubyid_size'>size</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span> <span class='kw'>if</span> <span class='id identifier rubyid_inputs'>inputs</span><span class='period'>.</span><span class='id identifier rubyid_size'>size</span><span class='period'>.</span><span class='id identifier rubyid_zero?'>zero?</span>
+  <span class='comment'># TODO GPU
+</span>  <span class='id identifier rubyid_forward_cpu'>forward_cpu</span><span class='lparen'>(</span><span class='id identifier rubyid_inputs'>inputs</span><span class='rparen'>)</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="forward_cpu-instance_method">
+  
+    #<strong>forward_cpu</strong>(inputs)  &#x21d2; <tt>Array&lt;Numo::NArray&gt;</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Computes the output arrays from the input Numo::NArray.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  <p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>inputs</span>
+      
+      
+        <span class='type'>(<tt>Array&lt;Numo::NArray&gt;</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Numo::NArray objects.</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>Array&lt;Numo::NArray&gt;</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Array of output arrays.</p>
+</div>
+      
+    </li>
+  
+</ul>
+<p class="tag_title">Raises:</p>
+<ul class="raise">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>NotImplementedError</tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+109
+110
+111</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/chainer/function_node.rb', line 109</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_forward_cpu'>forward_cpu</span><span class='lparen'>(</span><span class='id identifier rubyid_inputs'>inputs</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_raise'>raise</span> <span class='const'>NotImplementedError</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="get_retained_inputs-instance_method">
+  
+    #<strong>get_retained_inputs</strong>  &#x21d2; <tt>Array</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Returns a Array of retained input variables.</p>
+
+<p>This method is used to retrieve the input variables retained in `forward`.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>Array</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>a Array of retained input variables.</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+193
+194
+195</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/chainer/function_node.rb', line 193</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_get_retained_inputs'>get_retained_inputs</span>
+  <span class='ivar'>@input_indexes_to_retain</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span> <span class='lbrace'>{</span> <span class='op'>|</span><span class='id identifier rubyid_index'>index</span><span class='op'>|</span> <span class='ivar'>@inputs</span><span class='lbracket'>[</span><span class='id identifier rubyid_index'>index</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_get_variable'>get_variable</span> <span class='rbrace'>}</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="get_retained_outputs-instance_method">
+  
+    #<strong>get_retained_outputs</strong>  &#x21d2; <tt>Array</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Returns a Array of retained output variables.</p>
+
+<p>This method is used to retrieve the input variables retained in `forward`.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>Array</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>a Array of retained input variables.</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+202
+203
+204
+205
+206
+207
+208
+209
+210
+211
+212
+213
+214
+215
+216
+217
+218
+219
+220
+221
+222
+223
+224
+225
+226
+227
+228</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/chainer/function_node.rb', line 202</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_get_retained_outputs'>get_retained_outputs</span>
+  <span class='id identifier rubyid_ret'>ret</span> <span class='op'>=</span> <span class='lbracket'>[</span><span class='rbracket'>]</span>
+  <span class='id identifier rubyid_outputs'>outputs</span> <span class='op'>=</span> <span class='ivar'>@outputs</span>
+
+  <span class='id identifier rubyid_new_outputs'>new_outputs</span> <span class='op'>=</span> <span class='id identifier rubyid_outputs'>outputs</span><span class='period'>.</span><span class='id identifier rubyid_dup'>dup</span>
+  <span class='id identifier rubyid_outputs_modified'>outputs_modified</span> <span class='op'>=</span> <span class='kw'>false</span>
+
+  <span class='ivar'>@output_indexes_to_retain</span><span class='period'>.</span><span class='id identifier rubyid_zip'>zip</span><span class='lparen'>(</span><span class='ivar'>@retained_output_data</span><span class='rparen'>)</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_index'>index</span><span class='comma'>,</span> <span class='id identifier rubyid_data'>data</span><span class='op'>|</span>
+    <span class='id identifier rubyid_output'>output</span> <span class='op'>=</span>  <span class='id identifier rubyid_outputs'>outputs</span><span class='lbracket'>[</span><span class='id identifier rubyid_index'>index</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid___getobj__'>__getobj__</span>
+    <span class='kw'>if</span> <span class='id identifier rubyid_output'>output</span><span class='period'>.</span><span class='id identifier rubyid_nil?'>nil?</span>
+      <span class='id identifier rubyid_output_var'>output_var</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="../Chainer.html" title="Chainer (module)">Chainer</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="Variable.html" title="Chainer::Variable (class)">Variable</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new'><span class='object_link'><a href="Variable.html#initialize-instance_method" title="Chainer::Variable#initialize (method)">new</a></span></span><span class='lparen'>(</span><span class='id identifier rubyid_data'>data</span><span class='rparen'>)</span>
+      <span class='id identifier rubyid_output_var'>output_var</span><span class='period'>.</span><span class='id identifier rubyid_creator_node'>creator_node</span> <span class='op'>=</span> <span class='kw'>self</span>
+      <span class='id identifier rubyid_new_outputs'>new_outputs</span><span class='lbracket'>[</span><span class='id identifier rubyid_index'>index</span><span class='rbracket'>]</span> <span class='op'>=</span> <span class='const'>WeakRef</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='id identifier rubyid_output_var'>output_var</span><span class='rparen'>)</span>
+      <span class='id identifier rubyid_outputs_modified'>outputs_modified</span> <span class='op'>=</span> <span class='kw'>true</span>
+    <span class='kw'>else</span>
+      <span class='id identifier rubyid_output_var'>output_var</span> <span class='op'>=</span> <span class='id identifier rubyid_output'>output</span><span class='period'>.</span><span class='id identifier rubyid_get_variable'>get_variable</span>
+    <span class='kw'>end</span>
+
+    <span class='id identifier rubyid_ret'>ret</span> <span class='op'>&lt;&lt;</span> <span class='id identifier rubyid_output_var'>output_var</span>
+  <span class='kw'>end</span>
+
+  <span class='kw'>if</span> <span class='id identifier rubyid_outputs_modified'>outputs_modified</span>
+    <span class='ivar'>@outputs</span> <span class='op'>=</span> <span class='const'>Array</span><span class='lparen'>(</span><span class='id identifier rubyid_new_outputs'>new_outputs</span><span class='rparen'>)</span>
+  <span class='kw'>end</span>
+
+  <span class='id identifier rubyid_ret'>ret</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="label-instance_method">
+  
+    #<strong>label</strong>  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Short text that represents the function.</p>
+
+<p>The default implementation returns its type name. Each function should override it to give more information.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+31
+32
+33</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/chainer/function_node.rb', line 31</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_label'>label</span>
+  <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span><span class='period'>.</span><span class='id identifier rubyid_name'>name</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="output_data-instance_method">
+  
+    #<strong>output_data</strong>  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>A tuple of the retained output arrays. This property is mainly used by $Function$. Users basically do not have to use this property; use $get_retained_outputs$ instead.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Raises:</p>
+<ul class="raise">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>RuntimeError</tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+38
+39
+40
+41
+42
+43
+44
+45</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/chainer/function_node.rb', line 38</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_output_data'>output_data</span>
+  <span class='id identifier rubyid_raise'>raise</span> <span class='const'>RuntimeError</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>retained output data is gone</span><span class='tstring_end'>&#39;</span></span> <span class='kw'>if</span> <span class='ivar'>@retained_output_data</span><span class='period'>.</span><span class='id identifier rubyid_nil?'>nil?</span>
+  <span class='id identifier rubyid_out_data'>out_data</span> <span class='op'>=</span> <span class='lbracket'>[</span><span class='kw'>nil</span><span class='rbracket'>]</span> <span class='op'>*</span> <span class='ivar'>@outputs</span><span class='period'>.</span><span class='id identifier rubyid_size'>size</span>
+  <span class='ivar'>@output_indexes_to_retain</span><span class='period'>.</span><span class='id identifier rubyid_zip'>zip</span><span class='lparen'>(</span><span class='ivar'>@retained_output_data</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_each'>each</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_index'>index</span><span class='comma'>,</span> <span class='id identifier rubyid_data'>data</span><span class='op'>|</span>
+    <span class='id identifier rubyid_out_data'>out_data</span><span class='lbracket'>[</span><span class='id identifier rubyid_index'>index</span><span class='rbracket'>]</span> <span class='op'>=</span> <span class='id identifier rubyid_data'>data</span>
+  <span class='kw'>end</span>
+  <span class='id identifier rubyid_out_data'>out_data</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="retain_inputs-instance_method">
+  
+    #<strong>retain_inputs</strong>(indexes)  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Lets specified input variable nodes keep data arrays.</p>
+
+<p>By calling this method from `forward`, the function node can specify which inputs are required for backprop. The input variables with retained arrays can be obtained by `get_retained_inputs` from `backward`.</p>
+
+<p>Note that **this method must not be called from the outside of forward method.**</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  <p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>indexes</span>
+      
+      
+        <span class='type'>(<tt>Integer</tt>, <tt>Array</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Indexes of input variables that the function does not require for backprop.</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+120
+121
+122</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/chainer/function_node.rb', line 120</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_retain_inputs'>retain_inputs</span><span class='lparen'>(</span><span class='id identifier rubyid_indexes'>indexes</span><span class='rparen'>)</span>
+  <span class='ivar'>@input_indexes_to_retain</span> <span class='op'>=</span> <span class='id identifier rubyid_indexes'>indexes</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="retain_outputs-instance_method">
+  
+    #<strong>retain_outputs</strong>(indexes)  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Lets specified output variable nodes keep data arrays.</p>
+
+<p>By calling this method from `forward`, the function node can specify which outputs are required for backprop. If this method is not called, any output variables are not marked to keep the data array at the point of returning from `apply`. The output variables with retained arrays can be obtained by `get_retained_outputs` from `backward`. Note that **this method must not be called from the outside of forward method.**</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  <p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>indexes</span>
+      
+      
+        <span class='type'>(<tt>Integer</tt>, <tt>Array</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Indexes of input variables that the function does not require for backprop.</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+131
+132
+133</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/chainer/function_node.rb', line 131</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_retain_outputs'>retain_outputs</span><span class='lparen'>(</span><span class='id identifier rubyid_indexes'>indexes</span><span class='rparen'>)</span>
+  <span class='ivar'>@output_indexes_to_retain</span> <span class='op'>=</span> <span class='id identifier rubyid_indexes'>indexes</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="unchain-instance_method">
+  
+    #<strong>unchain</strong>  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Purges in/out nodes and this function node itself from the graph.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+231
+232
+233
+234
+235
+236
+237
+238
+239</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/chainer/function_node.rb', line 231</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_unchain'>unchain</span>
+  <span class='ivar'>@outputs</span><span class='period'>.</span><span class='id identifier rubyid_each'>each</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_y'>y</span><span class='op'>|</span>
+    <span class='id identifier rubyid_y_ref'>y_ref</span> <span class='op'>=</span> <span class='id identifier rubyid_y'>y</span><span class='period'>.</span><span class='lparen'>(</span><span class='rparen'>)</span>
+    <span class='kw'>unless</span> <span class='id identifier rubyid_y_ref'>y_ref</span><span class='period'>.</span><span class='id identifier rubyid_nil?'>nil?</span>
+      <span class='id identifier rubyid_y_ref'>y_ref</span><span class='period'>.</span><span class='id identifier rubyid_unchain'>unchain</span>
+    <span class='kw'>end</span>
+  <span class='kw'>end</span>
+  <span class='ivar'>@inputs</span> <span class='op'>=</span> <span class='kw'>nil</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+  </div>
+
+</div>
+
+      <div id="footer">
+  Generated on Thu Oct 10 04:25:40 2019 by
+  <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
+  0.9.20 (ruby-2.6.3).
+</div>
+
+    </div>
+  </body>
+</html>

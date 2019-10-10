@@ -1,0 +1,685 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>
+  Class: Chainer::Parameter
+  
+    &mdash; Documentation by YARD 0.9.20
+  
+</title>
+
+  <link rel="stylesheet" href="../css/style.css" type="text/css" charset="utf-8" />
+
+  <link rel="stylesheet" href="../css/common.css" type="text/css" charset="utf-8" />
+
+<script type="text/javascript" charset="utf-8">
+  pathId = "Chainer::Parameter";
+  relpath = '../';
+</script>
+
+
+  <script type="text/javascript" charset="utf-8" src="../js/jquery.js"></script>
+
+  <script type="text/javascript" charset="utf-8" src="../js/app.js"></script>
+
+
+
+    <!-- Additional settings for MathJax are from here. -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax:{
+          inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+          displayMath: [ ['$$','$$'], ["\\[","\\]"] ]
+        }
+      });
+    </script>
+    <script type="text/javascript"
+      src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.6/MathJax.js?config=TeX-AMS_HTML">
+    </script>
+    <meta http-equiv="X-UA-Compatible" CONTENT="IE=EmulateIE7" />
+    <!-- Additional settings for MathJax are over here. -->
+
+  </head>
+  <body>
+    <div class="nav_wrap">
+      <iframe id="nav" src="../class_list.html?1"></iframe>
+      <div id="resizer"></div>
+    </div>
+
+    <div id="main" tabindex="-1">
+      <div id="header">
+        <div id="menu">
+  
+    <a href="../_index.html">Index (P)</a> &raquo;
+    <span class='title'><span class='object_link'><a href="../Chainer.html" title="Chainer (module)">Chainer</a></span></span>
+     &raquo; 
+    <span class="title">Parameter</span>
+  
+</div>
+
+        <div id="search">
+  
+    <a class="full_list_link" id="class_list_link"
+        href="../class_list.html">
+
+        <svg width="24" height="24">
+          <rect x="0" y="4" width="24" height="4" rx="1" ry="1"></rect>
+          <rect x="0" y="12" width="24" height="4" rx="1" ry="1"></rect>
+          <rect x="0" y="20" width="24" height="4" rx="1" ry="1"></rect>
+        </svg>
+    </a>
+  
+</div>
+        <div class="clear"></div>
+      </div>
+
+      <div id="content"><h1>Class: Chainer::Parameter
+  
+  
+  
+</h1>
+<div class="box_info">
+  
+  <dl>
+    <dt>Inherits:</dt>
+    <dd>
+      <span class="inheritName"><span class='object_link'><a href="Variable.html" title="Chainer::Variable (class)">Variable</a></span></span>
+      
+        <ul class="fullTree">
+          <li>Object</li>
+          
+            <li class="next"><span class='object_link'><a href="Variable.html" title="Chainer::Variable (class)">Variable</a></span></li>
+          
+            <li class="next">Chainer::Parameter</li>
+          
+        </ul>
+        <a href="#" class="inheritanceTree">show all</a>
+      
+    </dd>
+  </dl>
+  
+
+  
+  
+  
+  
+  
+
+  
+
+  
+  <dl>
+    <dt>Defined in:</dt>
+    <dd>lib/chainer/parameter.rb</dd>
+  </dl>
+  
+</div>
+
+
+
+
+
+  <h2>Instance Attribute Summary <small><a href="#" class="summary_toggle">collapse</a></small></h2>
+  <ul class="summary">
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#grad_initializer-instance_method" title="#grad_initializer (instance method)">#<strong>grad_initializer</strong>  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+    
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Returns the value of attribute grad_initializer.</p>
+</div></span>
+  
+</li>
+
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#initializer-instance_method" title="#initializer (instance method)">#<strong>initializer</strong>  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+    
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Returns the value of attribute initializer.</p>
+</div></span>
+  
+</li>
+
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#update_rule-instance_method" title="#update_rule (instance method)">#<strong>update_rule</strong>  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+    
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Returns the value of attribute update_rule.</p>
+</div></span>
+  
+</li>
+
+    
+  </ul>
+
+
+
+  
+  
+  <h3 class="inherited">Attributes inherited from <span class='object_link'><a href="Variable.html" title="Chainer::Variable (class)">Variable</a></span></h3>
+  <p class="inherited"><span class='object_link'><a href="Variable.html#data-instance_method" title="Chainer::Variable#data (method)">#data</a></span>, <span class='object_link'><a href="Variable.html#grad-instance_method" title="Chainer::Variable#grad (method)">#grad</a></span>, <span class='object_link'><a href="Variable.html#node-instance_method" title="Chainer::Variable#node (method)">#node</a></span>, <span class='object_link'><a href="Variable.html#requires_grad-instance_method" title="Chainer::Variable#requires_grad (method)">#requires_grad</a></span></p>
+
+
+  
+    <h2>
+      Instance Method Summary
+      <small><a href="#" class="summary_toggle">collapse</a></small>
+    </h2>
+
+    <ul class="summary">
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#cleargrad-instance_method" title="#cleargrad (instance method)">#<strong>cleargrad</strong>  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#init-instance_method" title="#init (instance method)">#<strong>init</strong>(shape)  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#initialize-instance_method" title="#initialize (instance method)">#<strong>initialize</strong>(initializer: nil, shape: nil, name: nil)  &#x21d2; Parameter </a>
+    
+
+    
+  </span>
+  
+  
+    <span class="note title constructor">constructor</span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>A new instance of Parameter.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#update-instance_method" title="#update (instance method)">#<strong>update</strong>  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+    </ul>
+  
+
+
+  
+  
+  
+  
+  
+  
+  
+  
+  <h3 class="inherited">Methods inherited from <span class='object_link'><a href="Variable.html" title="Chainer::Variable (class)">Variable</a></span></h3>
+  <p class="inherited"><span class='object_link'><a href="Variable.html#*-instance_method" title="Chainer::Variable#* (method)">#*</a></span>, <span class='object_link'><a href="Variable.html#**-instance_method" title="Chainer::Variable#** (method)">#**</a></span>, <span class='object_link'><a href="Variable.html#%2B-instance_method" title="Chainer::Variable#+ (method)">#+</a></span>, <span class='object_link'><a href="Variable.html#--instance_method" title="Chainer::Variable#- (method)">#-</a></span>, <span class='object_link'><a href="Variable.html#-@-instance_method" title="Chainer::Variable#-@ (method)">#-@</a></span>, <span class='object_link'><a href="Variable.html#%2F-instance_method" title="Chainer::Variable#/ (method)">#/</a></span>, <span class='object_link'><a href="Variable.html#_backward_main-instance_method" title="Chainer::Variable#_backward_main (method)">#_backward_main</a></span>, <span class='object_link'><a href="Variable.html#as_variable-class_method" title="Chainer::Variable.as_variable (method)">as_variable</a></span>, <span class='object_link'><a href="Variable.html#backward-instance_method" title="Chainer::Variable#backward (method)">#backward</a></span>, <span class='object_link'><a href="Variable.html#coerce-instance_method" title="Chainer::Variable#coerce (method)">#coerce</a></span>, <span class='object_link'><a href="Variable.html#creator-instance_method" title="Chainer::Variable#creator (method)">#creator</a></span>, <span class='object_link'><a href="Variable.html#creator=-instance_method" title="Chainer::Variable#creator= (method)">#creator=</a></span>, <span class='object_link'><a href="Variable.html#creator_node-instance_method" title="Chainer::Variable#creator_node (method)">#creator_node</a></span>, <span class='object_link'><a href="Variable.html#creator_node=-instance_method" title="Chainer::Variable#creator_node= (method)">#creator_node=</a></span>, <span class='object_link'><a href="Variable.html#dtype-instance_method" title="Chainer::Variable#dtype (method)">#dtype</a></span>, <span class='object_link'><a href="Variable.html#grad_var-instance_method" title="Chainer::Variable#grad_var (method)">#grad_var</a></span>, <span class='object_link'><a href="Variable.html#grad_var=-instance_method" title="Chainer::Variable#grad_var= (method)">#grad_var=</a></span>, <span class='object_link'><a href="Variable.html#label-instance_method" title="Chainer::Variable#label (method)">#label</a></span>, <span class='object_link'><a href="Variable.html#name-instance_method" title="Chainer::Variable#name (method)">#name</a></span>, <span class='object_link'><a href="Variable.html#name=-instance_method" title="Chainer::Variable#name= (method)">#name=</a></span>, <span class='object_link'><a href="Variable.html#ndim-instance_method" title="Chainer::Variable#ndim (method)">#ndim</a></span>, <span class='object_link'><a href="Variable.html#rank-instance_method" title="Chainer::Variable#rank (method)">#rank</a></span>, <span class='object_link'><a href="Variable.html#reshape-instance_method" title="Chainer::Variable#reshape (method)">#reshape</a></span>, <span class='object_link'><a href="Variable.html#retain_data-instance_method" title="Chainer::Variable#retain_data (method)">#retain_data</a></span>, <span class='object_link'><a href="Variable.html#set_creator_node-instance_method" title="Chainer::Variable#set_creator_node (method)">#set_creator_node</a></span>, <span class='object_link'><a href="Variable.html#shape-instance_method" title="Chainer::Variable#shape (method)">#shape</a></span>, <span class='object_link'><a href="Variable.html#size-instance_method" title="Chainer::Variable#size (method)">#size</a></span>, <span class='object_link'><a href="Variable.html#transpose-instance_method" title="Chainer::Variable#transpose (method)">#transpose</a></span></p>
+<div id="constructor_details" class="method_details_list">
+  <h2>Constructor Details</h2>
+  
+    <div class="method_details first">
+  <h3 class="signature first" id="initialize-instance_method">
+  
+    #<strong>initialize</strong>(initializer: nil, shape: nil, name: nil)  &#x21d2; <tt><span class='object_link'><a href="" title="Chainer::Parameter (class)">Parameter</a></span></tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Returns a new instance of Parameter</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/chainer/parameter.rb', line 5</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_initialize'>initialize</span><span class='lparen'>(</span><span class='label'>initializer:</span> <span class='kw'>nil</span><span class='comma'>,</span> <span class='label'>shape:</span> <span class='kw'>nil</span><span class='comma'>,</span> <span class='label'>name:</span> <span class='kw'>nil</span><span class='rparen'>)</span>
+  <span class='kw'>if</span> <span class='id identifier rubyid_initializer'>initializer</span><span class='period'>.</span><span class='id identifier rubyid_nil?'>nil?</span>
+    <span class='id identifier rubyid_initializer'>initializer</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="../Chainer.html" title="Chainer (module)">Chainer</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="Initializers.html" title="Chainer::Initializers (module)">Initializers</a></span></span><span class='period'>.</span><span class='id identifier rubyid_nan'><span class='object_link'><a href="Initializers.html#nan-class_method" title="Chainer::Initializers.nan (method)">nan</a></span></span><span class='lparen'>(</span><span class='rparen'>)</span>
+  <span class='kw'>elsif</span> <span class='id identifier rubyid_initializer'>initializer</span><span class='period'>.</span><span class='id identifier rubyid_kind_of?'>kind_of?</span><span class='lparen'>(</span><span class='const'>Numeric</span><span class='rparen'>)</span>
+    <span class='id identifier rubyid_initializer'>initializer</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="Initializers.html" title="Chainer::Initializers (module)">Initializers</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="Initializers/Constant.html" title="Chainer::Initializers::Constant (class)">Constant</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new'><span class='object_link'><a href="Initializers/Constant.html#initialize-instance_method" title="Chainer::Initializers::Constant#initialize (method)">new</a></span></span><span class='lparen'>(</span><span class='id identifier rubyid_initializer'>initializer</span><span class='rparen'>)</span>
+  <span class='kw'>end</span>
+
+  <span class='kw'>if</span> <span class='id identifier rubyid_shape'>shape</span><span class='period'>.</span><span class='id identifier rubyid_nil?'>nil?</span>
+    <span class='kw'>if</span> <span class='const'><span class='object_link'><a href="../Chainer.html" title="Chainer (module)">Chainer</a></span></span><span class='period'>.</span><span class='id identifier rubyid_array?'><span class='object_link'><a href="../Chainer.html#array%3F-class_method" title="Chainer.array? (method)">array?</a></span></span><span class='lparen'>(</span><span class='id identifier rubyid_initializer'>initializer</span><span class='rparen'>)</span>
+      <span class='kw'>super</span><span class='lparen'>(</span><span class='id identifier rubyid_initializer'>initializer</span><span class='comma'>,</span> <span class='label'>name:</span> <span class='id identifier rubyid_name'>name</span><span class='rparen'>)</span>
+    <span class='kw'>else</span>
+      <span class='kw'>super</span><span class='lparen'>(</span><span class='label'>name:</span> <span class='id identifier rubyid_name'>name</span><span class='rparen'>)</span>
+      <span class='ivar'>@initializer</span> <span class='op'>=</span> <span class='id identifier rubyid_initializer'>initializer</span>
+      <span class='id identifier rubyid_dtype'>dtype</span> <span class='op'>=</span> <span class='id identifier rubyid_initializer'>initializer</span><span class='period'>.</span><span class='id identifier rubyid_respond_to?'>respond_to?</span><span class='lparen'>(</span><span class='symbol'>:dtype</span><span class='rparen'>)</span> <span class='op'>?</span> <span class='id identifier rubyid_initializer'>initializer</span><span class='period'>.</span><span class='id identifier rubyid_dtype'>dtype</span> <span class='op'>:</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>SFloat</span><span class='tstring_end'>&#39;</span></span>
+      <span class='ivar'>@grad_initializer</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="../Chainer.html" title="Chainer (module)">Chainer</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="Initializers.html" title="Chainer::Initializers (module)">Initializers</a></span></span><span class='period'>.</span><span class='id identifier rubyid_nan'><span class='object_link'><a href="Initializers.html#nan-class_method" title="Chainer::Initializers.nan (method)">nan</a></span></span><span class='lparen'>(</span><span class='label'>dtype:</span> <span class='id identifier rubyid_dtype'>dtype</span><span class='rparen'>)</span>
+    <span class='kw'>end</span>
+  <span class='kw'>else</span>
+    <span class='kw'>if</span> <span class='const'><span class='object_link'><a href="../Chainer.html" title="Chainer (module)">Chainer</a></span></span><span class='period'>.</span><span class='id identifier rubyid_array?'><span class='object_link'><a href="../Chainer.html#array%3F-class_method" title="Chainer.array? (method)">array?</a></span></span><span class='lparen'>(</span><span class='id identifier rubyid_initializer'>initializer</span><span class='rparen'>)</span>
+      <span class='id identifier rubyid_initializer'>initializer</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="Initializers.html" title="Chainer::Initializers (module)">Initializers</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="Initializers/Constant.html" title="Chainer::Initializers::Constant (class)">Constant</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new'><span class='object_link'><a href="Initializers/Constant.html#initialize-instance_method" title="Chainer::Initializers::Constant#initialize (method)">new</a></span></span><span class='lparen'>(</span><span class='id identifier rubyid_initializer'>initializer</span><span class='rparen'>)</span>
+    <span class='kw'>end</span>
+    <span class='id identifier rubyid_data'>data</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="../Chainer.html" title="Chainer (module)">Chainer</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="Initializers.html" title="Chainer::Initializers (module)">Initializers</a></span></span><span class='period'>.</span><span class='id identifier rubyid_generate_array'><span class='object_link'><a href="Initializers.html#generate_array-class_method" title="Chainer::Initializers.generate_array (method)">generate_array</a></span></span><span class='lparen'>(</span><span class='id identifier rubyid_initializer'>initializer</span><span class='comma'>,</span> <span class='id identifier rubyid_shape'>shape</span><span class='rparen'>)</span>
+    <span class='id identifier rubyid_xm'>xm</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="../Chainer.html" title="Chainer (module)">Chainer</a></span></span><span class='period'>.</span><span class='id identifier rubyid_get_array_module'><span class='object_link'><a href="../Chainer.html#get_array_module-class_method" title="Chainer.get_array_module (method)">get_array_module</a></span></span><span class='lparen'>(</span><span class='id identifier rubyid_data'>data</span><span class='rparen'>)</span>
+    <span class='id identifier rubyid_grad'>grad</span> <span class='op'>=</span> <span class='id identifier rubyid_xm'>xm</span><span class='op'>::</span><span class='const'>NArray</span><span class='lbracket'>[</span><span class='op'>*</span><span class='lbracket'>[</span><span class='int'>1</span><span class='comma'>,</span> <span class='int'>2</span><span class='rbracket'>]</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_new_fill'>new_fill</span><span class='lparen'>(</span><span class='op'>-</span><span class='int'>922337203</span><span class='rparen'>)</span>
+    <span class='kw'>super</span><span class='lparen'>(</span><span class='id identifier rubyid_data'>data</span><span class='comma'>,</span> <span class='label'>name:</span> <span class='id identifier rubyid_name'>name</span><span class='comma'>,</span> <span class='label'>grad:</span> <span class='id identifier rubyid_grad'>grad</span><span class='rparen'>)</span>
+  <span class='kw'>end</span>
+
+  <span class='ivar'>@update_rule</span> <span class='op'>=</span> <span class='kw'>nil</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+  
+</div>
+
+  <div id="instance_attr_details" class="attr_details">
+    <h2>Instance Attribute Details</h2>
+    
+      
+      <span id="grad_initializer=-instance_method"></span>
+      <div class="method_details first">
+  <h3 class="signature first" id="grad_initializer-instance_method">
+  
+    #<strong>grad_initializer</strong>  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Returns the value of attribute grad_initializer</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+3
+4
+5</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/chainer/parameter.rb', line 3</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_grad_initializer'>grad_initializer</span>
+  <span class='ivar'>@grad_initializer</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      
+      <span id="initializer=-instance_method"></span>
+      <div class="method_details ">
+  <h3 class="signature " id="initializer-instance_method">
+  
+    #<strong>initializer</strong>  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Returns the value of attribute initializer</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+3
+4
+5</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/chainer/parameter.rb', line 3</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_initializer'>initializer</span>
+  <span class='ivar'>@initializer</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      
+      <span id="update_rule=-instance_method"></span>
+      <div class="method_details ">
+  <h3 class="signature " id="update_rule-instance_method">
+  
+    #<strong>update_rule</strong>  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Returns the value of attribute update_rule</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+3
+4
+5</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/chainer/parameter.rb', line 3</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_update_rule'>update_rule</span>
+  <span class='ivar'>@update_rule</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+  </div>
+
+
+  <div id="instance_method_details" class="method_details_list">
+    <h2>Instance Method Details</h2>
+
+    
+      <div class="method_details first">
+  <h3 class="signature first" id="cleargrad-instance_method">
+  
+    #<strong>cleargrad</strong>  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+34
+35
+36
+37</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/chainer/parameter.rb', line 34</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_cleargrad'>cleargrad</span>
+  <span class='kw'>super</span>
+  <span class='ivar'>@grad_initializer</span> <span class='op'>=</span> <span class='kw'>nil</span> <span class='kw'>if</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_data'>data</span><span class='period'>.</span><span class='id identifier rubyid_nil?'>nil?</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="init-instance_method">
+  
+    #<strong>init</strong>(shape)  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+39
+40
+41
+42
+43
+44
+45
+46</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/chainer/parameter.rb', line 39</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_init'>init</span><span class='lparen'>(</span><span class='id identifier rubyid_shape'>shape</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_data'>data</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="../Chainer.html" title="Chainer (module)">Chainer</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="Initializers.html" title="Chainer::Initializers (module)">Initializers</a></span></span><span class='period'>.</span><span class='id identifier rubyid_generate_array'><span class='object_link'><a href="Initializers.html#generate_array-class_method" title="Chainer::Initializers.generate_array (method)">generate_array</a></span></span><span class='lparen'>(</span><span class='ivar'>@initializer</span><span class='comma'>,</span> <span class='id identifier rubyid_shape'>shape</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_ginit'>ginit</span> <span class='op'>=</span> <span class='ivar'>@grad_initializer</span>
+  <span class='id identifier rubyid_grad'>grad</span> <span class='op'>=</span> <span class='id identifier rubyid_ginit'>ginit</span><span class='period'>.</span><span class='id identifier rubyid_nil?'>nil?</span> <span class='op'>?</span> <span class='kw'>nil</span> <span class='op'>:</span> <span class='const'><span class='object_link'><a href="../Chainer.html" title="Chainer (module)">Chainer</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="Initializers.html" title="Chainer::Initializers (module)">Initializers</a></span></span><span class='period'>.</span><span class='id identifier rubyid_generate_array'><span class='object_link'><a href="Initializers.html#generate_array-class_method" title="Chainer::Initializers.generate_array (method)">generate_array</a></span></span><span class='lparen'>(</span><span class='id identifier rubyid_ginit'>ginit</span><span class='comma'>,</span> <span class='id identifier rubyid_shape'>shape</span><span class='rparen'>)</span>
+
+  <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_data'>data</span> <span class='op'>=</span> <span class='id identifier rubyid_data'>data</span>
+  <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_grad'>grad</span> <span class='op'>=</span> <span class='id identifier rubyid_grad'>grad</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="update-instance_method">
+  
+    #<strong>update</strong>  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+48
+49
+50
+51
+52</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/chainer/parameter.rb', line 48</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_update'>update</span>
+  <span class='kw'>if</span> <span class='ivar'>@update_rule</span>
+    <span class='ivar'>@update_rule</span><span class='period'>.</span><span class='id identifier rubyid_update'>update</span><span class='lparen'>(</span><span class='kw'>self</span><span class='rparen'>)</span>
+  <span class='kw'>end</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+  </div>
+
+</div>
+
+      <div id="footer">
+  Generated on Thu Oct 10 04:25:40 2019 by
+  <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
+  0.9.20 (ruby-2.6.3).
+</div>
+
+    </div>
+  </body>
+</html>

@@ -1,0 +1,734 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>
+  Class: Chainer::Training::Extensions::Evaluator
+  
+    &mdash; Documentation by YARD 0.9.20
+  
+</title>
+
+  <link rel="stylesheet" href="../../../css/style.css" type="text/css" charset="utf-8" />
+
+  <link rel="stylesheet" href="../../../css/common.css" type="text/css" charset="utf-8" />
+
+<script type="text/javascript" charset="utf-8">
+  pathId = "Chainer::Training::Extensions::Evaluator";
+  relpath = '../../../';
+</script>
+
+
+  <script type="text/javascript" charset="utf-8" src="../../../js/jquery.js"></script>
+
+  <script type="text/javascript" charset="utf-8" src="../../../js/app.js"></script>
+
+
+
+    <!-- Additional settings for MathJax are from here. -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax:{
+          inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+          displayMath: [ ['$$','$$'], ["\\[","\\]"] ]
+        }
+      });
+    </script>
+    <script type="text/javascript"
+      src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.6/MathJax.js?config=TeX-AMS_HTML">
+    </script>
+    <meta http-equiv="X-UA-Compatible" CONTENT="IE=EmulateIE7" />
+    <!-- Additional settings for MathJax are over here. -->
+
+  </head>
+  <body>
+    <div class="nav_wrap">
+      <iframe id="nav" src="../../../class_list.html?1"></iframe>
+      <div id="resizer"></div>
+    </div>
+
+    <div id="main" tabindex="-1">
+      <div id="header">
+        <div id="menu">
+  
+    <a href="../../../_index.html">Index (E)</a> &raquo;
+    <span class='title'><span class='object_link'><a href="../../../Chainer.html" title="Chainer (module)">Chainer</a></span></span> &raquo; <span class='title'><span class='object_link'><a href="../../Training.html" title="Chainer::Training (module)">Training</a></span></span> &raquo; <span class='title'><span class='object_link'><a href="../Extensions.html" title="Chainer::Training::Extensions (module)">Extensions</a></span></span>
+     &raquo; 
+    <span class="title">Evaluator</span>
+  
+</div>
+
+        <div id="search">
+  
+    <a class="full_list_link" id="class_list_link"
+        href="../../../class_list.html">
+
+        <svg width="24" height="24">
+          <rect x="0" y="4" width="24" height="4" rx="1" ry="1"></rect>
+          <rect x="0" y="12" width="24" height="4" rx="1" ry="1"></rect>
+          <rect x="0" y="20" width="24" height="4" rx="1" ry="1"></rect>
+        </svg>
+    </a>
+  
+</div>
+        <div class="clear"></div>
+      </div>
+
+      <div id="content"><h1>Class: Chainer::Training::Extensions::Evaluator
+  
+  
+  
+</h1>
+<div class="box_info">
+  
+  <dl>
+    <dt>Inherits:</dt>
+    <dd>
+      <span class="inheritName"><span class='object_link'><a href="../Extension.html" title="Chainer::Training::Extension (class)">Chainer::Training::Extension</a></span></span>
+      
+        <ul class="fullTree">
+          <li>Object</li>
+          
+            <li class="next"><span class='object_link'><a href="../Extension.html" title="Chainer::Training::Extension (class)">Chainer::Training::Extension</a></span></li>
+          
+            <li class="next">Chainer::Training::Extensions::Evaluator</li>
+          
+        </ul>
+        <a href="#" class="inheritanceTree">show all</a>
+      
+    </dd>
+  </dl>
+  
+
+  
+  
+  
+  
+  
+
+  
+
+  
+  <dl>
+    <dt>Defined in:</dt>
+    <dd>lib/chainer/training/extensions/evaluator.rb</dd>
+  </dl>
+  
+</div>
+
+<h2>Overview</h2><div class="docstring">
+  <div class="discussion">
+    
+<p>Trainer extension to evaluate models on a validation set. This extension evaluates the current models by a given evaluation function.</p>
+
+<p>It creates a Chainer::Reporter object to store values observed in the evaluation function on each iteration. The report for all iterations are aggregated to Chainer::DictSummary. The collected mean values are further reported to the reporter object of the trainer, where the name of each observation is prefixed by the evaluator name. See Chainer::Reporter for details in naming rules of the reports.</p>
+
+<p>Evaluator has a structure to customize similar to that of Chainer::Training::StandardUpdater. The main differences are:</p>
+<ul><li>
+<p>There are no optimizers in an evaluator. Instead, it holds links to evaluate.</p>
+</li><li>
+<p>An evaluation loop function is used instead of an update function.</p>
+</li><li>
+<p>Preparation routine can be customized, which is called before each evaluation. It can be used, e.g., to initialize the state of stateful recurrent networks.</p>
+</li></ul>
+
+<p>There are two ways to modify the evaluation behavior besides setting a custom evaluation function. One is by setting a custom evaluation loop via  the `eval_func` argument. The other is by inheriting this class and overriding the `evaluate` method. In latter case, users have to create and handle a reporter object manually. Users also have to copy the iterators before using them, in order to reuse them at the next time of evaluation. In both cases, the functions are called in testing mode  (i.e., `chainer.config.train` is set to `false`).</p>
+
+<p>This extension is called at the end of each epoch by default.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div>
+
+
+  <h2>Constant Summary</h2>
+  
+  <h3 class="inherited">Constants inherited
+     from <span class='object_link'><a href="../Extension.html" title="Chainer::Training::Extension (class)">Chainer::Training::Extension</a></span></h3>
+  <p class="inherited"><span class='object_link'><a href="../Extension.html#PRIORITY_EDITOR-constant" title="Chainer::Training::Extension::PRIORITY_EDITOR (constant)">Chainer::Training::Extension::PRIORITY_EDITOR</a></span>, <span class='object_link'><a href="../Extension.html#PRIORITY_READER-constant" title="Chainer::Training::Extension::PRIORITY_READER (constant)">Chainer::Training::Extension::PRIORITY_READER</a></span>, <span class='object_link'><a href="../Extension.html#PRIORITY_WRITER-constant" title="Chainer::Training::Extension::PRIORITY_WRITER (constant)">Chainer::Training::Extension::PRIORITY_WRITER</a></span></p>
+
+
+
+
+  <h2>Instance Attribute Summary</h2>
+  
+  <h3 class="inherited">Attributes inherited from <span class='object_link'><a href="../Extension.html" title="Chainer::Training::Extension (class)">Chainer::Training::Extension</a></span></h3>
+  <p class="inherited"><span class='object_link'><a href="../Extension.html#name-instance_method" title="Chainer::Training::Extension#name (method)">#name</a></span>, <span class='object_link'><a href="../Extension.html#priority-instance_method" title="Chainer::Training::Extension#priority (method)">#priority</a></span>, <span class='object_link'><a href="../Extension.html#trigger-instance_method" title="Chainer::Training::Extension#trigger (method)">#trigger</a></span></p>
+
+
+  
+    <h2>
+      Instance Method Summary
+      <small><a href="#" class="summary_toggle">collapse</a></small>
+    </h2>
+
+    <ul class="summary">
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#call-instance_method" title="#call (instance method)">#<strong>call</strong>(trainer = nil)  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Executes the evaluator extension.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#default_name-instance_method" title="#default_name (instance method)">#<strong>default_name</strong>  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#evaluate-instance_method" title="#evaluate (instance method)">#<strong>evaluate</strong>  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Evaluates the model and returns a result dictionary.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#initialize-instance_method" title="#initialize (instance method)">#<strong>initialize</strong>(iterator, target, converter: nil, device: nil, eval_hook: nil, eval_func: nil)  &#x21d2; Evaluator </a>
+    
+
+    
+  </span>
+  
+  
+    <span class="note title constructor">constructor</span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>A new instance of Evaluator.</p>
+</div></span>
+  
+</li>
+
+      
+    </ul>
+  
+
+
+  
+  
+  
+  
+  
+  <div id="constructor_details" class="method_details_list">
+  <h2>Constructor Details</h2>
+  
+    <div class="method_details first">
+  <h3 class="signature first" id="initialize-instance_method">
+  
+    #<strong>initialize</strong>(iterator, target, converter: nil, device: nil, eval_hook: nil, eval_func: nil)  &#x21d2; <tt><span class='object_link'><a href="" title="Chainer::Training::Extensions::Evaluator (class)">Evaluator</a></span></tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Returns a new instance of Evaluator</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  <p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>iterator</span>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="../../Dataset/Iterator.html" title="Chainer::Dataset::Iterator (class)">Dataset::Iterator</a></span></tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Dataset iterator for the validation dataset. It can also be a dictionary of iterators. If this is just an iterator, the iterator is registered by the name &#39;main&#39;.</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>target</span>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="../../Link.html" title="Chainer::Link (class)">Chainer::Link</a></span></tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Link object or a dictionary of links to evaluate. If this is just a link object, the link is registered by the name &#39;main&#39;.</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>converter</span>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="../../Dataset/Convert.html" title="Chainer::Dataset::Convert (module)">Dataset::Convert</a></span></tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Converter function to build input arrays. `Chainer::Dataset.concat_examples` is used by default.</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>device</span>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="../../Device.html" title="Chainer::Device (module)">Chainer::Device</a></span></tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Device to which the training data is sent.</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>eval_hook</span>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="../../Function.html" title="Chainer::Function (class)">Function</a></span></tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Function to prepare for each evaluation process. It is called at the beginning of the evaluation. The evaluator extension object is passed at each call.</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>eval_func</span>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="../../Function.html" title="Chainer::Function (class)">Function</a></span></tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Evaluation function called at each iteration. The target link to evaluate as a callable is used by default.</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/chainer/training/extensions/evaluator.rb', line 43</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_initialize'>initialize</span><span class='lparen'>(</span><span class='id identifier rubyid_iterator'>iterator</span><span class='comma'>,</span> <span class='id identifier rubyid_target'>target</span><span class='comma'>,</span> <span class='label'>converter:</span> <span class='kw'>nil</span><span class='comma'>,</span> <span class='label'>device:</span> <span class='kw'>nil</span><span class='comma'>,</span> <span class='label'>eval_hook:</span> <span class='kw'>nil</span><span class='comma'>,</span> <span class='label'>eval_func:</span> <span class='kw'>nil</span><span class='rparen'>)</span>
+  <span class='ivar'>@priority</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="../Extension.html" title="Chainer::Training::Extension (class)">Extension</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="../Extension.html#PRIORITY_WRITER-constant" title="Chainer::Training::Extension::PRIORITY_WRITER (constant)">PRIORITY_WRITER</a></span></span>
+  <span class='ivar'>@trigger</span> <span class='op'>=</span> <span class='lbracket'>[</span><span class='int'>1</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>epoch</span><span class='tstring_end'>&#39;</span></span><span class='rbracket'>]</span>
+
+  <span class='kw'>if</span> <span class='id identifier rubyid_iterator'>iterator</span><span class='period'>.</span><span class='id identifier rubyid_kind_of?'>kind_of?</span><span class='lparen'>(</span><span class='const'><span class='object_link'><a href="../../Dataset.html" title="Chainer::Dataset (module)">Dataset</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="../../Dataset/Iterator.html" title="Chainer::Dataset::Iterator (class)">Iterator</a></span></span><span class='rparen'>)</span>
+    <span class='id identifier rubyid_iterator'>iterator</span> <span class='op'>=</span> <span class='lbrace'>{</span> <span class='label'>main:</span> <span class='id identifier rubyid_iterator'>iterator</span> <span class='rbrace'>}</span>
+  <span class='kw'>end</span>
+  <span class='ivar'>@iterators</span> <span class='op'>=</span> <span class='id identifier rubyid_iterator'>iterator</span>
+
+  <span class='kw'>if</span> <span class='id identifier rubyid_target'>target</span><span class='period'>.</span><span class='id identifier rubyid_kind_of?'>kind_of?</span><span class='lparen'>(</span><span class='const'><span class='object_link'><a href="../../Link.html" title="Chainer::Link (class)">Link</a></span></span><span class='rparen'>)</span>
+    <span class='id identifier rubyid_target'>target</span> <span class='op'>=</span> <span class='lbrace'>{</span> <span class='label'>main:</span> <span class='id identifier rubyid_target'>target</span> <span class='rbrace'>}</span>
+  <span class='kw'>end</span>
+  <span class='ivar'>@targets</span> <span class='op'>=</span> <span class='id identifier rubyid_target'>target</span>
+
+  <span class='ivar'>@converter</span> <span class='op'>=</span> <span class='id identifier rubyid_converter'>converter</span> <span class='op'>||</span> <span class='const'><span class='object_link'><a href="../../Dataset.html" title="Chainer::Dataset (module)">Dataset</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="../../Dataset/Convert.html" title="Chainer::Dataset::Convert (module)">Convert</a></span></span><span class='period'>.</span><span class='id identifier rubyid_method'>method</span><span class='lparen'>(</span><span class='symbol'>:concat_examples</span><span class='rparen'>)</span>
+  <span class='ivar'>@device</span> <span class='op'>=</span> <span class='id identifier rubyid_device'>device</span>
+  <span class='ivar'>@eval_hook</span> <span class='op'>=</span> <span class='id identifier rubyid_eval_hook'>eval_hook</span>
+  <span class='ivar'>@eval_func</span> <span class='op'>=</span> <span class='id identifier rubyid_eval_func'>eval_func</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+  
+</div>
+
+
+  <div id="instance_method_details" class="method_details_list">
+    <h2>Instance Method Details</h2>
+
+    
+      <div class="method_details first">
+  <h3 class="signature first" id="call-instance_method">
+  
+    #<strong>call</strong>(trainer = nil)  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Executes the evaluator extension.</p>
+
+<p>Unlike usual extensions, this extension can be executed without passing a trainer object. This extension reports the performance on validation dataset using the `Chainer.report` function. Thus, users can use  this extension independently from any trainer by manually configuring a `Chainer::Reporter` object.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  <p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>trainer</span>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="../Trainer.html" title="Chainer::Training::Trainer (class)">Chainer::Training::Trainer</a></span></tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>nil</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Trainer object that invokes this extension. It can be omitted in case of calling this extension manually.</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/chainer/training/extensions/evaluator.rb', line 71</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_call'>call</span><span class='lparen'>(</span><span class='id identifier rubyid_trainer'>trainer</span> <span class='op'>=</span> <span class='kw'>nil</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_reporter'>reporter</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="../../Reporter.html" title="Chainer::Reporter (class)">Reporter</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new'><span class='object_link'><a href="../../Reporter.html#initialize-instance_method" title="Chainer::Reporter#initialize (method)">new</a></span></span>
+  <span class='id identifier rubyid_prefix'>prefix</span> <span class='op'>=</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_respond_to?'>respond_to?</span><span class='lparen'>(</span><span class='symbol'>:name</span><span class='rparen'>)</span> <span class='op'>?</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='embexpr_beg'>#{</span><span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_name'>name</span><span class='embexpr_end'>}</span><span class='tstring_content'>/</span><span class='tstring_end'>&quot;</span></span> <span class='op'>:</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_end'>&quot;</span></span>
+
+  <span class='ivar'>@targets</span><span class='period'>.</span><span class='id identifier rubyid_each'>each</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_name'>name</span><span class='comma'>,</span> <span class='id identifier rubyid_target'>target</span><span class='op'>|</span>
+    <span class='id identifier rubyid_reporter'>reporter</span><span class='period'>.</span><span class='id identifier rubyid_add_observer'>add_observer</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_prefix'>prefix</span><span class='embexpr_end'>}</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_name'>name</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='id identifier rubyid_target'>target</span><span class='rparen'>)</span>
+    <span class='id identifier rubyid_reporter'>reporter</span><span class='period'>.</span><span class='id identifier rubyid_add_observers'>add_observers</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_prefix'>prefix</span><span class='embexpr_end'>}</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_name'>name</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='id identifier rubyid_target'>target</span><span class='period'>.</span><span class='id identifier rubyid_method'>method</span><span class='lparen'>(</span><span class='symbol'>:namedlinks</span><span class='rparen'>)</span><span class='comma'>,</span> <span class='label'>skipself:</span> <span class='kw'>true</span><span class='rparen'>)</span>
+  <span class='kw'>end</span>
+
+  <span class='id identifier rubyid_result'>result</span> <span class='op'>=</span> <span class='kw'>nil</span>
+  <span class='id identifier rubyid_reporter'>reporter</span><span class='period'>.</span><span class='id identifier rubyid_scope'>scope</span><span class='lparen'>(</span><span class='id identifier rubyid_reporter'>reporter</span><span class='period'>.</span><span class='id identifier rubyid_observation'>observation</span><span class='rparen'>)</span> <span class='kw'>do</span>
+    <span class='id identifier rubyid_old_train'>old_train</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="../../../Chainer.html" title="Chainer (module)">Chainer</a></span></span><span class='period'>.</span><span class='id identifier rubyid_configuration'><span class='object_link'><a href="../../../Chainer.html#configuration-class_method" title="Chainer.configuration (method)">configuration</a></span></span><span class='period'>.</span><span class='id identifier rubyid_train'>train</span>
+    <span class='const'><span class='object_link'><a href="../../../Chainer.html" title="Chainer (module)">Chainer</a></span></span><span class='period'>.</span><span class='id identifier rubyid_configuration'><span class='object_link'><a href="../../../Chainer.html#configuration-class_method" title="Chainer.configuration (method)">configuration</a></span></span><span class='period'>.</span><span class='id identifier rubyid_train'>train</span> <span class='op'>=</span> <span class='kw'>false</span>
+    <span class='id identifier rubyid_result'>result</span> <span class='op'>=</span> <span class='id identifier rubyid_evaluate'>evaluate</span><span class='lparen'>(</span><span class='rparen'>)</span>
+    <span class='const'><span class='object_link'><a href="../../../Chainer.html" title="Chainer (module)">Chainer</a></span></span><span class='period'>.</span><span class='id identifier rubyid_configuration'><span class='object_link'><a href="../../../Chainer.html#configuration-class_method" title="Chainer.configuration (method)">configuration</a></span></span><span class='period'>.</span><span class='id identifier rubyid_train'>train</span> <span class='op'>=</span> <span class='id identifier rubyid_old_train'>old_train</span>
+  <span class='kw'>end</span>
+
+  <span class='const'><span class='object_link'><a href="../../Reporter.html" title="Chainer::Reporter (class)">Reporter</a></span></span><span class='period'>.</span><span class='id identifier rubyid_save_report'><span class='object_link'><a href="../../Reporter.html#save_report-class_method" title="Chainer::Reporter.save_report (method)">save_report</a></span></span><span class='lparen'>(</span><span class='id identifier rubyid_result'>result</span><span class='rparen'>)</span>
+  <span class='kw'>return</span> <span class='id identifier rubyid_result'>result</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="default_name-instance_method">
+  
+    #<strong>default_name</strong>  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+138
+139
+140</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/chainer/training/extensions/evaluator.rb', line 138</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_default_name'>default_name</span>
+  <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>validation</span><span class='tstring_end'>&quot;</span></span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="evaluate-instance_method">
+  
+    #<strong>evaluate</strong>  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Evaluates the model and returns a result dictionary. This method runs the evaluation loop over the validation dataset. It accumulates the reported values to `DictSummary` and returns a dictionary whose values are means computed by the summary.</p>
+
+<p>Users can override this method to customize the evaluation routine.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'></span>
+      
+      
+      
+        
+        <div class='inline'>
+<p>dict Result dictionary. This dictionary is further reported via `Chainer.save_report` without specifying any observer.</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120
+121
+122
+123
+124
+125
+126
+127
+128
+129
+130
+131
+132
+133
+134
+135
+136</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/chainer/training/extensions/evaluator.rb', line 98</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_evaluate'>evaluate</span>
+  <span class='id identifier rubyid_iterator'>iterator</span> <span class='op'>=</span> <span class='ivar'>@iterators</span><span class='lbracket'>[</span><span class='symbol'>:main</span><span class='rbracket'>]</span>
+  <span class='id identifier rubyid_eval_func'>eval_func</span> <span class='op'>=</span> <span class='ivar'>@eval_func</span> <span class='op'>||</span> <span class='ivar'>@targets</span><span class='lbracket'>[</span><span class='symbol'>:main</span><span class='rbracket'>]</span>
+
+  <span class='ivar'>@eval_hook</span><span class='period'>.</span><span class='lparen'>(</span><span class='kw'>self</span><span class='rparen'>)</span> <span class='kw'>if</span> <span class='ivar'>@eval_hook</span>
+
+  <span class='kw'>if</span> <span class='id identifier rubyid_iterator'>iterator</span><span class='period'>.</span><span class='id identifier rubyid_respond_to?'>respond_to?</span><span class='lparen'>(</span><span class='symbol'>:reset</span><span class='rparen'>)</span>
+    <span class='id identifier rubyid_iterator'>iterator</span><span class='period'>.</span><span class='id identifier rubyid_reset'>reset</span>
+    <span class='id identifier rubyid_it'>it</span> <span class='op'>=</span> <span class='id identifier rubyid_iterator'>iterator</span>
+  <span class='kw'>else</span>
+    <span class='id identifier rubyid_it'>it</span> <span class='op'>=</span> <span class='id identifier rubyid_iterator'>iterator</span><span class='period'>.</span><span class='id identifier rubyid_dup'>dup</span>
+  <span class='kw'>end</span>
+
+  <span class='id identifier rubyid_summary'>summary</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="../../DictSummary.html" title="Chainer::DictSummary (class)">DictSummary</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new'><span class='object_link'><a href="../../DictSummary.html#initialize-instance_method" title="Chainer::DictSummary#initialize (method)">new</a></span></span>
+
+  <span class='kw'>until</span> <span class='id identifier rubyid_it'>it</span><span class='period'>.</span><span class='id identifier rubyid_is_new_epoch'>is_new_epoch</span> <span class='kw'>do</span>
+    <span class='id identifier rubyid_batch'>batch</span> <span class='op'>=</span> <span class='id identifier rubyid_it'>it</span><span class='period'>.</span><span class='id identifier rubyid_next'>next</span>
+    <span class='id identifier rubyid_observation'>observation</span> <span class='op'>=</span> <span class='lbrace'>{</span><span class='rbrace'>}</span>
+    <span class='const'><span class='object_link'><a href="../../Reporter.html" title="Chainer::Reporter (class)">Reporter</a></span></span><span class='period'>.</span><span class='id identifier rubyid_report_scope'><span class='object_link'><a href="../../Reporter.html#report_scope-class_method" title="Chainer::Reporter.report_scope (method)">report_scope</a></span></span><span class='lparen'>(</span><span class='id identifier rubyid_observation'>observation</span><span class='rparen'>)</span> <span class='kw'>do</span>
+      <span class='id identifier rubyid_in_arrays'>in_arrays</span> <span class='op'>=</span> <span class='ivar'>@converter</span><span class='period'>.</span><span class='lparen'>(</span><span class='id identifier rubyid_batch'>batch</span><span class='comma'>,</span> <span class='label'>device:</span> <span class='ivar'>@device</span><span class='rparen'>)</span>
+
+      <span class='id identifier rubyid_old_enable_backprop'>old_enable_backprop</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="../../../Chainer.html" title="Chainer (module)">Chainer</a></span></span><span class='period'>.</span><span class='id identifier rubyid_configuration'><span class='object_link'><a href="../../../Chainer.html#configuration-class_method" title="Chainer.configuration (method)">configuration</a></span></span><span class='period'>.</span><span class='id identifier rubyid_enable_backprop'>enable_backprop</span>
+      <span class='const'><span class='object_link'><a href="../../../Chainer.html" title="Chainer (module)">Chainer</a></span></span><span class='period'>.</span><span class='id identifier rubyid_configuration'><span class='object_link'><a href="../../../Chainer.html#configuration-class_method" title="Chainer.configuration (method)">configuration</a></span></span><span class='period'>.</span><span class='id identifier rubyid_enable_backprop'>enable_backprop</span> <span class='op'>=</span> <span class='kw'>false</span>
+
+      <span class='kw'>if</span> <span class='id identifier rubyid_in_arrays'>in_arrays</span><span class='period'>.</span><span class='id identifier rubyid_kind_of?'>kind_of?</span><span class='lparen'>(</span><span class='const'>Array</span><span class='rparen'>)</span>
+        <span class='id identifier rubyid_eval_func'>eval_func</span><span class='period'>.</span><span class='lparen'>(</span><span class='op'>*</span><span class='id identifier rubyid_in_arrays'>in_arrays</span><span class='rparen'>)</span>
+      <span class='kw'>elsif</span> <span class='id identifier rubyid_in_arrays'>in_arrays</span><span class='period'>.</span><span class='id identifier rubyid_kind_of?'>kind_of?</span><span class='lparen'>(</span><span class='const'>Hash</span><span class='rparen'>)</span>
+        <span class='id identifier rubyid_eval_func'>eval_func</span><span class='period'>.</span><span class='lparen'>(</span><span class='op'>**</span><span class='id identifier rubyid_in_arrays'>in_arrays</span><span class='rparen'>)</span>
+      <span class='kw'>else</span>
+        <span class='id identifier rubyid_eval_func'>eval_func</span><span class='period'>.</span><span class='lparen'>(</span><span class='id identifier rubyid_in_arrays'>in_arrays</span><span class='rparen'>)</span>
+      <span class='kw'>end</span>
+
+      <span class='const'><span class='object_link'><a href="../../../Chainer.html" title="Chainer (module)">Chainer</a></span></span><span class='period'>.</span><span class='id identifier rubyid_configuration'><span class='object_link'><a href="../../../Chainer.html#configuration-class_method" title="Chainer.configuration (method)">configuration</a></span></span><span class='period'>.</span><span class='id identifier rubyid_enable_backprop'>enable_backprop</span> <span class='op'>=</span> <span class='id identifier rubyid_old_enable_backprop'>old_enable_backprop</span>
+    <span class='kw'>end</span>
+    <span class='id identifier rubyid_summary'>summary</span><span class='period'>.</span><span class='id identifier rubyid_add'>add</span><span class='lparen'>(</span><span class='id identifier rubyid_observation'>observation</span><span class='rparen'>)</span>
+  <span class='kw'>end</span>
+
+  <span class='id identifier rubyid_summary'>summary</span><span class='period'>.</span><span class='id identifier rubyid_compute_mean'>compute_mean</span><span class='lparen'>(</span><span class='rparen'>)</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+  </div>
+
+</div>
+
+      <div id="footer">
+  Generated on Thu Oct 10 04:25:42 2019 by
+  <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
+  0.9.20 (ruby-2.6.3).
+</div>
+
+    </div>
+  </body>
+</html>

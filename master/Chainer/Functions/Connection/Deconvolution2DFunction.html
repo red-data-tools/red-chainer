@@ -1,0 +1,1100 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>
+  Class: Chainer::Functions::Connection::Deconvolution2DFunction
+  
+    &mdash; Documentation by YARD 0.9.20
+  
+</title>
+
+  <link rel="stylesheet" href="../../../css/style.css" type="text/css" charset="utf-8" />
+
+  <link rel="stylesheet" href="../../../css/common.css" type="text/css" charset="utf-8" />
+
+<script type="text/javascript" charset="utf-8">
+  pathId = "Chainer::Functions::Connection::Deconvolution2DFunction";
+  relpath = '../../../';
+</script>
+
+
+  <script type="text/javascript" charset="utf-8" src="../../../js/jquery.js"></script>
+
+  <script type="text/javascript" charset="utf-8" src="../../../js/app.js"></script>
+
+
+
+    <!-- Additional settings for MathJax are from here. -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax:{
+          inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+          displayMath: [ ['$$','$$'], ["\\[","\\]"] ]
+        }
+      });
+    </script>
+    <script type="text/javascript"
+      src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.6/MathJax.js?config=TeX-AMS_HTML">
+    </script>
+    <meta http-equiv="X-UA-Compatible" CONTENT="IE=EmulateIE7" />
+    <!-- Additional settings for MathJax are over here. -->
+
+  </head>
+  <body>
+    <div class="nav_wrap">
+      <iframe id="nav" src="../../../class_list.html?1"></iframe>
+      <div id="resizer"></div>
+    </div>
+
+    <div id="main" tabindex="-1">
+      <div id="header">
+        <div id="menu">
+  
+    <a href="../../../_index.html">Index (D)</a> &raquo;
+    <span class='title'><span class='object_link'><a href="../../../Chainer.html" title="Chainer (module)">Chainer</a></span></span> &raquo; <span class='title'><span class='object_link'><a href="../../Functions.html" title="Chainer::Functions (module)">Functions</a></span></span> &raquo; <span class='title'><span class='object_link'><a href="../Connection.html" title="Chainer::Functions::Connection (module)">Connection</a></span></span>
+     &raquo; 
+    <span class="title">Deconvolution2DFunction</span>
+  
+</div>
+
+        <div id="search">
+  
+    <a class="full_list_link" id="class_list_link"
+        href="../../../class_list.html">
+
+        <svg width="24" height="24">
+          <rect x="0" y="4" width="24" height="4" rx="1" ry="1"></rect>
+          <rect x="0" y="12" width="24" height="4" rx="1" ry="1"></rect>
+          <rect x="0" y="20" width="24" height="4" rx="1" ry="1"></rect>
+        </svg>
+    </a>
+  
+</div>
+        <div class="clear"></div>
+      </div>
+
+      <div id="content"><h1>Class: Chainer::Functions::Connection::Deconvolution2DFunction
+  
+  
+  
+</h1>
+<div class="box_info">
+  
+  <dl>
+    <dt>Inherits:</dt>
+    <dd>
+      <span class="inheritName"><span class='object_link'><a href="../../FunctionNode.html" title="Chainer::FunctionNode (class)">Chainer::FunctionNode</a></span></span>
+      
+        <ul class="fullTree">
+          <li>Object</li>
+          
+            <li class="next"><span class='object_link'><a href="../../FunctionNode.html" title="Chainer::FunctionNode (class)">Chainer::FunctionNode</a></span></li>
+          
+            <li class="next">Chainer::Functions::Connection::Deconvolution2DFunction</li>
+          
+        </ul>
+        <a href="#" class="inheritanceTree">show all</a>
+      
+    </dd>
+  </dl>
+  
+
+  
+  
+  
+  
+  
+
+  
+
+  
+  <dl>
+    <dt>Defined in:</dt>
+    <dd>lib/chainer/functions/connection/deconvolution_2d.rb</dd>
+  </dl>
+  
+</div>
+
+
+
+
+
+  <h2>Instance Attribute Summary <small><a href="#" class="summary_toggle">collapse</a></small></h2>
+  <ul class="summary">
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#cover_all-instance_method" title="#cover_all (instance method)">#<strong>cover_all</strong>  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+    
+      <span class="note title readonly">readonly</span>
+    
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Returns the value of attribute cover_all.</p>
+</div></span>
+  
+</li>
+
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#ph-instance_method" title="#ph (instance method)">#<strong>ph</strong>  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+    
+      <span class="note title readonly">readonly</span>
+    
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Returns the value of attribute ph.</p>
+</div></span>
+  
+</li>
+
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#pw-instance_method" title="#pw (instance method)">#<strong>pw</strong>  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+    
+      <span class="note title readonly">readonly</span>
+    
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Returns the value of attribute pw.</p>
+</div></span>
+  
+</li>
+
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#sx-instance_method" title="#sx (instance method)">#<strong>sx</strong>  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+    
+      <span class="note title readonly">readonly</span>
+    
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Returns the value of attribute sx.</p>
+</div></span>
+  
+</li>
+
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#sy-instance_method" title="#sy (instance method)">#<strong>sy</strong>  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+    
+      <span class="note title readonly">readonly</span>
+    
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Returns the value of attribute sy.</p>
+</div></span>
+  
+</li>
+
+    
+  </ul>
+
+
+
+  
+  
+  <h3 class="inherited">Attributes inherited from <span class='object_link'><a href="../../FunctionNode.html" title="Chainer::FunctionNode (class)">Chainer::FunctionNode</a></span></h3>
+  <p class="inherited"><span class='object_link'><a href="../../FunctionNode.html#inputs-instance_method" title="Chainer::FunctionNode#inputs (method)">#inputs</a></span>, <span class='object_link'><a href="../../FunctionNode.html#outputs-instance_method" title="Chainer::FunctionNode#outputs (method)">#outputs</a></span>, <span class='object_link'><a href="../../FunctionNode.html#rank-instance_method" title="Chainer::FunctionNode#rank (method)">#rank</a></span></p>
+
+
+  
+    <h2>
+      Class Method Summary
+      <small><a href="#" class="summary_toggle">collapse</a></small>
+    </h2>
+
+    <ul class="summary">
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#deconvolution_2d-class_method" title="deconvolution_2d (class method)">.<strong>deconvolution_2d</strong>(x, w, b: nil, stride: 1, pad: 0, outsize: nil)  &#x21d2; Chainer::Variable </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Two dimensional deconvolution function.</p>
+</div></span>
+  
+</li>
+
+      
+    </ul>
+  
+    <h2>
+      Instance Method Summary
+      <small><a href="#" class="summary_toggle">collapse</a></small>
+    </h2>
+
+    <ul class="summary">
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#backward-instance_method" title="#backward (instance method)">#<strong>backward</strong>(indexes, grad_outputs)  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#forward-instance_method" title="#forward (instance method)">#<strong>forward</strong>(inputs)  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#initialize-instance_method" title="#initialize (instance method)">#<strong>initialize</strong>(stride: 1, pad: 0, outsize: nil)  &#x21d2; Deconvolution2DFunction </a>
+    
+
+    
+  </span>
+  
+  
+    <span class="note title constructor">constructor</span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>A new instance of Deconvolution2DFunction.</p>
+</div></span>
+  
+</li>
+
+      
+    </ul>
+  
+
+
+  
+  
+  
+  
+  
+  
+  
+  
+  <h3 class="inherited">Methods inherited from <span class='object_link'><a href="../../FunctionNode.html" title="Chainer::FunctionNode (class)">Chainer::FunctionNode</a></span></h3>
+  <p class="inherited"><span class='object_link'><a href="../../FunctionNode.html#apply-instance_method" title="Chainer::FunctionNode#apply (method)">#apply</a></span>, <span class='object_link'><a href="../../FunctionNode.html#backward_accumulate-instance_method" title="Chainer::FunctionNode#backward_accumulate (method)">#backward_accumulate</a></span>, <span class='object_link'><a href="../../FunctionNode.html#forward_cpu-instance_method" title="Chainer::FunctionNode#forward_cpu (method)">#forward_cpu</a></span>, <span class='object_link'><a href="../../FunctionNode.html#get_retained_inputs-instance_method" title="Chainer::FunctionNode#get_retained_inputs (method)">#get_retained_inputs</a></span>, <span class='object_link'><a href="../../FunctionNode.html#get_retained_outputs-instance_method" title="Chainer::FunctionNode#get_retained_outputs (method)">#get_retained_outputs</a></span>, <span class='object_link'><a href="../../FunctionNode.html#label-instance_method" title="Chainer::FunctionNode#label (method)">#label</a></span>, <span class='object_link'><a href="../../FunctionNode.html#output_data-instance_method" title="Chainer::FunctionNode#output_data (method)">#output_data</a></span>, <span class='object_link'><a href="../../FunctionNode.html#retain_inputs-instance_method" title="Chainer::FunctionNode#retain_inputs (method)">#retain_inputs</a></span>, <span class='object_link'><a href="../../FunctionNode.html#retain_outputs-instance_method" title="Chainer::FunctionNode#retain_outputs (method)">#retain_outputs</a></span>, <span class='object_link'><a href="../../FunctionNode.html#unchain-instance_method" title="Chainer::FunctionNode#unchain (method)">#unchain</a></span></p>
+<div id="constructor_details" class="method_details_list">
+  <h2>Constructor Details</h2>
+  
+    <div class="method_details first">
+  <h3 class="signature first" id="initialize-instance_method">
+  
+    #<strong>initialize</strong>(stride: 1, pad: 0, outsize: nil)  &#x21d2; <tt><span class='object_link'><a href="" title="Chainer::Functions::Connection::Deconvolution2DFunction (class)">Deconvolution2DFunction</a></span></tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Returns a new instance of Deconvolution2DFunction</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+75
+76
+77
+78
+79
+80
+81</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/chainer/functions/connection/deconvolution_2d.rb', line 75</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_initialize'>initialize</span><span class='lparen'>(</span><span class='label'>stride:</span> <span class='int'>1</span><span class='comma'>,</span> <span class='label'>pad:</span> <span class='int'>0</span><span class='comma'>,</span> <span class='label'>outsize:</span> <span class='kw'>nil</span><span class='rparen'>)</span>
+  <span class='ivar'>@cover_all</span> <span class='op'>=</span> <span class='kw'>nil</span>
+
+  <span class='ivar'>@sy</span><span class='comma'>,</span> <span class='ivar'>@sx</span> <span class='op'>=</span> <span class='id identifier rubyid_stride'>stride</span><span class='period'>.</span><span class='id identifier rubyid_is_a?'>is_a?</span><span class='lparen'>(</span><span class='op'>::</span><span class='const'>Array</span><span class='rparen'>)</span> <span class='op'>?</span> <span class='id identifier rubyid_stride'>stride</span> <span class='op'>:</span> <span class='lbracket'>[</span><span class='id identifier rubyid_stride'>stride</span><span class='comma'>,</span> <span class='id identifier rubyid_stride'>stride</span><span class='rbracket'>]</span>
+  <span class='ivar'>@ph</span><span class='comma'>,</span> <span class='ivar'>@pw</span> <span class='op'>=</span> <span class='id identifier rubyid_pad'>pad</span><span class='period'>.</span><span class='id identifier rubyid_is_a?'>is_a?</span><span class='lparen'>(</span><span class='op'>::</span><span class='const'>Array</span><span class='rparen'>)</span> <span class='op'>?</span> <span class='id identifier rubyid_pad'>pad</span> <span class='op'>:</span> <span class='lbracket'>[</span><span class='id identifier rubyid_pad'>pad</span><span class='comma'>,</span> <span class='id identifier rubyid_pad'>pad</span><span class='rbracket'>]</span>
+  <span class='ivar'>@outh</span><span class='comma'>,</span> <span class='ivar'>@outw</span> <span class='op'>=</span> <span class='id identifier rubyid_outsize'>outsize</span><span class='period'>.</span><span class='id identifier rubyid_nil?'>nil?</span> <span class='op'>?</span> <span class='lbracket'>[</span><span class='kw'>nil</span><span class='comma'>,</span> <span class='kw'>nil</span><span class='rbracket'>]</span> <span class='op'>:</span> <span class='id identifier rubyid_outsize'>outsize</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+  
+</div>
+
+  <div id="instance_attr_details" class="attr_details">
+    <h2>Instance Attribute Details</h2>
+    
+      
+      <span id=""></span>
+      <div class="method_details first">
+  <h3 class="signature first" id="cover_all-instance_method">
+  
+    #<strong>cover_all</strong>  &#x21d2; <tt>Object</tt>  <span class="extras">(readonly)</span>
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Returns the value of attribute cover_all</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+5
+6
+7</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/chainer/functions/connection/deconvolution_2d.rb', line 5</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_cover_all'>cover_all</span>
+  <span class='ivar'>@cover_all</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      
+      <span id=""></span>
+      <div class="method_details ">
+  <h3 class="signature " id="ph-instance_method">
+  
+    #<strong>ph</strong>  &#x21d2; <tt>Object</tt>  <span class="extras">(readonly)</span>
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Returns the value of attribute ph</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+5
+6
+7</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/chainer/functions/connection/deconvolution_2d.rb', line 5</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_ph'>ph</span>
+  <span class='ivar'>@ph</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      
+      <span id=""></span>
+      <div class="method_details ">
+  <h3 class="signature " id="pw-instance_method">
+  
+    #<strong>pw</strong>  &#x21d2; <tt>Object</tt>  <span class="extras">(readonly)</span>
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Returns the value of attribute pw</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+5
+6
+7</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/chainer/functions/connection/deconvolution_2d.rb', line 5</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_pw'>pw</span>
+  <span class='ivar'>@pw</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      
+      <span id=""></span>
+      <div class="method_details ">
+  <h3 class="signature " id="sx-instance_method">
+  
+    #<strong>sx</strong>  &#x21d2; <tt>Object</tt>  <span class="extras">(readonly)</span>
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Returns the value of attribute sx</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+5
+6
+7</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/chainer/functions/connection/deconvolution_2d.rb', line 5</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_sx'>sx</span>
+  <span class='ivar'>@sx</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      
+      <span id=""></span>
+      <div class="method_details ">
+  <h3 class="signature " id="sy-instance_method">
+  
+    #<strong>sy</strong>  &#x21d2; <tt>Object</tt>  <span class="extras">(readonly)</span>
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Returns the value of attribute sy</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+5
+6
+7</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/chainer/functions/connection/deconvolution_2d.rb', line 5</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_sy'>sy</span>
+  <span class='ivar'>@sy</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+  </div>
+
+
+  <div id="class_method_details" class="method_details_list">
+    <h2>Class Method Details</h2>
+
+    
+      <div class="method_details first">
+  <h3 class="signature first" id="deconvolution_2d-class_method">
+  
+    .<strong>deconvolution_2d</strong>(x, w, b: nil, stride: 1, pad: 0, outsize: nil)  &#x21d2; <tt><span class='object_link'><a href="../../Variable.html" title="Chainer::Variable (class)">Chainer::Variable</a></span></tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Two dimensional deconvolution function.</p>
+
+<p>This is an implementation of two-dimensional deconvolution. In most of deep learning frameworks and papers, this function is called <strong>transposed convolution</strong>. But because of historical reasons (e.g. paper by Ziller Deconvolutional Networks) and backward compatibility, this function is called <code>deconvolution</code> in Chainer.</p>
+
+<p>It takes three variables: input image <code>x</code>, the filter weight <code>W</code>, and the bias vector <code>b</code>.</p>
+<ul><li>
+<p>$n$ is the batch size.</p>
+</li><li>
+<p>$c_I$ and $c_O$ are the number of the input and output channels, respectively.</p>
+</li><li>
+<p>$h_I$ and $w_I$ are the height and width of the input image, respectively.</p>
+</li><li>
+<p>$h_K$ and $w_K$ are the height and width of the filters, respectively.</p>
+</li><li>
+<p>$h_P$ and $w_P$ are the height and width of the spatial padding size, respectively.</p>
+</li></ul>
+
+<p>Let $(s_Y, s_X)$ be the stride of filter application. Then, the output size $(h_O, w_O)$ is estimated by the following equations:</p>
+
+<p>$ h_O &amp;= s_Y (h_I - 1) + h_K - 2h_P, w_O &amp;= s_X (w_I - 1) + w_K - 2w_P. $</p>
+
+<p>Example &gt; n = 10 &gt; c_i, c_o = 1, 3 &gt; h_i, w_i = 5, 10 &gt; h_k, w_k = 10, 10 &gt; h_p, w_p = 5, 5 &gt; x = Numo::DFloat.new(n, c_i, h_i, w_i).rand &gt; x.shape</p>
+
+<h1 id="label-3E+-5B10-2C+1-2C+5-2C+10-5D">&gt; [10, 1, 5, 10]</h1>
+
+<p>&gt; w = Numo::DFloat.new(c_i, c_o, h_k, w_k).rand &gt; w.shape</p>
+
+<h1 id="label-3E+-5B1-2C+3-2C+10-2C+10-5D">&gt; [1, 3, 10, 10]</h1>
+
+<p>&gt; b = Numo::DFloat.new(c_o).rand &gt; b.shape</p>
+
+<h1 id="label-3E+-5B3-5D">&gt; [3]</h1>
+
+<p>&gt; s_y, s_x = 5, 5 &gt; y = Chainer::Functions::Connection::Deconvolution2DFunction.deconvolution_2d(x, w, b: b, stride: [s_y, s_x], pad: [h_p, w_p]) &gt; y.shape</p>
+
+<h1 id="label-3E+-5B10-2C+3-2C+20-2C+45-5D">&gt; [10, 3, 20, 45]</h1>
+
+<p>&gt; h_o = s_y * (h_i - 1) + h_k - 2 * h_p &gt; w_o = s_x * (w_i - 1) + w_k - 2 * w_p &gt; y.shape == [n, c_o, h_o, w_o]</p>
+
+<h1 id="label-3E+true">&gt; true</h1>
+
+
+  </div>
+</div>
+<div class="tags">
+  <p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>x</span>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="../../Variable.html" title="Chainer::Variable (class)">Chainer::Variable</a></span> or Numo::NArray</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Input variable of shape $(n, c_I, h_I, w_I)$.</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>w</span>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="../../Variable.html" title="Chainer::Variable (class)">Chainer::Variable</a></span> or Numo::NArray</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Weight variable of shape $(c_I, c_O, h_K, w_K)$.</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>b</span>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="../../Variable.html" title="Chainer::Variable (class)">Chainer::Variable</a></span> or Numo::NArray</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Bias variable of length $c_O$ (optional).</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>stride</span>
+      
+      
+        <span class='type'>(<tt>integer or <span class='object_link'><a href="../Array.html" title="Chainer::Functions::Array (module)">Array</a></span>&lt;integer&gt;</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Stride of filter applications. <tt>stride=s</tt> and <tt>stride=[s, s]</tt> are equivalent.</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>pad</span>
+      
+      
+        <span class='type'>(<tt>integer or <span class='object_link'><a href="../Array.html" title="Chainer::Functions::Array (module)">Array</a></span>&lt;integer&gt;</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Spatial padding width for input arrays. <tt>pad=p</tt> and <tt>pad=[p, p]</tt> are equivalent.</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>outsize</span>
+      
+      
+        <span class='type'>(<tt>integer or Arrat&lt;integer&gt;</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Expected output size of deconvolutional operation. It should be pair of height and width $(h_O, w_O)$. Default value is <code>nil</code> and the outsize is estimated by input size, stride and pad.</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="../../Variable.html" title="Chainer::Variable (class)">Chainer::Variable</a></span></tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Output variable of shape $(n, c_O, h_O, w_O)$.</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+65
+66
+67
+68
+69
+70
+71
+72
+73</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/chainer/functions/connection/deconvolution_2d.rb', line 65</span>
+
+<span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_deconvolution_2d'>deconvolution_2d</span><span class='lparen'>(</span><span class='id identifier rubyid_x'>x</span><span class='comma'>,</span> <span class='id identifier rubyid_w'>w</span><span class='comma'>,</span> <span class='label'>b:</span> <span class='kw'>nil</span><span class='comma'>,</span> <span class='label'>stride:</span> <span class='int'>1</span><span class='comma'>,</span> <span class='label'>pad:</span> <span class='int'>0</span><span class='comma'>,</span> <span class='label'>outsize:</span> <span class='kw'>nil</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_func'>func</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="" title="Chainer::Functions::Connection::Deconvolution2DFunction (class)">Deconvolution2DFunction</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new'><span class='object_link'><a href="#initialize-instance_method" title="Chainer::Functions::Connection::Deconvolution2DFunction#initialize (method)">new</a></span></span><span class='lparen'>(</span><span class='label'>stride:</span> <span class='id identifier rubyid_stride'>stride</span><span class='comma'>,</span> <span class='label'>pad:</span> <span class='id identifier rubyid_pad'>pad</span><span class='comma'>,</span> <span class='label'>outsize:</span> <span class='id identifier rubyid_outsize'>outsize</span><span class='rparen'>)</span>
+  <span class='kw'>if</span> <span class='id identifier rubyid_b'>b</span><span class='period'>.</span><span class='id identifier rubyid_nil?'>nil?</span>
+    <span class='id identifier rubyid_args'>args</span> <span class='op'>=</span> <span class='id identifier rubyid_x'>x</span><span class='comma'>,</span> <span class='id identifier rubyid_w'>w</span>
+  <span class='kw'>else</span>
+    <span class='id identifier rubyid_args'>args</span> <span class='op'>=</span> <span class='id identifier rubyid_x'>x</span><span class='comma'>,</span> <span class='id identifier rubyid_w'>w</span><span class='comma'>,</span> <span class='id identifier rubyid_b'>b</span>
+  <span class='kw'>end</span>
+  <span class='id identifier rubyid_func'>func</span><span class='period'>.</span><span class='id identifier rubyid_apply'>apply</span><span class='lparen'>(</span><span class='id identifier rubyid_args'>args</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_first'>first</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+  </div>
+
+  <div id="instance_method_details" class="method_details_list">
+    <h2>Instance Method Details</h2>
+
+    
+      <div class="method_details first">
+  <h3 class="signature first" id="backward-instance_method">
+  
+    #<strong>backward</strong>(indexes, grad_outputs)  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+134
+135
+136
+137
+138
+139
+140
+141
+142
+143
+144
+145
+146
+147
+148
+149
+150
+151
+152
+153
+154
+155
+156
+157
+158</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/chainer/functions/connection/deconvolution_2d.rb', line 134</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_backward'>backward</span><span class='lparen'>(</span><span class='id identifier rubyid_indexes'>indexes</span><span class='comma'>,</span> <span class='id identifier rubyid_grad_outputs'>grad_outputs</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_x'>x</span><span class='comma'>,</span> <span class='id identifier rubyid_w'>w</span> <span class='op'>=</span> <span class='id identifier rubyid_get_retained_inputs'>get_retained_inputs</span>
+  <span class='id identifier rubyid_gy'>gy</span> <span class='op'>=</span> <span class='id identifier rubyid_grad_outputs'>grad_outputs</span><span class='period'>.</span><span class='id identifier rubyid_first'>first</span>
+
+  <span class='id identifier rubyid_ret'>ret</span> <span class='op'>=</span> <span class='lbracket'>[</span><span class='rbracket'>]</span>
+
+  <span class='kw'>if</span> <span class='id identifier rubyid_indexes'>indexes</span><span class='period'>.</span><span class='id identifier rubyid_include?'>include?</span><span class='lparen'>(</span><span class='int'>0</span><span class='rparen'>)</span>
+    <span class='id identifier rubyid_set_cover_all'>set_cover_all</span><span class='lparen'>(</span><span class='id identifier rubyid_x'>x</span><span class='comma'>,</span> <span class='id identifier rubyid_w'>w</span><span class='rparen'>)</span> <span class='kw'>if</span> <span class='ivar'>@cover_all</span><span class='period'>.</span><span class='id identifier rubyid_nil?'>nil?</span>
+    <span class='id identifier rubyid_gx'>gx</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="../../../Chainer.html" title="Chainer (module)">Chainer</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="../../Functions.html" title="Chainer::Functions (module)">Functions</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="../Connection.html" title="Chainer::Functions::Connection (module)">Connection</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="Convolution2DFunction.html" title="Chainer::Functions::Connection::Convolution2DFunction (class)">Convolution2DFunction</a></span></span><span class='period'>.</span><span class='id identifier rubyid_convolution_2d'><span class='object_link'><a href="Convolution2DFunction.html#convolution_2d-class_method" title="Chainer::Functions::Connection::Convolution2DFunction.convolution_2d (method)">convolution_2d</a></span></span><span class='lparen'>(</span><span class='id identifier rubyid_gy'>gy</span><span class='comma'>,</span> <span class='id identifier rubyid_w'>w</span><span class='comma'>,</span> <span class='label'>stride:</span> <span class='lbracket'>[</span><span class='ivar'>@sy</span><span class='comma'>,</span> <span class='ivar'>@sx</span><span class='rbracket'>]</span><span class='comma'>,</span> <span class='label'>pad:</span> <span class='lbracket'>[</span><span class='ivar'>@ph</span><span class='comma'>,</span> <span class='ivar'>@pw</span><span class='rbracket'>]</span><span class='comma'>,</span> <span class='label'>cover_all:</span> <span class='ivar'>@cover_all</span><span class='rparen'>)</span>
+    <span class='id identifier rubyid_ret'>ret</span> <span class='op'>&lt;&lt;</span> <span class='id identifier rubyid_gx'>gx</span>
+  <span class='kw'>end</span>
+
+  <span class='kw'>if</span> <span class='id identifier rubyid_indexes'>indexes</span><span class='period'>.</span><span class='id identifier rubyid_include?'>include?</span><span class='lparen'>(</span><span class='int'>1</span><span class='rparen'>)</span>
+    <span class='id identifier rubyid_set_cover_all'>set_cover_all</span><span class='lparen'>(</span><span class='id identifier rubyid_x'>x</span><span class='comma'>,</span> <span class='id identifier rubyid_w'>w</span><span class='rparen'>)</span> <span class='kw'>if</span> <span class='ivar'>@cover_all</span><span class='period'>.</span><span class='id identifier rubyid_nil?'>nil?</span>
+    <span class='id identifier rubyid_gw'>gw</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="../../../Chainer.html" title="Chainer (module)">Chainer</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="../../Functions.html" title="Chainer::Functions (module)">Functions</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="../Connection.html" title="Chainer::Functions::Connection (module)">Connection</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="Convolution2DGradW.html" title="Chainer::Functions::Connection::Convolution2DGradW (class)">Convolution2DGradW</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new'><span class='object_link'><a href="Convolution2DGradW.html#initialize-instance_method" title="Chainer::Functions::Connection::Convolution2DGradW#initialize (method)">new</a></span></span><span class='lparen'>(</span><span class='kw'>self</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_apply'><span class='object_link'><a href="../../FunctionNode.html#apply-instance_method" title="Chainer::FunctionNode#apply (method)">apply</a></span></span><span class='lparen'>(</span><span class='lbracket'>[</span><span class='id identifier rubyid_gy'>gy</span><span class='comma'>,</span> <span class='id identifier rubyid_x'>x</span><span class='rbracket'>]</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_first'>first</span>
+    <span class='id identifier rubyid_ret'>ret</span> <span class='op'>&lt;&lt;</span> <span class='id identifier rubyid_gw'>gw</span>
+  <span class='kw'>end</span>
+
+  <span class='kw'>if</span> <span class='id identifier rubyid_indexes'>indexes</span><span class='period'>.</span><span class='id identifier rubyid_include?'>include?</span><span class='lparen'>(</span><span class='int'>2</span><span class='rparen'>)</span>
+    <span class='id identifier rubyid_gb'>gb</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="../../../Chainer.html" title="Chainer (module)">Chainer</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="../../Functions.html" title="Chainer::Functions (module)">Functions</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="../Math.html" title="Chainer::Functions::Math (module)">Math</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="../Math/Sum.html" title="Chainer::Functions::Math::Sum (class)">Sum</a></span></span><span class='period'>.</span><span class='id identifier rubyid_sum'><span class='object_link'><a href="../Math/Sum.html#sum-class_method" title="Chainer::Functions::Math::Sum.sum (method)">sum</a></span></span><span class='lparen'>(</span><span class='id identifier rubyid_gy'>gy</span><span class='comma'>,</span> <span class='label'>axis:</span> <span class='lbracket'>[</span><span class='int'>0</span><span class='comma'>,</span> <span class='int'>2</span><span class='comma'>,</span> <span class='int'>3</span><span class='rbracket'>]</span><span class='rparen'>)</span>
+    <span class='id identifier rubyid_ret'>ret</span> <span class='op'>&lt;&lt;</span> <span class='id identifier rubyid_gb'>gb</span>
+  <span class='kw'>end</span>
+
+  <span class='id identifier rubyid_ret'>ret</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="forward-instance_method">
+  
+    #<strong>forward</strong>(inputs)  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120
+121
+122
+123
+124
+125
+126</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/chainer/functions/connection/deconvolution_2d.rb', line 83</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_forward'>forward</span><span class='lparen'>(</span><span class='id identifier rubyid_inputs'>inputs</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_retain_inputs'>retain_inputs</span><span class='lparen'>(</span><span class='lbracket'>[</span><span class='int'>0</span><span class='comma'>,</span> <span class='int'>1</span><span class='rbracket'>]</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_x'>x</span><span class='comma'>,</span> <span class='id identifier rubyid_w'>w</span> <span class='op'>=</span> <span class='id identifier rubyid_inputs'>inputs</span><span class='lbracket'>[</span><span class='int'>0</span><span class='op'>...</span><span class='int'>2</span><span class='rbracket'>]</span>
+  <span class='id identifier rubyid_b'>b</span> <span class='op'>=</span> <span class='id identifier rubyid_inputs'>inputs</span><span class='period'>.</span><span class='id identifier rubyid_size'>size</span> <span class='op'>==</span> <span class='int'>3</span> <span class='op'>?</span> <span class='id identifier rubyid_inputs'>inputs</span><span class='lbracket'>[</span><span class='int'>2</span><span class='rbracket'>]</span> <span class='op'>:</span> <span class='kw'>nil</span>
+
+  <span class='id identifier rubyid_xm'>xm</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="../../../Chainer.html" title="Chainer (module)">Chainer</a></span></span><span class='period'>.</span><span class='id identifier rubyid_get_array_module'><span class='object_link'><a href="../../../Chainer.html#get_array_module-class_method" title="Chainer.get_array_module (method)">get_array_module</a></span></span><span class='lparen'>(</span><span class='id identifier rubyid_x'>x</span><span class='rparen'>)</span>
+  <span class='kw'>unless</span> <span class='id identifier rubyid_inputs'>inputs</span><span class='period'>.</span><span class='id identifier rubyid_all?'>all?</span> <span class='lbrace'>{</span> <span class='op'>|</span><span class='id identifier rubyid_i'>i</span><span class='op'>|</span> <span class='id identifier rubyid_i'>i</span><span class='period'>.</span><span class='id identifier rubyid_is_a?'>is_a?</span><span class='lparen'>(</span><span class='id identifier rubyid_xm'>xm</span><span class='op'>::</span><span class='const'>NArray</span><span class='rparen'>)</span> <span class='rbrace'>}</span>
+    <span class='kw'>if</span> <span class='id identifier rubyid_b'>b</span><span class='period'>.</span><span class='id identifier rubyid_nil?'>nil?</span>
+      <span class='id identifier rubyid_raise'>raise</span> <span class='const'>TypeError</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_xm'>xm</span><span class='embexpr_end'>}</span><span class='tstring_content'>::NArray must not be used together w: </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_w'>w</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span><span class='embexpr_end'>}</span><span class='tstring_content'>, x: </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_x'>x</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span>
+    <span class='kw'>else</span>
+      <span class='id identifier rubyid_raise'>raise</span> <span class='const'>TypeError</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_xm'>xm</span><span class='embexpr_end'>}</span><span class='tstring_content'>::NArray must not be used together w: </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_w'>w</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span><span class='embexpr_end'>}</span><span class='tstring_content'>, x: </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_x'>x</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span><span class='embexpr_end'>}</span><span class='tstring_content'>, b: </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_b'>b</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span>
+    <span class='kw'>end</span>
+  <span class='kw'>end</span>
+
+  <span class='id identifier rubyid_kh'>kh</span><span class='comma'>,</span> <span class='id identifier rubyid_kw'>kw</span> <span class='op'>=</span> <span class='id identifier rubyid_w'>w</span><span class='period'>.</span><span class='id identifier rubyid_shape'>shape</span><span class='lbracket'>[</span><span class='int'>2</span><span class='op'>..</span><span class='op'>-</span><span class='int'>1</span><span class='rbracket'>]</span>
+  <span class='id identifier rubyid__'>_</span><span class='comma'>,</span> <span class='id identifier rubyid__'>_</span><span class='comma'>,</span> <span class='id identifier rubyid_x_h'>x_h</span><span class='comma'>,</span> <span class='id identifier rubyid_x_w'>x_w</span> <span class='op'>=</span> <span class='id identifier rubyid_x'>x</span><span class='period'>.</span><span class='id identifier rubyid_shape'>shape</span>
+
+  <span class='kw'>if</span> <span class='ivar'>@outh</span><span class='period'>.</span><span class='id identifier rubyid_nil?'>nil?</span>
+    <span class='ivar'>@outh</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="../../../Chainer.html" title="Chainer (module)">Chainer</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="../../Utils.html" title="Chainer::Utils (module)">Utils</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="../../Utils/Conv.html" title="Chainer::Utils::Conv (module)">Conv</a></span></span><span class='period'>.</span><span class='id identifier rubyid_get_deconv_outsize'><span class='object_link'><a href="../../Utils/Conv.html#get_deconv_outsize-class_method" title="Chainer::Utils::Conv.get_deconv_outsize (method)">get_deconv_outsize</a></span></span><span class='lparen'>(</span><span class='id identifier rubyid_x_h'>x_h</span><span class='comma'>,</span> <span class='id identifier rubyid_kh'>kh</span><span class='comma'>,</span> <span class='ivar'>@sy</span><span class='comma'>,</span> <span class='ivar'>@ph</span><span class='rparen'>)</span>
+    <span class='id identifier rubyid_raise'>raise</span> <span class='const'>TypeError</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>Height in the output should be positive.</span><span class='tstring_end'>&#39;</span></span> <span class='kw'>if</span> <span class='ivar'>@outh</span> <span class='op'>&lt;=</span> <span class='int'>0</span>
+  <span class='kw'>end</span>
+  <span class='kw'>if</span> <span class='ivar'>@outw</span><span class='period'>.</span><span class='id identifier rubyid_nil?'>nil?</span>
+    <span class='ivar'>@outw</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="../../../Chainer.html" title="Chainer (module)">Chainer</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="../../Utils.html" title="Chainer::Utils (module)">Utils</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="../../Utils/Conv.html" title="Chainer::Utils::Conv (module)">Conv</a></span></span><span class='period'>.</span><span class='id identifier rubyid_get_deconv_outsize'><span class='object_link'><a href="../../Utils/Conv.html#get_deconv_outsize-class_method" title="Chainer::Utils::Conv.get_deconv_outsize (method)">get_deconv_outsize</a></span></span><span class='lparen'>(</span><span class='id identifier rubyid_x_w'>x_w</span><span class='comma'>,</span> <span class='id identifier rubyid_kw'>kw</span><span class='comma'>,</span> <span class='ivar'>@sx</span><span class='comma'>,</span> <span class='ivar'>@pw</span><span class='rparen'>)</span>
+    <span class='id identifier rubyid_raise'>raise</span> <span class='const'>TypeError</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>Width in the output should be positive.</span><span class='tstring_end'>&#39;</span></span> <span class='kw'>if</span> <span class='ivar'>@outw</span> <span class='op'>&lt;=</span> <span class='int'>0</span>
+  <span class='kw'>end</span>
+
+  <span class='id identifier rubyid_set_cover_all'>set_cover_all</span><span class='lparen'>(</span><span class='id identifier rubyid_x'>x</span><span class='comma'>,</span> <span class='id identifier rubyid_w'>w</span><span class='rparen'>)</span>
+  <span class='kw'>if</span> <span class='id identifier rubyid_xm'>xm</span> <span class='op'>==</span> <span class='const'>Cumo</span> <span class='kw'>and</span> <span class='const'><span class='object_link'><a href="../../../Chainer.html" title="Chainer (module)">Chainer</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="../../CUDA.html" title="Chainer::CUDA (module)">CUDA</a></span></span><span class='period'>.</span><span class='id identifier rubyid_cudnn_enabled?'><span class='object_link'><a href="../../CUDA.html#cudnn_enabled%3F-class_method" title="Chainer::CUDA.cudnn_enabled? (method)">cudnn_enabled?</a></span></span> <span class='kw'>and</span> <span class='op'>!</span><span class='ivar'>@cover_all</span>
+    <span class='kw'>return</span> <span class='id identifier rubyid__forward_cudnn'>_forward_cudnn</span><span class='lparen'>(</span><span class='id identifier rubyid_x'>x</span><span class='comma'>,</span> <span class='id identifier rubyid_w'>w</span><span class='comma'>,</span> <span class='id identifier rubyid_b'>b</span><span class='rparen'>)</span>
+  <span class='kw'>end</span>
+
+  <span class='id identifier rubyid_gcol'>gcol</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="../../../Chainer.html" title="Chainer (module)">Chainer</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="../../Utils.html" title="Chainer::Utils (module)">Utils</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="../../Utils/Math.html" title="Chainer::Utils::Math (module)">Math</a></span></span><span class='period'>.</span><span class='id identifier rubyid_tensordot'><span class='object_link'><a href="../../Utils/Math.html#tensordot-class_method" title="Chainer::Utils::Math.tensordot (method)">tensordot</a></span></span><span class='lparen'>(</span><span class='id identifier rubyid_w'>w</span><span class='comma'>,</span> <span class='id identifier rubyid_x'>x</span><span class='comma'>,</span> <span class='lbracket'>[</span><span class='int'>0</span><span class='comma'>,</span> <span class='int'>1</span><span class='rbracket'>]</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_cast_to'>cast_to</span><span class='lparen'>(</span><span class='id identifier rubyid_x'>x</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span><span class='rparen'>)</span>
+  <span class='comment'># - k, m, n: shape of out_channel
+</span>  <span class='comment'># - b: number of inputs
+</span>  <span class='comment'># - h, w: height and width of kernels
+</span>  <span class='comment'># k, m, n, b, h, w -&gt; b, k, m, n, h, w
+</span>  <span class='id identifier rubyid_gcol'>gcol</span> <span class='op'>=</span> <span class='id identifier rubyid_gcol'>gcol</span><span class='period'>.</span><span class='id identifier rubyid_transpose'>transpose</span><span class='lparen'>(</span><span class='int'>3</span><span class='comma'>,</span> <span class='int'>0</span><span class='comma'>,</span> <span class='int'>1</span><span class='comma'>,</span> <span class='int'>2</span><span class='comma'>,</span> <span class='int'>4</span><span class='comma'>,</span> <span class='int'>5</span><span class='rparen'>)</span>
+
+  <span class='id identifier rubyid_y'>y</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="../../../Chainer.html" title="Chainer (module)">Chainer</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="../../Utils.html" title="Chainer::Utils (module)">Utils</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="../../Utils/Conv.html" title="Chainer::Utils::Conv (module)">Conv</a></span></span><span class='period'>.</span><span class='id identifier rubyid_col2im'><span class='object_link'><a href="../../Utils/Conv.html#col2im-class_method" title="Chainer::Utils::Conv.col2im (method)">col2im</a></span></span><span class='lparen'>(</span><span class='id identifier rubyid_gcol'>gcol</span><span class='comma'>,</span> <span class='ivar'>@sy</span><span class='comma'>,</span> <span class='ivar'>@sx</span><span class='comma'>,</span> <span class='ivar'>@ph</span><span class='comma'>,</span> <span class='ivar'>@pw</span><span class='comma'>,</span> <span class='ivar'>@outh</span><span class='comma'>,</span> <span class='ivar'>@outw</span><span class='rparen'>)</span>
+  <span class='kw'>if</span> <span class='op'>!</span><span class='id identifier rubyid_b'>b</span><span class='period'>.</span><span class='id identifier rubyid_nil?'>nil?</span>
+    <span class='id identifier rubyid_y'>y</span> <span class='op'>+=</span> <span class='id identifier rubyid_b'>b</span><span class='period'>.</span><span class='id identifier rubyid_reshape'>reshape</span><span class='lparen'>(</span><span class='int'>1</span><span class='comma'>,</span> <span class='id identifier rubyid_b'>b</span><span class='period'>.</span><span class='id identifier rubyid_size'>size</span><span class='comma'>,</span> <span class='int'>1</span><span class='comma'>,</span> <span class='int'>1</span><span class='rparen'>)</span>
+  <span class='kw'>end</span>
+  <span class='lbracket'>[</span><span class='id identifier rubyid_y'>y</span><span class='rbracket'>]</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+  </div>
+
+</div>
+
+      <div id="footer">
+  Generated on Thu Oct 10 04:25:43 2019 by
+  <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
+  0.9.20 (ruby-2.6.3).
+</div>
+
+    </div>
+  </body>
+</html>
