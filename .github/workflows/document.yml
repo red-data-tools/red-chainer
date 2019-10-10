@@ -1,0 +1,63 @@
+# Licensed to the Apache Software Foundation (ASF) under one
+# or more contributor license agreements.  See the NOTICE file
+# distributed with this work for additional information
+# regarding copyright ownership.  The ASF licenses this file
+# to you under the Apache License, Version 2.0 (the
+# "License"); you may not use this file except in compliance
+# with the License.  You may obtain a copy of the License at
+#
+#   http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing,
+# software distributed under the License is distributed on an
+# "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+# KIND, either express or implied.  See the License for the
+# specific language governing permissions and limitations
+# under the License.
+
+name: Document
+on:
+  push:
+    branches:
+      - master
+    tags:
+      - "*"
+jobs:
+  deploy:
+    name: Deploy
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+      - uses: actions/setup-ruby@v1
+      - name: Install dependencies
+        run: |
+          bundle install
+      - name: Generate document
+        run: |
+          bundle exec rake yard
+          mv doc ../doc
+      - name: Deploy
+        run: |
+          git config user.name "GitHub Actions"
+          git config user.email "actions@noreply.github.com"
+          git remote add deploy \
+            https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git
+          git fetch deploy
+          if ! git checkout --track deploy/gh-pages; then
+            git checkout --orphan gh-pages
+            git rm --cached -r .
+            git clean --force -d -x
+          fi
+          rsync \
+            -a \
+            --delete \
+            --exclude "/.git/" \
+            ../doc/ \
+            ./$(ruby -e 'print ENV["GITHUB_REF"].split("/").last')
+          git add --all
+          git commit -m "Update: ${GITHUB_SHA}"
+          git push deploy gh-pages
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        if: |
+          github.ref
