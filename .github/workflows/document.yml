@@ -46,8 +46,8 @@ jobs:
           if ! git checkout --track deploy/gh-pages; then
             git checkout --orphan gh-pages
             git rm --cached -r .
-            git clean --force -d -x
           fi
+          git clean --force -d -x
           rsync \
             -a \
             --delete \
