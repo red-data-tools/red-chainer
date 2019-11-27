@@ -1,5 +1,8 @@
 # Red Chainer : A deep learning framework
 
+[![Build Status](https://travis-ci.org/red-data-tools/red-chainer.svg?branch=master)](https://travis-ci.org/red-data-tools/red-chainer)
+[![Gem Version](https://badge.fury.io/rb/red-chainer.svg)](https://badge.fury.io/rb/red-chainer)
+
 A flexible framework for neural network for Ruby
 
 ## Description
