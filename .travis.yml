@@ -4,9 +4,9 @@ notifications:
 sudo: false
 language: ruby
 rvm:
-  - 2.4.3
-  - 2.5.0
-  - 2.6.0
+  - 2.6
+  - 2.7
+  - 3.0
 before_install: gem install bundler
 script:
   - ruby test/run_test.rb
