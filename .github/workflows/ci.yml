@@ -14,5 +14,5 @@ jobs:
         with:
           ruby-version: ${{ matrix.ruby }}
       - run: gem install bundler
-      - run: bundle exec rake test
+      - run: bundle exec ruby test/run_test.rb
       - run: yardoc --fail-on-warning
