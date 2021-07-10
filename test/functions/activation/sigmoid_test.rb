@@ -23,7 +23,7 @@ class Chainer::Functions::Activation::SigmoidTest < Test::Unit::TestCase
     y = Chainer::Functions::Activation::Sigmoid.sigmoid(x)
     assert_equal(@dtype, y.data.class)
     y_expect = Chainer::Functions::Activation::Sigmoid.sigmoid(Chainer::Variable.new(@x))
-    Chainer::Testing.assert_allclose(y_expect.data, y.data, @check_forward_options)
+    Chainer::Testing.assert_allclose(y_expect.data, y.data, **@check_forward_options)
   end
 
   def test_forward
@@ -31,7 +31,7 @@ class Chainer::Functions::Activation::SigmoidTest < Test::Unit::TestCase
   end
 
   def check_backward(x_data, y_grad, use_cudnn: "always")
-    Chainer::check_backward(Chainer::Functions::Activation::Sigmoid.method(:sigmoid), x_data, y_grad, @check_backward_options)
+    Chainer::check_backward(Chainer::Functions::Activation::Sigmoid.method(:sigmoid), x_data, y_grad, **@check_backward_options)
   end
 
   def test_backward
@@ -43,7 +43,7 @@ class Chainer::Functions::Activation::SigmoidTest < Test::Unit::TestCase
       y = Chainer::Functions::Activation::Sigmoid.sigmoid(x)
       y * y
     end
-    Chainer::check_double_backward(func, x_data, y_grad, x_grad_grad, @check_backward_options)
+    Chainer::check_double_backward(func, x_data, y_grad, x_grad_grad, **@check_backward_options)
   end
 
   def test_double_backward

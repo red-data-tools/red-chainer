@@ -41,7 +41,7 @@ class Chainer::Functions::Activation::LogSoftmaxTest < Test::Unit::TestCase
   end
 
   def check_backward(x_data, gy_data, use_cudnn: "always")
-    Chainer::check_backward(Chainer::Functions::Activation::LogSoftmax.method(:log_softmax), x_data, gy_data, @check_backward_options)
+    Chainer::check_backward(Chainer::Functions::Activation::LogSoftmax.method(:log_softmax), x_data, gy_data, **@check_backward_options)
   end
 
   def test_backward
@@ -49,7 +49,7 @@ class Chainer::Functions::Activation::LogSoftmaxTest < Test::Unit::TestCase
   end
 
   def check_double_backward(x_data, gy_data, ggx_data, use_cudnn: 'always')
-    Chainer::check_double_backward(Chainer::Functions::Activation::LogSoftmax.method(:log_softmax), x_data, gy_data, ggx_data, @check_backward_options)
+    Chainer::check_double_backward(Chainer::Functions::Activation::LogSoftmax.method(:log_softmax), x_data, gy_data, ggx_data, **@check_backward_options)
   end
 
   def test_double_backward

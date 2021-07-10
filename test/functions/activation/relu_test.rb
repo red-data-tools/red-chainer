@@ -48,7 +48,7 @@ class Chainer::Functions::Activation::ReLUTest < Test::Unit::TestCase
   end
 
   def check_backward(x_data, y_grad, use_cudnn: "always")
-    Chainer::check_backward(Chainer::Functions::Activation::Relu.method(:relu), x_data, y_grad, @check_backward_options)
+    Chainer::check_backward(Chainer::Functions::Activation::Relu.method(:relu), x_data, y_grad, **@check_backward_options)
   end
 
   def test_backward
@@ -61,7 +61,7 @@ class Chainer::Functions::Activation::ReLUTest < Test::Unit::TestCase
       x * x
     end
 
-    Chainer::check_double_backward(func, x_data, y_grad, x_grad_grad, @check_backward_options)
+    Chainer::check_double_backward(func, x_data, y_grad, x_grad_grad, **@check_backward_options)
   end
 
   def test_double_backward

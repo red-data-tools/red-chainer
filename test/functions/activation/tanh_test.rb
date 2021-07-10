@@ -30,7 +30,7 @@ class Chainer::Functions::Activation::TanhTest < Test::Unit::TestCase
   end
 
   def check_backward(x_data, gy_data, use_cudnn: "always")
-    Chainer::check_backward(Chainer::Functions::Activation::Tanh.method(:tanh), x_data, gy_data, @check_backward_options)
+    Chainer::check_backward(Chainer::Functions::Activation::Tanh.method(:tanh), x_data, gy_data, **@check_backward_options)
   end
 
   def test_backward
@@ -42,7 +42,7 @@ class Chainer::Functions::Activation::TanhTest < Test::Unit::TestCase
       y = Chainer::Functions::Activation::Tanh.tanh(x)
       y * y
     end
-    Chainer::check_double_backward(func, x_data, y_grad, x_grad_grad, @check_backward_options)
+    Chainer::check_double_backward(func, x_data, y_grad, x_grad_grad, **@check_backward_options)
   end
 
   def test_double_backward
