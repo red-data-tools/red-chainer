@@ -22,7 +22,7 @@ class Chainer::Functions::Pooling::AveragePooling2DTest < Test::Unit::TestCase
       3.times.each do |c|
         x = @x[k, c, false]
         expect = xm::DFloat[[x[0...2, 0...2, false].sum.to_f, x[0...2, 1...3, false].sum.to_f], [x[1...4, 0...2, false].sum.to_f, x[1...4, 1...3, false].sum.to_f]] / 9
-        Chainer::Testing.assert_allclose(expect, y_data[k, c, false], @check_forward_options)
+        Chainer::Testing.assert_allclose(expect, y_data[k, c, false], **@check_forward_options)
       end
     end
   end
@@ -36,7 +36,7 @@ class Chainer::Functions::Pooling::AveragePooling2DTest < Test::Unit::TestCase
       Chainer::Functions::Pooling::AveragePooling2D.average_pooling_2d(x, 3, stride: 2, pad: 1)
     end
 
-    Chainer::check_backward(func, x_data, y_grad, @check_backward_options)
+    Chainer::check_backward(func, x_data, y_grad, **@check_backward_options)
   end
 
   def test_backward
@@ -48,7 +48,7 @@ class Chainer::Functions::Pooling::AveragePooling2DTest < Test::Unit::TestCase
       y = Chainer::Functions::Pooling::AveragePooling2D.average_pooling_2d(x, 3, stride: 2, pad: 1)
       y * y
     end
-    Chainer::check_double_backward(func, x_data, y_grad, x_grad_grad, @check_backward_options)
+    Chainer::check_double_backward(func, x_data, y_grad, x_grad_grad, **@check_backward_options)
   end
 
   def test_double_backward

@@ -67,7 +67,7 @@ class Chainer::Functions::Activation::LeakyReLUTest < Test::Unit::TestCase
       y * y
     end
 
-    Chainer::check_double_backward(func, x_data, y_grad, x_grad_grad, @check_backward_options)
+    Chainer::check_double_backward(func, x_data, y_grad, x_grad_grad, **@check_backward_options)
   end
 
   def test_double_backward
