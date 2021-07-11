@@ -6,15 +6,15 @@
 <title>
   Module: Chainer
   
-    &mdash; Documentation by YARD 0.9.20
+    &mdash; Documentation by YARD 0.9.26
   
 </title>
 
-  <link rel="stylesheet" href="css/style.css" type="text/css" charset="utf-8" />
+  <link rel="stylesheet" href="css/style.css" type="text/css" />
 
-  <link rel="stylesheet" href="css/common.css" type="text/css" charset="utf-8" />
+  <link rel="stylesheet" href="css/common.css" type="text/css" />
 
-<script type="text/javascript" charset="utf-8">
+<script type="text/javascript">
   pathId = "Chainer";
   relpath = '';
 </script>
@@ -606,7 +606,7 @@ check_backward(func, x1_data, [gy1_data, gy2_data])
 
 <p>Function objects are acceptable as <code>func</code> argument:</p>
 
-<pre class="code ruby"><code class="ruby">check_backward(lambda{|x1, x1| f(x1, x2)}, [x1_data, x2_data], gy_data)
+<pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_check_backward'>check_backward</span><span class='lparen'>(</span><span class='id identifier rubyid_lambda'>lambda</span><span class='lbrace'>{</span><span class='op'>|</span><span class='id identifier rubyid_x1'>x1</span><span class='comma'>,</span> <span class='id identifier rubyid_x1'>x1</span><span class='op'>|</span> <span class='id identifier rubyid_f'>f</span><span class='lparen'>(</span><span class='id identifier rubyid_x1'>x1</span><span class='comma'>,</span> <span class='id identifier rubyid_x2'>x2</span><span class='rparen'>)</span><span class='rbrace'>}</span><span class='comma'>,</span> <span class='lbracket'>[</span><span class='id identifier rubyid_x1_data'>x1_data</span><span class='comma'>,</span> <span class='id identifier rubyid_x2_data'>x2_data</span><span class='rbracket'>]</span><span class='comma'>,</span> <span class='id identifier rubyid_gy_data'>gy_data</span><span class='rparen'>)</span>
 </code></pre>
 
 
@@ -690,6 +690,8 @@ check_backward(func, x1_data, [gy1_data, gy2_data])
         <span class='type'>(<tt>Float</tt>)</span>
       
       
+        <em class="default">(defaults to: <tt>0.001</tt>)</em>
+      
       
         &mdash;
         <div class='inline'>
@@ -705,6 +707,8 @@ check_backward(func, x1_data, [gy1_data, gy2_data])
       
         <span class='type'>(<tt>Float</tt>)</span>
       
+      
+        <em class="default">(defaults to: <tt>1e-5</tt>)</em>
       
       
         &mdash;
@@ -722,6 +726,8 @@ check_backward(func, x1_data, [gy1_data, gy2_data])
         <span class='type'>(<tt>Float</tt>)</span>
       
       
+        <em class="default">(defaults to: <tt>1e-4</tt>)</em>
+      
       
         &mdash;
         <div class='inline'>
@@ -738,6 +744,8 @@ check_backward(func, x1_data, [gy1_data, gy2_data])
         <span class='type'>(<tt>Array&lt;Boolean&gt;</tt>)</span>
       
       
+        <em class="default">(defaults to: <tt>nil</tt>)</em>
+      
       
         &mdash;
         <div class='inline'>
@@ -753,6 +761,8 @@ check_backward(func, x1_data, [gy1_data, gy2_data])
       
         <span class='type'>(<tt>Numo::NArray.class</tt>)</span>
       
+      
+        <em class="default">(defaults to: <tt>nil</tt>)</em>
       
       
         &mdash;
@@ -1684,9 +1694,9 @@ check_backward(func, x1_data, [gy1_data, gy2_data])
 </div>
 
       <div id="footer">
-  Generated on Thu Oct 10 04:40:07 2019 by
+  Generated on Sun Jul 11 20:19:35 2021 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
-  0.9.20 (ruby-2.6.3).
+  0.9.26 (ruby-3.0.1).
 </div>
 
     </div>
