@@ -28,6 +28,10 @@ module Chainer
         @optimizers.to_h
       end
 
+      def get_iterator(name)
+        @iterators[name]
+      end
+
       def update
         update_core
         @iteration += 1

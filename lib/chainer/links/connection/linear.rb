@@ -32,8 +32,6 @@ module Chainer
           Chainer::Functions::Connection::LinearFunction.linear(x, @w, @b)
         end
 
-        private
-
         def initialize_params(in_size)
           @w.init([@out_size, in_size])
         end

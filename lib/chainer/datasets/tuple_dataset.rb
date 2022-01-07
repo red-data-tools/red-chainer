@@ -1,6 +1,7 @@
 module Chainer
   module Datasets
     class TupleDataset
+      attr_reader :datasets
       def initialize(*datasets)
         if datasets.empty?
           raise "no datasets are given"
